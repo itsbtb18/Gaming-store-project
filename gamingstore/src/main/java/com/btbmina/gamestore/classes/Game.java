@@ -10,9 +10,8 @@ public class Game {
     private double price;
     private String category;
     private double rating;
-    private String systemRequirements;
+    private String systemRequirements; // Ajouté
 
-    // Constructeur complet
     public Game(int id, String title, String description, double price, String category, double rating, String systemRequirements) {
         this.id = id;
         this.title = title;
@@ -23,12 +22,11 @@ public class Game {
         this.systemRequirements = systemRequirements;
     }
 
-    // Constructeur sans ID
     public Game(String title, String description, double price, String category, double rating, String systemRequirements) {
         this(0, title, description, price, category, rating, systemRequirements);
     }
 
-    // Getters et setters
+    // Getters et Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -46,13 +44,15 @@ public class Game {
 
     public double getRating() { return rating; }
     public void setRating(double rating) {
-        if (rating < 0.0 || rating > 5.0) {
+        if (rating < 0.0 || rating > 5.0)
             throw new IllegalArgumentException("La note doit être entre 0.0 et 5.0");
-        }
         this.rating = rating;
     }
 
-    public String getSystemRequirements() { return systemRequirements; }
+    public String getSystemRequirements() {
+        return systemRequirements;
+    }
+
     public void setSystemRequirements(String systemRequirements) {
         this.systemRequirements = systemRequirements;
     }

@@ -9,12 +9,10 @@ import java.time.LocalDateTime;
         private double price;
         private String paymentMethod;
 
-        // Objets liés qui seront chargés à la demande
         private User user;
         private Game game;
 
-        // Constructeur pour un nouvel achat
-        public Purchase(int userId, int gameId, double price, Timestamp paymentMethod) {
+        public Purchase(int userId, int gameId, double price, String paymentMethod) {
             this.userId = userId;
             this.gameId = gameId;
             this.price = price;
@@ -22,7 +20,6 @@ import java.time.LocalDateTime;
             this.purchaseDate = LocalDateTime.now();
         }
 
-        // Constructeur complet pour le chargement depuis la base de données
         public Purchase(int purchaseId, int userId, int gameId, LocalDateTime purchaseDate,
                         double price, String paymentMethod) {
             this.purchaseId = purchaseId;
@@ -33,71 +30,35 @@ import java.time.LocalDateTime;
             this.paymentMethod = paymentMethod;
         }
 
-        // Getters et Setters
-        public int getPurchaseId() {
-            return purchaseId;
-        }
+        // Getters / Setters
+        public int getPurchaseId() { return purchaseId; }
+        public void setPurchaseId(int purchaseId) { this.purchaseId = purchaseId; }
 
-        public void setPurchaseId(int purchaseId) {
-            this.purchaseId = purchaseId;
-        }
+        public int getUserId() { return userId; }
+        public void setUserId(int userId) { this.userId = userId; }
 
-        public int getUserId() {
-            return userId;
-        }
+        public int getGameId() { return gameId; }
+        public void setGameId(int gameId) { this.gameId = gameId; }
 
-        public void setUserId(int userId) {
-            this.userId = userId;
-        }
+        public LocalDateTime getPurchaseDate() { return purchaseDate; }
+        public void setPurchaseDate(LocalDateTime purchaseDate) { this.purchaseDate = purchaseDate; }
 
-        public int getGameId() {
-            return gameId;
-        }
+        public double getPrice() { return price; }
+        public void setPrice(double price) { this.price = price; }
 
-        public void setGameId(int gameId) {
-            this.gameId = gameId;
-        }
+        public String getPaymentMethod() { return paymentMethod; }
+        public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 
-        public LocalDateTime getPurchaseDate() {
-            return purchaseDate;
-        }
-
-        public void setPurchaseDate(LocalDateTime purchaseDate) {
-            this.purchaseDate = purchaseDate;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-
-        public String getPaymentMethod() {
-            return paymentMethod;
-        }
-
-        public void setPaymentMethod(String paymentMethod) {
-            this.paymentMethod = paymentMethod;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
+        public User getUser() { return user; }
         public void setUser(User user) {
             this.user = user;
             this.userId = user.getUserId();
         }
 
-        public Game getGame() {
-            return game;
-        }
-
+        public Game getGame() { return game; }
         public void setGame(Game game) {
             this.game = game;
-            this.gameId = game.getGameId();
+            this.gameId = game.getId();
         }
 
         @Override
@@ -110,6 +71,5 @@ import java.time.LocalDateTime;
                     ", price=" + price +
                     ", paymentMethod='" + paymentMethod + '\'' +
                     '}';
-        }}
-
-
+        }
+    }

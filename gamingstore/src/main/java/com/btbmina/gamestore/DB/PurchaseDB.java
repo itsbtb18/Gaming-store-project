@@ -5,39 +5,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseDB {
-    private static final String URL = "jdbc:mysql://localhost:3306/gamestore"; // Adjust based on your DB
-    private static final String USER = "root"; // DB username
-    private static final String PASSWORD = "password"; // DB password
+    private static final String URL = "jdbc:mysql://localhost:3306/gamestore";
+    private static final String USER = "root";
+    private static final String PASSWORD = "password";
 
-    public static List<Purchase> getPurchasesByUserId(int userId) {
-        String query = "SELECT * FROM purchases WHERE user_id = ?";
-        List<Purchase> purchases = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                purchases.add(new Purchase(rs.getInt("purchase_id"), rs.getInt("user_id"),
-                        rs.getInt("game_id"), rs.getTimestamp("purchase_date")));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return purchases;
-    }
-
+    // ➤ Insérer un achat dans la base de données
     public static boolean insertPurchase(Purchase purchase) {
-        String query = "INSERT INTO purchases (user_id, game_id) VALUES (?, ?)";
+        String query = "INSERT INTO purchases (user_id, game_id, purchase_date, price, payment_method) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setInt(1, purchase.getUserId());
             stmt.setInt(2, purchase.getGameId());
+            stmt.setTimestamp(3, Timestamp.valueOf(purchase.getPurchaseDate()));
+            stmt.setDouble(4, purchase.getPrice());
+            stmt.setString(5, purchase.getPaymentMethod());
+
             return stmt.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    // Additional methods for retrieving, updating, and deleting purchases can be added similarly.
+    // ➤ Récupérer tous les achats d'un utilisateur
+    public static List<Purchase> getPurchasesByUserId(int userId) {
+        List<Purchase> purchases = new ArrayList<>();
+        String query = "SELECT * FROM purchases WHERE user_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Purchase purchase = new Purchase(
+                        rs.getInt("purchase_id"),
+                        rs.getInt("user_id"),
+                        rs.getInt("game_id"),
+                        rs.getTimestamp("purchase_date").toLocalDateTime(),
+                        rs.getDouble("price"),
+                        rs.getString("payment_method")
+                );
+                purchases.add(purchase);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return purchases;
+    }
 }
