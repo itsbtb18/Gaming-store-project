@@ -19,8 +19,8 @@ public class Game {
     private String trailerUrl;
 
     // Propriétés liées qui seront chargées au besoin
-    private SystemRequirement systemRequirement;
-    private List<Category> categories = new ArrayList<>();
+    private SystemRequirements systemRequirement;
+    private List<GameCategory> categories = new ArrayList<>();
     private List<Rating> ratings = new ArrayList<>();
 
     // Score moyen calculé à partir des ratings
@@ -125,23 +125,23 @@ public class Game {
         this.trailerUrl = trailerUrl;
     }
 
-    public SystemRequirement getSystemRequirement() {
+    public SystemRequirements getSystemRequirement() {
         return systemRequirement;
     }
 
-    public void setSystemRequirement(SystemRequirement systemRequirement) {
+    public void setSystemRequirement(SystemRequirements systemRequirement) {
         this.systemRequirement = systemRequirement;
     }
 
-    public List<Category> getCategories() {
+    public List<GameCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<GameCategory> categories) {
         this.categories = categories;
     }
 
-    public void addCategory(Category category) {
+    public void addCategory(GameCategory category) {
         if (!categories.contains(category)) {
             categories.add(category);
         }
