@@ -19,8 +19,8 @@ public class Game {
     private String trailerUrl;
 
     // Propriétés liées qui seront chargées au besoin
-    private SystemRequirement systemRequirement;
-    private List<Category> categories = new ArrayList<>();
+    private SystemRequirements systemRequirement;
+    private List<GameCategory> categories = new ArrayList<>();
     private List<Rating> ratings = new ArrayList<>();
 
     // Score moyen calculé à partir des ratings
