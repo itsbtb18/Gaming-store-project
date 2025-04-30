@@ -1,195 +1,72 @@
 package com.btbmina.gamestore.classes;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Représente un jeu dans le système avec ses détails et exigences système
  */
 public class Game {
-    private int gameId;
+    private int id;
     private String title;
     private String description;
     private double price;
-    private LocalDate releaseDate;
-    private String developer;
-    private String publisher;
-    private byte[] coverImage;
-    private String trailerUrl;
+    private String category;
+    private double rating;
+    private String systemRequirements;
 
-    // Propriétés liées qui seront chargées au besoin
-    private SystemRequirements systemRequirement;
-    private List<GameCategory> categories = new ArrayList<>();
-    private List<Rating> ratings = new ArrayList<>();
-
-    // Score moyen calculé à partir des ratings
-    private double averageRating;
-
-    // Constructeur pour un nouveau jeu
-    public Game(int title, String description, String price, double releaseDate,
-                double developer, String publisher) {
+    // Constructeur complet
+    public Game(int id, String title, String description, double price, String category, double rating, String systemRequirements) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
-        this.releaseDate = releaseDate;
-        this.developer = developer;
-        this.publisher = publisher;
+        this.category = category;
+        this.rating = rating;
+        this.systemRequirements = systemRequirements;
     }
 
-    // Constructeur complet pour le chargement depuis la base de données
-    public Game(int gameId, String title, String description, double price,
-                LocalDate releaseDate, String developer, String publisher,
-                byte[] coverImage, String trailerUrl) {
-        this.gameId = gameId;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.releaseDate = releaseDate;
-        this.developer = developer;
-        this.publisher = publisher;
-        this.coverImage = coverImage;
-        this.trailerUrl = trailerUrl;
+    // Constructeur sans ID
+    public Game(String title, String description, double price, String category, double rating, String systemRequirements) {
+        this(0, title, description, price, category, rating, systemRequirements);
     }
 
-    // Getters et Setters
-    public int getGameId() {
-        return gameId;
-    }
+    // Getters et setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public LocalDate getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public String getDeveloper() {
-        return developer;
-    }
-
-    public void setDeveloper(String developer) {
-        this.developer = developer;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public byte[] getCoverImage() {
-        return coverImage;
-    }
-
-    public void setCoverImage(byte[] coverImage) {
-        this.coverImage = coverImage;
-    }
-
-    public String getTrailerUrl() {
-        return trailerUrl;
-    }
-
-    public void setTrailerUrl(String trailerUrl) {
-        this.trailerUrl = trailerUrl;
-    }
-
-    public SystemRequirements getSystemRequirement() {
-        return systemRequirement;
-    }
-
-    public void setSystemRequirement(SystemRequirements systemRequirement) {
-        this.systemRequirement = systemRequirement;
-    }
-
-    public List<GameCategory> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<GameCategory> categories) {
-        this.categories = categories;
-    }
-
-    public void addCategory(GameCategory category) {
-        if (!categories.contains(category)) {
-            categories.add(category);
+    public double getRating() { return rating; }
+    public void setRating(double rating) {
+        if (rating < 0.0 || rating > 5.0) {
+            throw new IllegalArgumentException("La note doit être entre 0.0 et 5.0");
         }
+        this.rating = rating;
     }
 
-    public List<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
-        calculateAverageRating();
-    }
-
-    public void addRating(Rating rating) {
-        if (!ratings.contains(rating)) {
-            ratings.add(rating);
-            calculateAverageRating();
-        }
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    // Calcule la note moyenne à partir de la liste des évaluations
-    private void calculateAverageRating() {
-        if (ratings.isEmpty()) {
-            this.averageRating = 0;
-            return;
-        }
-
-        double sum = 0;
-        for (Rating rating : ratings) {
-            sum += rating.getScore();
-        }
-        this.averageRating = sum / ratings.size();
+    public String getSystemRequirements() { return systemRequirements; }
+    public void setSystemRequirements(String systemRequirements) {
+        this.systemRequirements = systemRequirements;
     }
 
     @Override
     public String toString() {
         return "Game{" +
-                "gameId=" + gameId +
+                "id=" + id +
                 ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 ", price=" + price +
-                ", developer='" + developer + '\'' +
-                ", publisher='" + publisher + '\'' +
-                ", avgRating=" + averageRating +
+                ", category='" + category + '\'' +
+                ", rating=" + rating +
+                ", systemRequirements='" + systemRequirements + '\'' +
                 '}';
     }
 }

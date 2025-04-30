@@ -1,4 +1,5 @@
 package com.btbmina.gamestore.classes;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
     public class Purchase {
         private int purchaseId;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
         private Game game;
 
         // Constructeur pour un nouvel achat
-        public Purchase(int userId, int gameId, double price, String paymentMethod) {
+        public Purchase(int userId, int gameId, double price, Timestamp paymentMethod) {
             this.userId = userId;
             this.gameId = gameId;
             this.price = price;
