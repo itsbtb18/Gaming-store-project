@@ -66,4 +66,12 @@ public class DatabaseConnection {
             }
         }
     }
+    public boolean isConnected() {
+        try {
+            return connection != null && !connection.isClosed();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }
+

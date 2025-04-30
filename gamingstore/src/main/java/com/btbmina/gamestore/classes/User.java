@@ -19,7 +19,7 @@ public class User {
     private List<Game> ownedGames = new ArrayList<>();
 
     // Constructeur pour un nouvel utilisateur
-    public User(String username, String email, String passwordHash) {
+    public User(int userId, String username, String email, String passwordHash) {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;

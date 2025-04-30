@@ -27,8 +27,8 @@ public class Game {
     private double averageRating;
 
     // Constructeur pour un nouveau jeu
-    public Game(String title, String description, double price, LocalDate releaseDate,
-                String developer, String publisher) {
+    public Game(int title, String description, String price, double releaseDate,
+                double developer, String publisher) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -125,23 +125,23 @@ public class Game {
         this.trailerUrl = trailerUrl;
     }
 
-    public SystemRequirement getSystemRequirement() {
+    public SystemRequirements getSystemRequirement() {
         return systemRequirement;
     }
 
-    public void setSystemRequirement(SystemRequirement systemRequirement) {
+    public void setSystemRequirement(SystemRequirements systemRequirement) {
         this.systemRequirement = systemRequirement;
     }
 
-    public List<Category> getCategories() {
+    public List<GameCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<GameCategory> categories) {
         this.categories = categories;
     }
 
-    public void addCategory(Category category) {
+    public void addCategory(GameCategory category) {
         if (!categories.contains(category)) {
             categories.add(category);
         }
