@@ -27,8 +27,8 @@ public class Game {
     private double averageRating;
 
     // Constructeur pour un nouveau jeu
-    public Game(String title, String description, double price, LocalDate releaseDate,
-                String developer, String publisher) {
+    public Game(int title, String description, String price, double releaseDate,
+                double developer, String publisher) {
         this.title = title;
         this.description = description;
         this.price = price;
