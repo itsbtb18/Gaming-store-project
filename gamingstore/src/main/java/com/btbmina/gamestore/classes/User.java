@@ -8,7 +8,7 @@ public class User {
     private int userId;
     private String username;
     private String email;
-    private String passwordHash;
+    private String password;
     private LocalDateTime registrationDate;
     private boolean isVerified;
     private String verificationToken;
@@ -19,20 +19,20 @@ public class User {
     private List<Game> ownedGames = new ArrayList<>();
 
     // Constructeur pour un nouvel utilisateur
-    public User(int userId, String username, String email, String passwordHash) {
+    public User(int userId, String username, String email, String password) {
         this.username = username;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.registrationDate = LocalDateTime.now();
         this.isVerified = false;
     }
-    public User(int userId, String username, String email, String passwordHash,
+    public User(int userId, String username, String email, String password,
                 LocalDateTime registrationDate, boolean isVerified,
                 String verificationToken, byte[] profileImage, LocalDateTime lastLogin) {
         this.userId = userId;
         this.username = username;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.registrationDate = registrationDate;
         this.isVerified = isVerified;
         this.verificationToken = verificationToken;
@@ -65,12 +65,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public LocalDateTime getRegistrationDate() {

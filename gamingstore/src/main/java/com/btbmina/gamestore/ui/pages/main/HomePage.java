@@ -1,4 +1,4 @@
-package com.btbmina.gamestore.ui;
+package com.btbmina.gamestore.ui.pages.main;
 
 import javax.swing.*;
 import java.awt.*;

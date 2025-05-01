@@ -32,7 +32,7 @@ public class UserDB{
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getPasswordHash());
+            stmt.setString(3, user.getPassword());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

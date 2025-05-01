@@ -6,10 +6,12 @@ import com.btbmina.gamestore.ui.FontManager;
 import com.btbmina.gamestore.ui.pages.auth.LoginPage;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Loading page - first screen shown when the application starts

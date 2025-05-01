@@ -1,0 +1,76 @@
+📂 gamingstore/
+├── 📂 src/
+│   ├── 📂 data/
+│   │   ├── 📄 database.db
+│   ├── 📂 main/
+│   │   ├── 📂 java/
+│   │   │   └── 📂 com/
+│   │   │       └── 📂 btbmina/
+│   │   │           └── 📂 gamestore/
+│   │   │               ├── 📂 animation/
+│   │   │               │   ├── 📄 AnimationManager.java
+│   │   │               │   ├── 📄 FadeEffect.java
+│   │   │               │   ├── 📄 SlideEffect.java
+│   │   │               │   └── 📄 TransitionEffect.java
+│   │   │               ├── 📂 controller/
+│   │   │               │   ├── 📄 AuthController.java
+│   │   │               │   ├── 📄 CartController.java
+│   │   │               │   ├── 📄 GameController.java
+│   │   │               │   ├── 📄 LibraryController.java
+│   │   │               │   ├── 📄 ProfileController.java
+│   │   │               │   └── 📄 StoreController.java
+│   │   │               ├── 📂 DB/
+│   │   │               │   ├── 📄 GameDB.java
+│   │   │               │   ├── 📄 PurchaseDB.java
+│   │   │               │   └── 📄 UserDB.java
+│   │   │               │   ├── 📄 DatabaseManager.java
+│   │   │               │   ├── 📄 DatabaseConnection.java
+│   │   │               ├── 📂 classes/
+│   │   │               │   ├── 📄 Cart.java
+│   │   │               │   ├── 📄 Game.java
+│   │   │               │   ├── 📄 GameCategory.java
+│   │   │               │   ├── 📄 Purchase.java
+│   │   │               │   ├── 📄 SystemRequirements.java
+│   │   │               │   └── 📄 User.java
+│   │   │               ├── 📂 service/
+│   │   │               │   ├── 📄 AuthService.java
+│   │   │               │   ├── 📄 CartService.java
+│   │   │               │   ├── 📄 GameService.java
+│   │   │               │   ├── 📄 LibraryService.java
+│   │   │               │   ├── 📄 ProfileService.java
+│   │   │               │   └── 📄 PurchaseService.java
+│   │   │               ├── 📂 ui/
+│   │   │               │   ├── 📂 components/
+│   │   │               │   │   ├── 📄 AnimatedButton.java
+│   │   │               │   │   ├── 📄 GameCard.java
+│   │   │               │   │   ├── 📄 GradientPanel.java
+│   │   │               │   │   ├── 📄 LoadingBar.java
+│   │   │               │   │   ├── 📄 ModernScrollPane.java
+│   │   │               │   │   ├── 📄 PurpleButton.java
+│   │   │               │   │   ├── 📄 PurplePanel.java
+│   │   │               │   │   ├── 📄 RoundedPanel.java
+│   │   │               │   │   └── 📄 SearchBar.java
+│   │   │               │   ├── 📂 pages/
+│   │   │               │   │   ├── 📂 auth/
+│   │   │               │   │   │    ├── 📄 LoginPage.java
+│   │   │               │   │   │    ├── 📄 SignupPage
+│   │   │               │   │   ├── 📂 main/
+│   │   │               │   │   │    ├── 📄 CartPage.java
+│   │   │               │   │   │    ├── 📄 GamePage.java
+│   │   │               │   │   │    ├── 📄 LibraryPage.java
+│   │   │               │   │   │    ├── 📄 HomePage.java
+│   │   │               │   │   │    ├── 📄 ProfilePage.java
+│   │   │               │   │   │    ├── 📄 LoadingPage.java
+│   │   │               │   │   │    └── 📄 StorePage.java
+│   │   │               │   ├── 📄 AppTheme.java
+│   │   │               │   ├── 📄 FontManager.java
+│   │   │               │   └── 📄 UIManager.java
+│   │   │               ├── 📂 util/
+│   │   │               │   ├── 📄 ColorScheme.java
+│   │   │               └── 📄 GameStoreApp.java
+│   │   ├── 📂 ressources/
+│   │   │   └── 📂 assets/
+│   │   │       └── 📂 fonts/
+│   │   │       └── 📂 icons/
+│   │   │       └── 📂 images/
+│   │   │       └── 📂 sounds/

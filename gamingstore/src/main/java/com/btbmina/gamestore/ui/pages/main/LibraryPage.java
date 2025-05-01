@@ -1,12 +1,12 @@
-package ui;
+package com.btbmina.gamestore.ui.pages.main;
 
 import utils.ColorScheme;
 import components.PurpleButton;
 import javax.swing.*;
 import java.awt.*;
 
-public class LibraryPanel extends JPanel {
-    public LibraryPanel() {
+public class LibraryPage extends JPanel {
+    public LibraryPage() {
         setLayout(new BorderLayout());
         setBackground(ColorScheme.BACKGROUND);
 
