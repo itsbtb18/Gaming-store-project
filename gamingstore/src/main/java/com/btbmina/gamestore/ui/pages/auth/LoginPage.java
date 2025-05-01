@@ -88,6 +88,12 @@ public class LoginPage extends JFrame {
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(signupLink);
 
+        signupLink.addActionListener(e -> {
+            new SignupPage(); // make sure SignupPage exists and is imported
+            dispose(); // closes the login page
+        });
+
+
         add(mainPanel);
         setVisible(true);
     }

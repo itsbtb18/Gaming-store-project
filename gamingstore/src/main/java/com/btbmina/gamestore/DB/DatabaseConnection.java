@@ -11,7 +11,7 @@ public class DatabaseConnection {
     // Database credentials
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/btbmina_games";
     private static final String DATABASE_USER = "root";
-    private static final String DATABASE_PASSWORD = "password";
+    private static final String DATABASE_PASSWORD = "2004";
 
     private static DatabaseConnection instance;
     private Connection connection;
