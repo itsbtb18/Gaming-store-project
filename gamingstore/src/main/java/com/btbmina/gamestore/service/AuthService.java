@@ -38,30 +38,26 @@ public class AuthService {
 
     // Authenticate the user during login
     public User authenticateUser(String username, String password) {
-        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
 
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
 
-            ResultSet resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
-                // User found
-                return true;
-            } else {
-                // Invalid credentials
-                JOptionPane.showMessageDialog(null, "Invalid username or password.",
-                        "Login Failed", JOptionPane.ERROR_MESSAGE);
-                return false;
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("user_id"),                    // ← remplace "id" par "user_id"
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error authenticating user: " + e.getMessage(),
-                    "Login Failed", JOptionPane.ERROR_MESSAGE);
-            return false;
         }
+        return null;
     }
-
     // Get user data by username (to load user profile)
     public User getUserData(String username) {
         String query = "SELECT * FROM users WHERE username = ?";
