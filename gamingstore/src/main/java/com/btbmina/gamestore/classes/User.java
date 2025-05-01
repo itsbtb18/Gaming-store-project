@@ -40,6 +40,12 @@ public class User {
         this.lastLogin = lastLogin;
     }
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     // Getters et Setters
     public int getUserId() {
         return userId;

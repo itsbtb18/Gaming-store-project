@@ -12,7 +12,7 @@ public class CartPage extends JPanel {
 
     public CartPage() {
         setLayout(new BorderLayout());
-        setBackground(ColorScheme.BACKGROUND);
+        setBackground(ColorScheme.DARK_BACKGROUND);
 
         createUI();
     }
@@ -20,18 +20,18 @@ public class CartPage extends JPanel {
     private void createUI() {
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(ColorScheme.DARK_BACKGROUND);
+        headerPanel.setBackground(ColorScheme.MEDIUM_BACKGROUND);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel titleLabel = new JLabel("Shopping Cart");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(ColorScheme.TEXT_COLOR);
+        titleLabel.setForeground(ColorScheme.TEXT_PRIMARY);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
         // Cart items
         cartItemsPanel = new JPanel();
         cartItemsPanel.setLayout(new BoxLayout(cartItemsPanel, BoxLayout.Y_AXIS));
-        cartItemsPanel.setBackground(ColorScheme.BACKGROUND);
+        cartItemsPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
         // Add sample items (would be loaded from cart data)
         addCartItem("Game 1", 59.99);
@@ -41,6 +41,8 @@ public class CartPage extends JPanel {
         JScrollPane scrollPane = new JScrollPane(cartItemsPanel);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getVerticalScrollBar().setBackground(ColorScheme.SCROLLBAR_TRACK);
+        scrollPane.getVerticalScrollBar().setForeground(ColorScheme.SCROLLBAR_THUMB);
 
         // Checkout panel
         JPanel checkoutPanel = createCheckoutPanel();
@@ -52,20 +54,20 @@ public class CartPage extends JPanel {
 
     private void addCartItem(String title, double price) {
         JPanel itemPanel = new JPanel(new BorderLayout());
-        itemPanel.setBackground(ColorScheme.MEDIUM_PURPLE);
+        itemPanel.setBackground(ColorScheme.LIGHT_BACKGROUND);
         itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         // Game info
         JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.setBackground(ColorScheme.MEDIUM_PURPLE);
+        infoPanel.setBackground(ColorScheme.LIGHT_BACKGROUND);
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setForeground(ColorScheme.TEXT_COLOR);
+        titleLabel.setForeground(ColorScheme.TEXT_PRIMARY);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
 
         JLabel priceLabel = new JLabel(String.format("$%.2f", price));
-        priceLabel.setForeground(ColorScheme.TEXT_COLOR);
+        priceLabel.setForeground(ColorScheme.TEXT_SECONDARY);
 
         infoPanel.add(titleLabel, BorderLayout.WEST);
         infoPanel.add(priceLabel, BorderLayout.EAST);
@@ -85,23 +87,35 @@ public class CartPage extends JPanel {
     }
 
     private void removeCartItem(JPanel itemPanel, double price) {
-        cartItemsPanel.remove(itemPanel);
-        cartItemsPanel.remove(cartItemsPanel.getComponent(cartItemsPanel.getComponentCount() - 1)); // Remove spacing
-        totalPrice -= price;
-        updateTotalPrice();
-        cartItemsPanel.revalidate();
-        cartItemsPanel.repaint();
+        int index = -1;
+        for (int i = 0; i < cartItemsPanel.getComponentCount(); i++) {
+            if (cartItemsPanel.getComponent(i) == itemPanel) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index != -1) {
+            cartItemsPanel.remove(itemPanel);
+            if (index + 1 < cartItemsPanel.getComponentCount()) {
+                cartItemsPanel.remove(index); // Remove spacer too
+            }
+            totalPrice -= price;
+            updateTotalPrice();
+            cartItemsPanel.revalidate();
+            cartItemsPanel.repaint();
+        }
     }
 
     private JPanel createCheckoutPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(ColorScheme.DARK_PURPLE);
+        panel.setBackground(ColorScheme.PRIMARY_PURPLE);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Total price
         totalPriceLabel = new JLabel();
         totalPriceLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        totalPriceLabel.setForeground(ColorScheme.TEXT_COLOR);
+        totalPriceLabel.setForeground(ColorScheme.TEXT_PRIMARY);
         updateTotalPrice();
 
         // Checkout button
@@ -109,7 +123,7 @@ public class CartPage extends JPanel {
         checkoutButton.setPreferredSize(new Dimension(200, 40));
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rightPanel.setBackground(ColorScheme.DARK_PURPLE);
+        rightPanel.setBackground(ColorScheme.PRIMARY_PURPLE);
         rightPanel.add(totalPriceLabel);
         rightPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         rightPanel.add(checkoutButton);

@@ -23,13 +23,15 @@ public class AnimationManager {
      * @param callback Optional callback to run after animation
      */
     public static void fadeIn(JComponent component, int duration, int delay, Runnable callback) {
-        component.setOpaque(false);
-        float[] opacity = {0f};
+        if (component instanceof AlphaContainer) {
+            AlphaContainer alphaComponent = (AlphaContainer) component;
+            alphaComponent.setAlpha(0f);
+            component.setVisible(true);
+        } else {
+            component.setOpaque(false);
+        }
 
-        // Set initial opacity
-        component.setAlpha(opacity[0]);
-        component.setVisible(true);
-
+        final float[] opacity = {0f};
         int steps = Math.max(duration / 16, 1); // ~60fps
         float increment = 1.0f / steps;
 
@@ -42,8 +44,11 @@ public class AnimationManager {
                 if (opacity[0] > 1f) opacity[0] = 1f;
 
                 SwingUtilities.invokeLater(() -> {
-                    component.setAlpha(opacity[0]);
-                    component.repaint();
+                    if (component instanceof AlphaContainer) {
+                        ((AlphaContainer) component).setAlpha(opacity[0]);
+                    } else {
+                        component.repaint();
+                    }
                 });
 
                 step++;
@@ -51,14 +56,13 @@ public class AnimationManager {
                     if (callback != null) {
                         SwingUtilities.invokeLater(callback);
                     }
-                    ((SwingWorker)this).cancel(true);
+                    ((Runnable) this).run();
                 }
             }
         };
 
         // Schedule the animation
-        scheduler.scheduleAtFixedRate(
-                fadeTask, delay, duration / steps, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(fadeTask, delay, duration / steps, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -70,8 +74,14 @@ public class AnimationManager {
      * @param callback Optional callback to run after animation
      */
     public static void fadeOut(JComponent component, int duration, int delay, Runnable callback) {
-        float[] opacity = {1f};
+        if (component instanceof AlphaContainer) {
+            AlphaContainer alphaComponent = (AlphaContainer) component;
+            alphaComponent.setAlpha(1f);
+        } else {
+            component.setOpaque(false);
+        }
 
+        final float[] opacity = {1f};
         int steps = Math.max(duration / 16, 1); // ~60fps
         float decrement = 1.0f / steps;
 
@@ -84,8 +94,11 @@ public class AnimationManager {
                 if (opacity[0] < 0f) opacity[0] = 0f;
 
                 SwingUtilities.invokeLater(() -> {
-                    component.setAlpha(opacity[0]);
-                    component.repaint();
+                    if (component instanceof AlphaContainer) {
+                        ((AlphaContainer) component).setAlpha(opacity[0]);
+                    } else {
+                        component.repaint();
+                    }
                 });
 
                 step++;
@@ -98,55 +111,36 @@ public class AnimationManager {
                             callback.run();
                         }
                     });
-                    ((SwingWorker)this).cancel(true);
                 }
             }
         };
 
         // Schedule the animation
-        scheduler.scheduleAtFixedRate(
-                fadeTask, delay, duration / steps, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(fadeTask, delay, duration / steps, TimeUnit.MILLISECONDS);
     }
 
     /**
      * Slide in a component from a specific direction
-     *
-     * @param component The component to slide in
-     * @param direction Direction to slide from (TOP, BOTTOM, LEFT, RIGHT)
-     * @param duration Duration in milliseconds
-     * @param delay Delay before starting in milliseconds
-     * @param callback Optional callback to run after animation
+     * This would need to be customized based on your layout manager and container
      */
     public static void slideIn(JComponent component, int direction, int duration, int delay, Runnable callback) {
-        // Implementation details would depend on specific requirements
-        // This would need to be customized based on your layout manager and container
+        // Implementation depends on the specific layout manager.
     }
 
     /**
      * Slide out a component in a specific direction
-     *
-     * @param component The component to slide out
-     * @param direction Direction to slide to (TOP, BOTTOM, LEFT, RIGHT)
-     * @param duration Duration in milliseconds
-     * @param delay Delay before starting in milliseconds
-     * @param callback Optional callback to run after animation
+     * This would need to be customized based on your layout manager and container
      */
     public static void slideOut(JComponent component, int direction, int duration, int delay, Runnable callback) {
-        // Implementation details would depend on specific requirements
-        // This would need to be customized based on your layout manager and container
+        // Implementation depends on the specific layout manager.
     }
 
     /**
      * Transition between two frames
-     *
-     * @param currentFrame The current frame to transition from
-     * @param nextFrame The next frame to transition to
-     * @param type The type of transition (FADE, SLIDE_LEFT, SLIDE_RIGHT, etc.)
-     * @param duration Duration in milliseconds
+     * This would handle seamless transitions between different main windows
      */
     public static void transitionFrames(JFrame currentFrame, JFrame nextFrame, int type, int duration) {
-        // Implementation for frame transitions
-        // This would handle seamless transitions between different main windows
+        // Implementation for frame transitions (customize as needed)
     }
 
     /**
@@ -164,8 +158,16 @@ public class AnimationManager {
     }
 
     // Extension of JComponent with alpha capability for fade effects
-    public static abstract class AlphaContainer extends JComponent {
+    public static class AlphaContainer extends JComponent {
         private float alpha = 1.0f;
+        private final JComponent wrapped;
+
+        public AlphaContainer(JComponent wrapped) {
+            this.wrapped = wrapped;
+            setLayout(new BorderLayout());
+            add(wrapped, BorderLayout.CENTER);
+            setOpaque(false);
+        }
 
         public void setAlpha(float alpha) {
             this.alpha = alpha;

@@ -1,21 +1,24 @@
 package com.btbmina.gamestore.ui;
 
+import com.btbmina.gamestore.ui.pages.main.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class UIManager {
+public class AppUIManager {
     private static JFrame mainFrame;
     private static CardLayout cardLayout;
     private static JPanel mainPanel;
     private static final Color DARK_PURPLE = new Color(48, 25, 52);
     private static final Color MEDIUM_PURPLE = new Color(87, 54, 163);
     private static final Color LIGHT_PURPLE = new Color(157, 78, 221);
-    
+
     public static void initialize() {
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            // Correct the UIManager Look and Feel setup
+            javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,7 +38,7 @@ public class UIManager {
     private static void setupUI() {
         // Create sidebar
         JPanel sidebar = createSidebar();
-        
+
         // Create main content panel
         mainPanel.add(new HomePage(), "HOME");
         mainPanel.add(new StorePage(), "STORE");
@@ -54,7 +57,7 @@ public class UIManager {
         sidebar.setPreferredSize(new Dimension(200, 0));
         sidebar.setBackground(DARK_PURPLE);
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        
+
         // Logo
         JLabel logo = new JLabel("Gaming Store");
         logo.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -91,7 +94,7 @@ public class UIManager {
         button.setMaximumSize(new Dimension(180, 40));
         button.setBackground(MEDIUM_PURPLE);
         button.setLayout(new BorderLayout());
-        
+
         JLabel label = new JLabel(text, SwingConstants.CENTER);
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -117,7 +120,7 @@ public class UIManager {
     private static void animateButton(JPanel button, int offset) {
         Timer timer = new Timer(50, null);
         final int[] frame = {0};
-        
+
         timer.addActionListener(e -> {
             frame[0]++;
             if (frame[0] <= 5) {
@@ -127,7 +130,7 @@ public class UIManager {
                 timer.stop();
             }
         });
-        
+
         timer.start();
     }
 

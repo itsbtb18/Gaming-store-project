@@ -26,6 +26,12 @@ public class Game {
         this(0, title, description, price, category, rating, systemRequirements);
     }
 
+    public Game(int gameId, String gameName, double gamePrice) {
+        this.id = gameId;
+        this.title = gameName;
+        this.price = gamePrice;
+    }
+
     // Getters et Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
