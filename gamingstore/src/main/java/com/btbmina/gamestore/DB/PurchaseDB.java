@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseDB {
-    private static final String URL = "jdbc:mysql://localhost:3306/gamestore";
+    private static final String URL = "jdbc:mysql://localhost:3306/btbmina_games";
     private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "2004";
 
     // ➤ Insérer un achat dans la base de données
     public static boolean insertPurchase(Purchase purchase) {

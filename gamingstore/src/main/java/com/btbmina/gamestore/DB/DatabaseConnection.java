@@ -8,10 +8,10 @@ import java.sql.SQLException;
  * Manages database connections for the application
  */
 public class DatabaseConnection {
-    // Database credentials
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/btbmina_games";
-    private static final String DATABASE_USER = "root";
-    private static final String DATABASE_PASSWORD = "2004";
+    // Database credentials - made public for DatabaseInitializer
+    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/btbmina_games";
+    public static final String DATABASE_USER = "root";
+    public static final String DATABASE_PASSWORD = "2004";
 
     private static DatabaseConnection instance;
     private Connection connection;
@@ -20,6 +20,7 @@ public class DatabaseConnection {
         try {
             // Load MySQL JDBC Driver
             Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("MySQL JDBC Driver loaded successfully.");
         } catch (ClassNotFoundException e) {
             System.err.println("MySQL JDBC Driver not found!");
             e.printStackTrace();
@@ -44,6 +45,7 @@ public class DatabaseConnection {
             try {
                 connection = DriverManager.getConnection(
                         DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
+                System.out.println("Database connection established.");
             } catch (SQLException e) {
                 System.err.println("Failed to connect to database!");
                 e.printStackTrace();
@@ -60,12 +62,17 @@ public class DatabaseConnection {
         if (connection != null) {
             try {
                 connection.close();
+                System.out.println("Database connection closed.");
             } catch (SQLException e) {
                 System.err.println("Error closing database connection");
                 e.printStackTrace();
             }
         }
     }
+
+    /**
+     * Check if the database connection is active
+     */
     public boolean isConnected() {
         try {
             return connection != null && !connection.isClosed();
@@ -74,4 +81,3 @@ public class DatabaseConnection {
         }
     }
 }
-

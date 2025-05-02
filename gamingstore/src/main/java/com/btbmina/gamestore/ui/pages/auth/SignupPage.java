@@ -2,9 +2,14 @@ package com.btbmina.gamestore.ui.pages.auth;
 
 import com.btbmina.gamestore.Util.ColorScheme;
 import com.btbmina.gamestore.ui.components.PurpleButton;
+import com.btbmina.gamestore.ui.pages.main.HomePage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SignupPage extends JFrame {
 
@@ -64,6 +69,43 @@ public class SignupPage extends JFrame {
         mainPanel.add(signupButton);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         mainPanel.add(loginLink);
+// Signup button action
+        signupButton.addActionListener(e -> {
+            // Validate form fields
+            String username = usernameField.getText();
+            String email = emailField.getText();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
+
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "All fields must be filled!", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Don't continue if fields are empty
+            }
+
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(this, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Don't continue if passwords don't match
+            }
+
+            // Add user to the database (you need to write this method)
+            if (addUserToDatabase(username, email, password)) {
+                System.out.println("Account created successfully");
+                new HomePage();
+                dispose(); // pour fermer la fenêtre de signup
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to create account. Try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+// Login link action
+        loginLink.addActionListener(e -> {
+            System.out.println("Login link clicked");
+            new LoginPage(); // Go back to login page
+            dispose();       // Close signup page
+        });
+
+
 
         add(mainPanel);
         setVisible(true);
@@ -99,4 +141,26 @@ public class SignupPage extends JFrame {
         panel.add(field);
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
     }
+
+    public boolean addUserToDatabase(String username, String email, String password) {
+        String dbUrl = "jdbc:mysql://localhost:3306/btbmina_games";
+        String dbUser = "root";
+        String dbPassword = "2004";
+        String insertSQL = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+             PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, email);
+            stmt.setString(3, password); // You might want to hash the password before storing it
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Return true if insertion is successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if there’s an error
+        }
+    }
+
 }
