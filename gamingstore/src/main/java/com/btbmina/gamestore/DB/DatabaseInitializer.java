@@ -20,12 +20,6 @@ public class DatabaseInitializer {
     public static boolean initialize() {
         System.out.println("Starting database initialization...");
 
-        // First, create the database if it doesn't exist
-        if (!createDatabase()) {
-            System.err.println("Failed to create database!");
-            return false;
-        }
-
         // Then create tables
         if (!createTables()) {
             System.err.println("Failed to create tables!");
@@ -39,26 +33,6 @@ public class DatabaseInitializer {
     /**
      * Create the database if it doesn't exist
      */
-    private static boolean createDatabase() {
-        // This connection doesn't specify a database name
-        String url = "jdbc:mysql://localhost:3306/";
-
-        try (Connection conn = java.sql.DriverManager.getConnection(
-                url,
-                DatabaseConnection.DATABASE_USER,
-                DatabaseConnection.DATABASE_PASSWORD);
-             Statement stmt = conn.createStatement()) {
-
-            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS btbmina_games");
-            System.out.println("Database created or already exists.");
-            return true;
-
-        } catch (SQLException e) {
-            System.err.println("Error creating database: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     /**
      * Create tables in the database
@@ -73,8 +47,8 @@ public class DatabaseInitializer {
                             "user_id INT AUTO_INCREMENT PRIMARY KEY, " +
                             "username VARCHAR(50) NOT NULL UNIQUE, " +
                             "email VARCHAR(100) NOT NULL UNIQUE, " +
-                            "password_hash VARCHAR(255) NOT NULL, " +
-                            "registration_date DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                            "password VARCHAR(255) NOT NULL, " +
+                            "registration_date DATETIME, " +
                             "is_verified BOOLEAN DEFAULT FALSE, " +
                             "verification_token VARCHAR(100), " +
                             "profile_image MEDIUMBLOB, " +
@@ -101,7 +75,7 @@ public class DatabaseInitializer {
                             "purchase_id INT AUTO_INCREMENT PRIMARY KEY, " +
                             "user_id INT NOT NULL, " +
                             "game_id INT NOT NULL, " +
-                            "purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                            "registration_date DATETIME, " +
                             "price DOUBLE NOT NULL, " +
                             "payment_method VARCHAR(50), " +
                             "FOREIGN KEY (user_id) REFERENCES users(user_id), " +

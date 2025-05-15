@@ -143,9 +143,9 @@ public class SignupPage extends JFrame {
     }
 
     public boolean addUserToDatabase(String username, String email, String password) {
-        String dbUrl = "jdbc:mysql://localhost:3306/btbmina_games";
-        String dbUser = "root";
-        String dbPassword = "2004";
+        String dbUrl = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083";
+        String dbUser = "sql7779083";
+        String dbPassword = "Hdm6dRtXQF";
         String insertSQL = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
