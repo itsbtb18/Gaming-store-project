@@ -10,9 +10,10 @@ public class Game {
     private double price;
     private String category;
     private double rating;
-    private String systemRequirements; // Ajouté
+    private String systemRequirements;
+    private  String path_image;// Ajouté
 
-    public Game(int id, String title, String description, double price, String category, double rating, String systemRequirements) {
+    public Game(int id, String title, String description, double price, String category, double rating, String systemRequirements, String path_image ) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -20,10 +21,11 @@ public class Game {
         this.category = category;
         this.rating = rating;
         this.systemRequirements = systemRequirements;
+        this.path_image = path_image;
     }
 
-    public Game(String title, String description, double price, String category, double rating, String systemRequirements) {
-        this(0, title, description, price, category, rating, systemRequirements);
+    public Game(String title, String description, double price, String category, double rating, String systemRequirements , String path_image) {
+        this(0, title, description, price, category, rating, systemRequirements, path_image);
     }
 
     public Game(int gameId, String gameName, double gamePrice) {
@@ -38,6 +40,14 @@ public class Game {
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+
+    public String getPath_image() {
+        return path_image;
+    }
+
+    public void setPath_image(String path_image) {
+        this.path_image = path_image;
+    }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
@@ -74,5 +84,4 @@ public class Game {
                 ", rating=" + rating +
                 ", systemRequirements='" + systemRequirements + '\'' +
                 '}';
-    }
-}
+    }}

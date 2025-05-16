@@ -21,7 +21,8 @@ public class GameDB {
                         rs.getDouble("price"),
                         rs.getString("category"),
                         rs.getDouble("rating"),
-                        rs.getString("system_requirements")
+                        rs.getString("system_requirements"),
+                        rs.getString("path_image")
                 );
             }
         } catch (SQLException e) {
