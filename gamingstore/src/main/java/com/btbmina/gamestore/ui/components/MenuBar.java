@@ -3,10 +3,7 @@ package com.btbmina.gamestore.ui.components;
 import com.btbmina.gamestore.Util.ColorScheme;
 import com.btbmina.gamestore.ui.FontManager;
 import com.btbmina.gamestore.classes.User;
-import com.btbmina.gamestore.ui.pages.main.CartPage;
-import com.btbmina.gamestore.ui.pages.main.StorePage;
-import com.btbmina.gamestore.ui.pages.main.LibraryPage;
-import com.btbmina.gamestore.ui.pages.main.HomePage;
+import com.btbmina.gamestore.ui.pages.main.*;
 import com.btbmina.gamestore.ui.pages.auth.LoginPage;
 
 import javax.swing.*;
@@ -35,21 +32,14 @@ public class MenuBar extends JPanel {
     }
 
     private void createContent() {
-        // Left side - Navigation
-        JPanel navPanel = createNavPanel();
-
-        // Right side - Controls
-        JPanel controlsPanel = createControlsPanel();
-
-        add(navPanel, BorderLayout.WEST);
-        add(controlsPanel, BorderLayout.EAST);
+        add(createNavPanel(), BorderLayout.WEST);
+        add(createControlsPanel(), BorderLayout.EAST);
     }
 
     private JPanel createNavPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setOpaque(false);
 
-        // Navigation items
         String[] items = {"Home", "Store", "Library"};
         Class<?>[] pages = {HomePage.class, StorePage.class, LibraryPage.class};
 
@@ -65,18 +55,43 @@ public class MenuBar extends JPanel {
         panel.setOpaque(false);
 
         // Cart button
-        JButton cartButton = createIconButton("🛒", "Cart");
+        JButton cartButton = createControlButton("Cart");
         cartButton.addActionListener(e -> navigateTo(CartPage.class));
 
         // User button
-        JButton userButton = createIconButton("👤", "Account");
+        JButton userButton = createControlButton("Account");
         userButton.addActionListener(e -> showUserMenu(userButton));
 
         panel.add(cartButton);
         panel.add(userButton);
-        panel.add(Box.createHorizontalStrut(20)); // Padding at the end
+        panel.add(Box.createHorizontalStrut(20));
 
         return panel;
+    }
+
+    private JButton createControlButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(FontManager.getBold(14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(87, 54, 163));
+        button.setOpaque(true);
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setFocusPainted(false);
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(108, 67, 200));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(new Color(87, 54, 163));
+            }
+        });
+
+        return button;
     }
 
     private JButton createNavButton(String text, Class<?> pageClass) {
@@ -84,19 +99,7 @@ public class MenuBar extends JPanel {
         button.setFont(FontManager.getBold(14));
         button.setForeground(Color.WHITE);
         styleButton(button);
-
         button.addActionListener(e -> navigateTo(pageClass));
-
-        return button;
-    }
-
-    private JButton createIconButton(String icon, String tooltip) {
-        JButton button = new JButton(icon);
-        button.setFont(FontManager.getRegular(18));
-        button.setForeground(Color.WHITE);
-        button.setToolTipText(tooltip);
-        styleButton(button);
-
         return button;
     }
 
@@ -105,49 +108,58 @@ public class MenuBar extends JPanel {
         button.setContentAreaFilled(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
+        button.setOpaque(false);
 
-        // Hover animation
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                animateBackground(button, HOVER_COLOR);
+                button.setOpaque(true);
+                button.setBackground(HOVER_COLOR);
+                button.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                animateBackground(button, new Color(0, 0, 0, 0));
+                button.setOpaque(false);
+                button.repaint();
             }
         });
     }
 
     private void showUserMenu(Component source) {
         JPopupMenu menu = new JPopupMenu();
-        menu.setBackground(ColorScheme.DARK_BACKGROUND);
-        menu.setBorder(new LineBorder(new Color(255, 255, 255, 30)));
+        menu.setBackground(new Color(48, 25, 52));
+        menu.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
         // User info panel
-        JPanel userInfo = new JPanel(new GridLayout(2, 1, 0, 5));
-        userInfo.setBackground(ColorScheme.DARK_BACKGROUND);
+        JPanel userInfo = new JPanel(new BorderLayout(10, 5));
+        userInfo.setBackground(new Color(48, 25, 52));
         userInfo.setBorder(new EmptyBorder(15, 20, 15, 20));
+
+        // User details
+        JPanel detailsPanel = new JPanel(new GridLayout(2, 1, 0, 5));
+        detailsPanel.setOpaque(false);
 
         JLabel nameLabel = new JLabel(currentUser.getUsername());
         JLabel emailLabel = new JLabel(currentUser.getEmail());
 
         nameLabel.setForeground(Color.WHITE);
-        emailLabel.setForeground(ColorScheme.TEXT_SECONDARY);
+        emailLabel.setForeground(new Color(200, 200, 200));
 
         nameLabel.setFont(FontManager.getBold(14));
         emailLabel.setFont(FontManager.getRegular(12));
 
-        userInfo.add(nameLabel);
-        userInfo.add(emailLabel);
+        detailsPanel.add(nameLabel);
+        detailsPanel.add(emailLabel);
+        userInfo.add(detailsPanel, BorderLayout.CENTER);
 
         menu.add(userInfo);
         menu.addSeparator();
 
         // Menu items
-        addMenuItem(menu, "Profile", e -> {/* TODO */});
-        addMenuItem(menu, "Account Management", e -> {/* TODO */});
+        addMenuItem(menu, "Profile", e -> System.out.println("Profile clicked"));
+        addMenuItem(menu, "Library", e -> navigateTo(LibraryPage.class));
+        addMenuItem(menu, "Settings", e -> System.out.println("Settings clicked"));
         menu.addSeparator();
         addMenuItem(menu, "Log Out", e -> handleLogout());
 
@@ -158,48 +170,22 @@ public class MenuBar extends JPanel {
         JMenuItem item = new JMenuItem(text);
         item.setFont(FontManager.getRegular(13));
         item.setForeground(Color.WHITE);
-        item.setBackground(ColorScheme.DARK_BACKGROUND);
+        item.setBackground(new Color(87, 54, 163));
         item.setBorder(new EmptyBorder(10, 20, 10, 20));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        item.setOpaque(true);
         item.addActionListener(action);
 
-        // Hover effect
         item.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                item.setBackground(ColorScheme.LIGHT_BACKGROUND);
+                item.setBackground(new Color(108, 67, 200));
             }
             public void mouseExited(MouseEvent e) {
-                item.setBackground(ColorScheme.DARK_BACKGROUND);
+                item.setBackground(new Color(87, 54, 163));
             }
         });
 
         menu.add(item);
-    }
-
-    private void animateBackground(JButton button, Color targetColor) {
-        Timer timer = new Timer(20, null);
-        float[] alpha = {0f};
-
-        timer.addActionListener(e -> {
-            alpha[0] += 0.1f;
-            if (alpha[0] >= 1f) {
-                alpha[0] = 1f;
-                timer.stop();
-            }
-
-            Color currentColor = new Color(
-                    targetColor.getRed(),
-                    targetColor.getGreen(),
-                    targetColor.getBlue(),
-                    (int)(targetColor.getAlpha() * alpha[0])
-            );
-
-            button.setBackground(currentColor);
-            button.setOpaque(true);
-            button.repaint();
-        });
-
-        timer.start();
     }
 
     private void navigateTo(Class<?> pageClass) {
