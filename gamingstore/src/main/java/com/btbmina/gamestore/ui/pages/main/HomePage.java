@@ -2,163 +2,215 @@ package com.btbmina.gamestore.ui.pages.main;
 
 import com.btbmina.gamestore.Util.ColorScheme;
 import com.btbmina.gamestore.ui.FontManager;
-import com.btbmina.gamestore.ui.components.PurpleButton;
-import com.btbmina.gamestore.ui.components.TitleBar;
+import com.btbmina.gamestore.ui.components.*;
+import com.btbmina.gamestore.DB.UserDB;
+import com.btbmina.gamestore.classes.User;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomePage extends JFrame {
-    private Timer slideShowTimer;
+    private User currentUser;
+    private JPanel carouselPanel;
     private int currentImageIndex = 0;
-    private final String[] featuredGames = {"Game1.jpg", "Game2.jpg", "Game3.jpg"};
-    private Image backgroundImage;
+    private Timer slideTimer;
+    private List<GamePromotion> promotions;
+
+    private static class GamePromotion {
+        String title;
+        String description;
+        ImageIcon image;
+        double price;
+        double discount;
+
+        public GamePromotion(String title, String description, String imagePath, double price, double discount) {
+            this.title = title;
+            this.description = description;
+            this.image = new ImageIcon(getClass().getResource(imagePath));
+            this.price = price;
+            this.discount = discount;
+        }
+    }
 
     public HomePage() {
-        setTitle("Gaming Store - Home");
+        initializeFrame();
+        loadUserData();
+        createMainContent();
+        initializePromotions();
+        startImageSlideshow();
+    }
+
+    private void initializeFrame() {
+        setTitle("Gaming Store");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true); // Fullscreen with custom decoration
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Fullscreen
+        setSize(1280, 720);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
+    }
 
+    private void loadUserData() {
         try {
-            backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/assets/images/home_bg.jpg")));
-        } catch (IOException e) {
-            System.err.println("Background image not found");
+            currentUser = UserDB.getCurrentUser();
+            if (currentUser == null) {
+                throw new IllegalStateException("User not logged in");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            currentUser = new User("Guest", "guest@example.com");
         }
+    }
 
-        JPanel layeredPanel = new BackgroundPanel();
-        layeredPanel.setLayout(new BorderLayout());
+    private void createMainContent() {
+        JPanel mainContainer = new JPanel(new BorderLayout());
+        mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Title bar
-        layeredPanel.add(new TitleBar(this), BorderLayout.NORTH);
+        // Add TitleBar
+        mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
 
-        // Top control bar (Profile dropdown + Cart)
-        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
-        topRightPanel.setOpaque(false);
-
-        // Cart button
-        PurpleButton cartButton = new PurpleButton("Cart");
-        cartButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Redirecting to Cart...");
-        });
-
-        // Profile dropdown
-        JButton profileButton = new PurpleButton("Profile \u25BC"); // Down arrow
-        JPopupMenu profileMenu = new JPopupMenu();
-        JMenuItem profileItem = new JMenuItem("View Profile");
-        JMenuItem accountItem = new JMenuItem("Account Management");
-        JMenuItem logoutItem = new JMenuItem("Log Out");
-
-        profileMenu.add(profileItem);
-        profileMenu.add(accountItem);
-        profileMenu.addSeparator();
-        profileMenu.add(logoutItem);
-
-        profileButton.addActionListener(e -> profileMenu.show(profileButton, 0, profileButton.getHeight()));
-
-        topRightPanel.add(profileButton);
-        topRightPanel.add(cartButton);
-        layeredPanel.add(topRightPanel, BorderLayout.EAST);
-
-        // Main content
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setOpaque(false);
-
-        // Slideshow
-        JPanel slideshowPanel = new JPanel();
-        slideshowPanel.setOpaque(false);
-        slideshowPanel.setPreferredSize(new Dimension(0, 300));
-        mainPanel.add(slideshowPanel, BorderLayout.NORTH);
-
-        // Latest releases & offers
+        // Create content panel with scroll
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setOpaque(false);
+        contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        JPanel latestPanel = new JPanel(new GridLayout(1, 4, 10, 0));
-        latestPanel.setOpaque(false);
-        for (int i = 0; i < 4; i++) latestPanel.add(createGameCard("Latest Game " + (i + 1)));
+        // Add MenuBar below TitleBar
+        contentPanel.add(new com.btbmina.gamestore.ui.components.MenuBar(this, currentUser));
 
-        JPanel offersPanel = new JPanel(new GridLayout(1, 4, 10, 0));
-        offersPanel.setOpaque(false);
-        for (int i = 0; i < 4; i++) offersPanel.add(createGameCard("Special Offer " + (i + 1)));
 
-        addSection(contentPanel, "Latest Releases", latestPanel);
-        addSection(contentPanel, "Special Offers", offersPanel);
+        // Add promotional carousel
+        contentPanel.add(createCarouselSection());
 
+        // Add categories
+        contentPanel.add(createCategoriesSection());
+
+        // Wrap in ScrollPane
         JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        layeredPanel.add(mainPanel, BorderLayout.CENTER);
-        setContentPane(layeredPanel);
-
-        startSlideshow();
-        setVisible(true);
+        mainContainer.add(scrollPane, BorderLayout.CENTER);
+        setContentPane(mainContainer);
     }
 
-    private void addSection(JPanel container, String title, JPanel content) {
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(FontManager.getFont(FontManager.FONT_NAME_BOLD, Font.BOLD, 24));
+    private JPanel createCarouselSection() {
+        JPanel section = new JPanel(new BorderLayout());
+        section.setBackground(ColorScheme.DARK_BACKGROUND);
+        section.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Title
+        JLabel titleLabel = new JLabel("Featured & On Sale");
+        titleLabel.setFont(FontManager.getTitle(24));
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 0));
-        content.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-        container.add(titleLabel);
-        container.add(content);
+        section.add(titleLabel, BorderLayout.NORTH);
+
+        // Carousel
+        carouselPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (promotions != null && !promotions.isEmpty()) {
+                    GamePromotion current = promotions.get(currentImageIndex);
+                    Image img = current.image.getImage();
+                    g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+
+                    // Add gradient overlay
+                    Graphics2D g2d = (Graphics2D) g;
+                    GradientPaint gradient = new GradientPaint(
+                            0, getHeight() - 100,
+                            new Color(0, 0, 0, 0),
+                            0, getHeight(),
+                            new Color(0, 0, 0, 200)
+                    );
+                    g2d.setPaint(gradient);
+                    g2d.fillRect(0, getHeight() - 100, getWidth(), 100);
+                }
+            }
+        };
+        carouselPanel.setPreferredSize(new Dimension(0, 300));
+        section.add(carouselPanel, BorderLayout.CENTER);
+
+        return section;
     }
 
-    private JPanel createGameCard(String title) {
-        JPanel card = new JPanel();
+    private JPanel createCategoriesSection() {
+        JPanel section = new JPanel(new BorderLayout());
+        section.setBackground(ColorScheme.DARK_BACKGROUND);
+        section.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Title
+        JLabel titleLabel = new JLabel("Browse Categories");
+        titleLabel.setFont(FontManager.getTitle(24));
+        titleLabel.setForeground(Color.WHITE);
+        section.add(titleLabel, BorderLayout.NORTH);
+
+        // Categories grid
+        JPanel grid = new JPanel(new GridLayout(2, 4, 15, 15));
+        grid.setBackground(ColorScheme.DARK_BACKGROUND);
+
+        String[] categories = {
+                "Action", "Adventure", "RPG", "Strategy",
+                "Sports", "Racing", "Indie", "Simulation"
+        };
+
+        for (String category : categories) {
+            grid.add(createCategoryCard(category));
+        }
+
+        section.add(grid, BorderLayout.CENTER);
+        return section;
+    }
+
+    private JPanel createCategoryCard(String category) {
+        JPanel card = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                GradientPaint gradient = new GradientPaint(
+                        0, 0, ColorScheme.ACCENT_PINK,
+                        getWidth(), getHeight(), ColorScheme.PRIMARY_PURPLE
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+            }
+        };
+
         card.setLayout(new BorderLayout());
-        card.setBackground(new Color(87, 54, 163));
+        card.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        JPanel imagePanel = new JPanel();
-        imagePanel.setPreferredSize(new Dimension(0, 200));
-        imagePanel.setBackground(new Color(48, 25, 52));
+        JLabel label = new JLabel(category);
+        label.setFont(FontManager.getBold(16));
+        label.setForeground(Color.WHITE);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.setBackground(new Color(87, 54, 163));
-
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        JLabel priceLabel = new JLabel("$59.99");
-        priceLabel.setForeground(Color.WHITE);
-        priceLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        infoPanel.add(titleLabel, BorderLayout.CENTER);
-        infoPanel.add(priceLabel, BorderLayout.EAST);
-
-        card.add(imagePanel, BorderLayout.CENTER);
-        card.add(infoPanel, BorderLayout.SOUTH);
-
+        card.add(label, BorderLayout.CENTER);
         return card;
     }
 
-    private void startSlideshow() {
-        slideShowTimer = new Timer(3000, (ActionEvent e) -> {
-            currentImageIndex = (currentImageIndex + 1) % featuredGames.length;
-            repaint();
-        });
-        slideShowTimer.start();
+    private void initializePromotions() {
+        promotions = new ArrayList<>();
+        promotions.add(new GamePromotion(
+                "Cyberpunk 2077",
+                "50% OFF - Experience the future today!",
+                "/images/promos/cyberpunk.jpg",
+                59.99,
+                0.5
+        ));
+        // Add more promotions...
     }
 
-    // Custom JPanel with background image
-    private class BackgroundPanel extends JPanel {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (backgroundImage != null) {
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        }
+    private void startImageSlideshow() {
+        slideTimer = new Timer(5000, e -> {
+            currentImageIndex = (currentImageIndex + 1) % promotions.size();
+            carouselPanel.repaint();
+        });
+        slideTimer.start();
     }
 }

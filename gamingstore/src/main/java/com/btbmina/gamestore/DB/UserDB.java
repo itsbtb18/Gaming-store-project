@@ -9,6 +9,8 @@ public class UserDB{
     private static final String URL = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083"; // Adjust based on your DB
     private static final String USER = "sql7779083"; // DB username
     private static final String PASSWORD = "Hdm6dRtXQF"; // DB password
+    private static User currentUser;
+
 
     public static User getUserById(int userId) {
         String query = "SELECT * FROM users WHERE user_id = ?";
@@ -30,7 +32,9 @@ public class UserDB{
         return null;
     }
 
-
+    public static User getCurrentUser() {
+        return currentUser;
+    }
 
     public static boolean insertUser(User user) {
         String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
@@ -50,15 +54,26 @@ public class UserDB{
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
-            stmt.setString(2, password); // Dans un vrai cas, tu devrais comparer le mot de passe haché
+            stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
-            return rs.next(); // Retourne true si un utilisateur est trouvé
+            if (rs.next()) {
+                currentUser = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Relancer l'exception
+            throw e;
         }
     }
+
 
     // Additional methods for updating and deleting users can be added similarly.
 

@@ -45,6 +45,13 @@ public class User {
         this.email = email;
         this.password = password;
     }
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
+        this.registrationDate = LocalDateTime.now();
+        this.isVerified = false;
+    }
+
 
 
     // Getters et Setters
