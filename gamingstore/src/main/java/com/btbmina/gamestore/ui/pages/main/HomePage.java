@@ -9,8 +9,7 @@ import com.btbmina.gamestore.ui.components.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -72,67 +71,17 @@ public class HomePage extends JFrame {
             return new ImageIcon(placeholder);
         }
     }
-    private void initializePromotions() {
-        promotions = new ArrayList<>();
-
-        // Initialize with some featured games
-        promotions.add(new GamePromotion(
-                "Cyberpunk 2077",
-                "Experience the future of gaming - 50% OFF!",
-                "/images/promos/cyberpunk.jpg",
-                59.99,
-                0.50
-        ));
-
-        promotions.add(new GamePromotion(
-                "Elden Ring",
-                "Journey through the Lands Between",
-                "/images/promos/elden-ring.jpg",
-                69.99,
-                0.0
-        ));
-
-        promotions.add(new GamePromotion(
-                "God of War Ragnarök",
-                "Epic Norse adventure - 30% OFF",
-                "/images/promos/god-of-war.jpg",
-                49.99,
-                0.30
-        ));
-
-        // Start the slideshow timer
-        if (promotions.isEmpty()) {
-            System.err.println("Warning: No promotions loaded");
-            return;
-        }
-
-        startImageSlideshow();
-    }
-
-    private void startImageSlideshow() {
-        if (slideTimer != null) {
-            slideTimer.stop();
-        }
-
-        slideTimer = new Timer(5000, e -> {
-            currentImageIndex = (currentImageIndex + 1) % promotions.size();
-            if (carouselPanel != null) {
-                carouselPanel.repaint();
-            }
-        });
-        slideTimer.start();
-    }
 
     public HomePage() {
         initializeFrame();
         loadUserData();
         createMainContent();
         initializePromotions();
-        startImageSlideshow();
         setVisible(true);
     }
 
     private void initializeFrame() {
+        setTitle("Gaming Store - Home");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 720);
         setLocationRelativeTo(null);
@@ -150,19 +99,70 @@ public class HomePage extends JFrame {
             currentUser = new User("Guest", "guest@example.com");
         }
     }
+
+    private void createMainContent() {
+        JPanel mainContainer = new JPanel(new BorderLayout());
+        mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
+
+        // Add TitleBar
+        mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
+
+        // Create content panel with vertical layout
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
+
+        // Add MenuBar with spacing
+        JPanel menuWrapper = new JPanel(new BorderLayout());
+        menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
+        menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        menuWrapper.add(new MenuBar(this, currentUser), BorderLayout.CENTER);
+        contentPanel.add(menuWrapper);
+
+        // Add main sections
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        contentPanel.add(createCarouselSection());
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        contentPanel.add(createCategoriesSection());
+
+        // Add scrollPane with custom scrollbar
+        JScrollPane scrollPane = createScrollPane(contentPanel);
+        mainContainer.add(scrollPane, BorderLayout.CENTER);
+
+        setContentPane(mainContainer);
+    }
+
+    private JScrollPane createScrollPane(JPanel content) {
+        JScrollPane scrollPane = new JScrollPane(content);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
+        scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
+        return scrollPane;
+    }
+
     private JPanel createCarouselSection() {
         JPanel section = new JPanel(new BorderLayout());
         section.setBackground(ColorScheme.DARK_BACKGROUND);
-        section.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        section.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
-        // Title
-        JLabel titleLabel = new JLabel("Featured & On Sale");
+        // Title with animation
+        JLabel titleLabel = new JLabel("Featured Games");
         titleLabel.setFont(FontManager.getTitle(24));
         titleLabel.setForeground(Color.WHITE);
         section.add(titleLabel, BorderLayout.NORTH);
 
         // Carousel panel
-        carouselPanel = new JPanel(new BorderLayout()) {
+        carouselPanel = createCarouselPanel();
+        carouselPanel.setPreferredSize(new Dimension(0, 300));
+        section.add(carouselPanel, BorderLayout.CENTER);
+
+        return section;
+    }
+
+    private JPanel createCarouselPanel() {
+        return new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -189,93 +189,79 @@ public class HomePage extends JFrame {
                     g2d.setPaint(overlay);
                     g2d.fillRect(0, getHeight() - 150, getWidth(), 150);
 
-                    // Draw game title
-                    g2d.setFont(FontManager.getBold(32));
-                    g2d.setColor(Color.WHITE);
-                    g2d.drawString(current.title, 40, getHeight() - 80);
-
-                    // Draw description
-                    g2d.setFont(FontManager.getRegular(16));
-                    g2d.setColor(new Color(200, 200, 200));
-                    g2d.drawString(current.description, 40, getHeight() - 45);
-
-                    // Draw price and discount
-                    int priceX = getWidth() - 180;
-                    int priceY = getHeight() - 45;
-
-                    if (current.discount > 0) {
-                        // Original price (struck through)
-                        String originalPrice = String.format("$%.2f", current.price);
-                        g2d.setFont(FontManager.getRegular(16));
-                        g2d.setColor(new Color(200, 200, 200));
-                        g2d.drawString(originalPrice, priceX, priceY);
-
-                        // Strike through line
-                        int strikeY = priceY - 4;
-                        g2d.drawLine(priceX, strikeY, priceX + g2d.getFontMetrics().stringWidth(originalPrice), strikeY);
-
-                        // Show discounted price
-                        double discountedPrice = current.price * (1 - current.discount);
-                        String priceText = String.format("$%.2f", discountedPrice);
-                        g2d.setFont(FontManager.getBold(24));
-                        g2d.setColor(ColorScheme.ACCENT_PINK);
-                        g2d.drawString(priceText, priceX + 100, priceY);
-                    } else {
-                        // Show regular price
-                        String priceText = String.format("$%.2f", current.price);
-                        g2d.setFont(FontManager.getBold(24));
-                        g2d.setColor(ColorScheme.ACCENT_PINK);
-                        g2d.drawString(priceText, priceX, priceY);
-                    }
-
-                    // Add navigation dots
+                    // Draw game info
+                    drawGameInfo(g2d, current);
                     drawNavigationDots(g2d);
                 }
             }
-
-            private void drawNavigationDots(Graphics2D g2d) {
-                int dotSize = 8;
-                int spacing = 20;
-                int totalWidth = (promotions.size() * dotSize) + ((promotions.size() - 1) * spacing);
-                int startX = (getWidth() - totalWidth) / 2;
-                int y = getHeight() - 20;
-
-                for (int i = 0; i < promotions.size(); i++) {
-                    int x = startX + (i * (dotSize + spacing));
-                    if (i == currentImageIndex) {
-                        g2d.setColor(Color.WHITE);
-                    } else {
-                        g2d.setColor(new Color(255, 255, 255, 100));
-                    }
-                    g2d.fillOval(x, y, dotSize, dotSize);
-                }
-            }
         };
-
-        // Set preferred size for carousel
-        carouselPanel.setPreferredSize(new Dimension(0, 400));
-
-        // Add mouse interaction for navigation
-        carouselPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                if (x < carouselPanel.getWidth() / 2) {
-                    currentImageIndex = (currentImageIndex - 1 + promotions.size()) % promotions.size();
-                } else {
-                    currentImageIndex = (currentImageIndex + 1) % promotions.size();
-                }
-                carouselPanel.repaint();
-            }
-        });
-
-        section.add(carouselPanel, BorderLayout.CENTER);
-        return section;
     }
+
+    private void drawGameInfo(Graphics2D g2d, GamePromotion game) {
+        // Title
+        g2d.setFont(FontManager.getBold(32));
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(game.title, 40, carouselPanel.getHeight() - 80);
+
+        // Description
+        g2d.setFont(FontManager.getRegular(16));
+        g2d.setColor(new Color(200, 200, 200));
+        g2d.drawString(game.description, 40, carouselPanel.getHeight() - 45);
+
+        // Price info
+        drawPriceInfo(g2d, game);
+    }
+
+    private void drawPriceInfo(Graphics2D g2d, GamePromotion game) {
+        int priceX = carouselPanel.getWidth() - 180;
+        int priceY = carouselPanel.getHeight() - 45;
+
+        if (game.discount > 0) {
+            // Original price (struck through)
+            String originalPrice = String.format("$%.2f", game.price);
+            g2d.setFont(FontManager.getRegular(16));
+            g2d.setColor(new Color(200, 200, 200));
+            g2d.drawString(originalPrice, priceX, priceY);
+
+            // Strike through line
+            int strikeY = priceY - 4;
+            g2d.drawLine(priceX, strikeY, priceX + g2d.getFontMetrics().stringWidth(originalPrice), strikeY);
+
+            // Discounted price
+            double discountedPrice = game.price * (1 - game.discount);
+            String priceText = String.format("$%.2f", discountedPrice);
+            g2d.setFont(FontManager.getBold(24));
+            g2d.setColor(ColorScheme.ACCENT_PINK);
+            g2d.drawString(priceText, priceX + 100, priceY);
+        } else {
+            // Regular price
+            String priceText = String.format("$%.2f", game.price);
+            g2d.setFont(FontManager.getBold(24));
+            g2d.setColor(ColorScheme.ACCENT_PINK);
+            g2d.drawString(priceText, priceX, priceY);
+        }
+    }
+
+    private void drawNavigationDots(Graphics2D g2d) {
+        if (promotions == null || promotions.isEmpty()) return;
+
+        int dotSize = 8;
+        int spacing = 20;
+        int totalWidth = (promotions.size() * dotSize) + ((promotions.size() - 1) * spacing);
+        int startX = (carouselPanel.getWidth() - totalWidth) / 2;
+        int y = carouselPanel.getHeight() - 20;
+
+        for (int i = 0; i < promotions.size(); i++) {
+            int x = startX + (i * (dotSize + spacing));
+            g2d.setColor(i == currentImageIndex ? Color.WHITE : new Color(255, 255, 255, 100));
+            g2d.fillOval(x, y, dotSize, dotSize);
+        }
+    }
+
     private JPanel createCategoriesSection() {
         JPanel section = new JPanel(new BorderLayout());
         section.setBackground(ColorScheme.DARK_BACKGROUND);
-        section.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        section.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 
         // Title
         JLabel titleLabel = new JLabel("Browse Categories");
@@ -287,16 +273,11 @@ public class HomePage extends JFrame {
         JPanel grid = new JPanel(new GridLayout(2, 4, 15, 15));
         grid.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Define categories with their icons (using emoji as placeholders)
         String[][] categories = {
-                {"Action", "🎮"},
-                {"Adventure", "🗺"},
-                {"RPG", "⚔"},
-                {"Strategy", "🎯"},
-                {"Sports", "⚽"},
-                {"Racing", "🏎"},
-                {"Indie", "🎨"},
-                {"Simulation", "🌍"}
+                {"Action", "🎮"}, {"Adventure", "🗺"},
+                {"RPG", "⚔"}, {"Strategy", "🎯"},
+                {"Sports", "⚽"}, {"Racing", "🏎"},
+                {"Indie", "🎨"}, {"Simulation", "🌍"}
         };
 
         for (String[] category : categories) {
@@ -315,65 +296,60 @@ public class HomePage extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Create gradient background
                 GradientPaint gradient = new GradientPaint(
                         0, 0, ColorScheme.DARK_BACKGROUND,
                         0, getHeight(), ColorScheme.LIGHT_BACKGROUND
                 );
                 g2d.setPaint(gradient);
-
-                // Draw rounded rectangle
                 g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
 
-                // Draw border
                 g2d.setColor(new Color(255, 255, 255, 30));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
             }
         };
 
+        // Card setup
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(ColorScheme.DARK_BACKGROUND);
         card.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
         card.setPreferredSize(new Dimension(180, 120));
 
-        // Icon label
+        // Icon
         JLabel iconLabel = new JLabel(icon);
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Category name label
+        // Category name
         JLabel nameLabel = new JLabel(categoryName);
         nameLabel.setFont(FontManager.getBold(16));
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add components
+        // Layout
         card.add(Box.createVerticalGlue());
         card.add(iconLabel);
         card.add(Box.createRigidArea(new Dimension(0, 10)));
         card.add(nameLabel);
         card.add(Box.createVerticalGlue());
 
-        // Add hover effect
+        // Hover effect
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                card.setBackground(ColorScheme.LIGHT_BACKGROUND);
                 animateHover(card, true);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                card.setBackground(ColorScheme.DARK_BACKGROUND);
                 animateHover(card, false);
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO: Navigate to category page
                 System.out.println("Category clicked: " + categoryName);
+                // TODO: Implement category navigation
             }
         });
 
@@ -415,41 +391,50 @@ public class HomePage extends JFrame {
         int blue = (int) (start.getBlue() * (1 - ratio) + end.getBlue() * ratio);
         return new Color(red, green, blue);
     }
-    private void createMainContent() {
-        JPanel mainContainer = new JPanel(new BorderLayout());
-        mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add TitleBar
-        mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
+    private void initializePromotions() {
+        promotions = new ArrayList<>();
 
-        // Create scrollable content panel
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
+        promotions.add(new GamePromotion(
+                "Cyberpunk 2077",
+                "Experience the future of gaming - 50% OFF!",
+                "/images/promos/cyberpunk.jpg",
+                59.99,
+                0.50
+        ));
 
-        // Add MenuBar
-        contentPanel.add(new MenuBar(this, currentUser));
+        promotions.add(new GamePromotion(
+                "Elden Ring",
+                "Journey through the Lands Between",
+                "/images/promos/elden-ring.jpg",
+                69.99,
+                0.0
+        ));
 
-        // Add main content sections
-        contentPanel.add(createCarouselSection());
-        contentPanel.add(createCategoriesSection());
+        promotions.add(new GamePromotion(
+                "God of War Ragnarök",
+                "Epic Norse adventure - 30% OFF",
+                "/images/promos/god-of-war.jpg",
+                49.99,
+                0.30
+        ));
 
-        // Create scrollPane with custom scrollbar
-        JScrollPane scrollPane = createScrollPane(contentPanel);
-        mainContainer.add(scrollPane, BorderLayout.CENTER);
-
-        setContentPane(mainContainer);
+        if (!promotions.isEmpty()) {
+            startImageSlideshow();
+        }
     }
 
-    private JScrollPane createScrollPane(JPanel content) {
-        JScrollPane scrollPane = new JScrollPane(content);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
-        scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
-        return scrollPane;
-    }
+    private void startImageSlideshow() {
+        if (slideTimer != null) {
+            slideTimer.stop();
+        }
 
-    // ... rest of the code (createCarouselSection, createCategoriesSection, etc.) remains the same ...
+        slideTimer = new Timer(5000, e -> {
+            currentImageIndex = (currentImageIndex + 1) % promotions.size();
+            if (carouselPanel != null) {
+                carouselPanel.repaint();
+            }
+        });
+        slideTimer.start();
+    }
 }
