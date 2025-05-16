@@ -44,13 +44,14 @@ public class GameDB {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     Game game = new Game(
-                            rs.getInt("id"),
+                            rs.getInt("game_id"),         // Changed from "id" to match database column
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getDouble("price"),
                             rs.getString("category"),
                             rs.getDouble("rating"),
-                            rs.getString("system_requirements")
+                            rs.getString("system_requirements"),
+                            rs.getString("path_image")    // Added missing path_image parameter
                     );
                     games.add(game);
                 }
