@@ -29,7 +29,7 @@ public class LoginPage extends JFrame {
     // ✅ Corrected and simplified image loader
     private void loadBackgroundImage() {
         try {
-            backgroundImage = ImageIO.read(getClass().getResource("/assets/images/bg_login.jpg"));
+            backgroundImage = ImageIO.read(getClass().getClassLoader().getResource("assets/images/bg_login.jpg"));
         } catch (IOException | IllegalArgumentException e) {
             System.err.println("Failed to load background image: " + e.getMessage());
         }
