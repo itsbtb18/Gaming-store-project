@@ -9,9 +9,9 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
     // Database credentials - made public for DatabaseInitializer
-    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/btbmina_games";
-    public static final String DATABASE_USER = "root";
-    public static final String DATABASE_PASSWORD = "2004";
+    public static final String DATABASE_URL = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083";
+    public static final String DATABASE_USER = "sql7779083";
+    public static final String DATABASE_PASSWORD = "Hdm6dRtXQF";
 
     private static DatabaseConnection instance;
     private Connection connection;

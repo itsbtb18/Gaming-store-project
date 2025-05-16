@@ -16,7 +16,7 @@ public class FontManager {
     private static final Map<String, Font> fontCache = new HashMap<>();
 
     // Font paths
-    private static final String FONT_PATH = "/fonts/";
+    private static final String FONT_PATH = "/assets/fonts/";
     private static final String FONT_REGULAR = "Inter-Regular.ttf";
     private static final String FONT_BOLD = "Inter-Bold.ttf";
     private static final String FONT_MEDIUM = "Inter-Medium.ttf";

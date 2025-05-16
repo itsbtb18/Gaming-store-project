@@ -3,9 +3,9 @@ import com.btbmina.gamestore.classes.Game;
 import com.btbmina.gamestore.classes.User;
 import java.sql.*;
 public class GameDB {
-    private static final String URL = "jdbc:mysql://localhost:3306/btbmina_games";
-    private static final String USER = "root";
-    private static final String PASSWORD = "2004";
+    private static final String URL = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083";
+    private static final String USER = "sql7779083";
+    private static final String PASSWORD = "Hdm6dRtXQF";
 
     public static Game getGameById(int gameId) {
         String query = "SELECT * FROM games WHERE game_id = ?";

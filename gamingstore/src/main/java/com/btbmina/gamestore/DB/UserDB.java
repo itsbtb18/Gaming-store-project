@@ -6,22 +6,22 @@ import java.sql.Connection;
 import java.sql.*;
 
 public class UserDB{
-    private static final String URL = "jdbc:mysql://localhost:3306/btbmina_games"; // Adjust based on your DB
-    private static final String USER = "root"; // DB username
-    private static final String PASSWORD = "2004"; // DB password
+    private static final String URL = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083"; // Adjust based on your DB
+    private static final String USER = "sql7779083"; // DB username
+    private static final String PASSWORD = "Hdm6dRtXQF"; // DB password
 
     public static User getUserById(int userId) {
-        String query = "SELECT * FROM users WHERE users.user_id = ?";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        String query = "SELECT * FROM users WHERE user_id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new User(
-                        rs.getInt("id"),
+                        rs.getInt("user_id"),
                         rs.getString("username"),
                         rs.getString("email"),
-                        rs.getString("password")  // was "password_hash"
+                        rs.getString("password")
                 );
             }
         } catch (SQLException e) {
@@ -29,6 +29,7 @@ public class UserDB{
         }
         return null;
     }
+
 
 
     public static boolean insertUser(User user) {
