@@ -40,7 +40,9 @@ public class SignupPage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 720);
         setLocationRelativeTo(null);
-        setUndecorated(true);
+        setUndecorated(true); // if you use a custom title bar like TitleBar
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
     private void createMainContent() {
