@@ -83,9 +83,23 @@ public class HomePage extends JFrame {
     private void initializeFrame() {
         setTitle("Gaming Store - Home");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1280, 720);
-        setLocationRelativeTo(null);
         setUndecorated(true);
+
+        // Get screen dimensions
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+        if (gd.isFullScreenSupported()) {
+            // Enable true full screen mode
+            gd.setFullScreenWindow(this);
+        } else {
+            // Fallback to maximized window if full screen is not supported
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            // Set size to screen size
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            setSize(screenSize.width, screenSize.height);
+            setLocationRelativeTo(null);
+        }
     }
 
     private void loadUserData() {
@@ -119,6 +133,10 @@ public class HomePage extends JFrame {
         menuWrapper.add(new MenuBar(this, currentUser), BorderLayout.CENTER);
         contentPanel.add(menuWrapper);
 
+        // Add SearchBar section
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        contentPanel.add(createSearchSection());
+
         // Add main sections
         contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         contentPanel.add(createCarouselSection());
@@ -130,6 +148,25 @@ public class HomePage extends JFrame {
         mainContainer.add(scrollPane, BorderLayout.CENTER);
 
         setContentPane(mainContainer);
+    }
+
+    // Add this new method to create the search section
+    private JPanel createSearchSection() {
+        JPanel searchSection = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        searchSection.setBackground(ColorScheme.DARK_BACKGROUND);
+
+        SearchBar searchBar = new SearchBar();
+        // Set preferred size for the search bar
+        searchBar.setPreferredSize(new Dimension(600, 40));
+
+        // Create a wrapper panel for proper alignment
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(ColorScheme.DARK_BACKGROUND);
+        wrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        wrapper.add(searchBar, BorderLayout.CENTER);
+
+        searchSection.add(wrapper);
+        return searchSection;
     }
 
     private JScrollPane createScrollPane(JPanel content) {

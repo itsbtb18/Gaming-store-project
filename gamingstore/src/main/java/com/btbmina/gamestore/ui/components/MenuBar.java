@@ -13,7 +13,8 @@ import java.awt.event.*;
 
 public class MenuBar extends JPanel {
     private static final int HEIGHT = 60;
-    private static final Color HOVER_COLOR = new Color(255, 255, 255, 30);
+    private static final Color MENU_PURPLE = new Color(87, 54, 163);
+    private static final Color HOVER_PURPLE = new Color(108, 67, 200);
     private final JFrame parentFrame;
     private final User currentUser;
 
@@ -39,14 +40,7 @@ public class MenuBar extends JPanel {
     private JPanel createNavPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setOpaque(false);
-
-        String[] items = {"Home", "Store", "Library"};
-        Class<?>[] pages = {HomePage.class, StorePage.class, LibraryPage.class};
-
-        for (int i = 0; i < items.length; i++) {
-            panel.add(createNavButton(items[i], pages[i]));
-        }
-
+        panel.add(createNavButton("Home", HomePage.class));
         return panel;
     }
 
@@ -54,11 +48,9 @@ public class MenuBar extends JPanel {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
         panel.setOpaque(false);
 
-        // Cart button
         JButton cartButton = createControlButton("Cart");
         cartButton.addActionListener(e -> navigateTo(CartPage.class));
 
-        // User button
         JButton userButton = createControlButton("Account");
         userButton.addActionListener(e -> showUserMenu(userButton));
 
@@ -73,7 +65,7 @@ public class MenuBar extends JPanel {
         JButton button = new JButton(text);
         button.setFont(FontManager.getBold(14));
         button.setForeground(Color.WHITE);
-        button.setBackground(new Color(87, 54, 163));
+        button.setBackground(MENU_PURPLE);
         button.setOpaque(true);
         button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -82,12 +74,12 @@ public class MenuBar extends JPanel {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(new Color(108, 67, 200));
+                button.setBackground(HOVER_PURPLE);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(new Color(87, 54, 163));
+                button.setBackground(MENU_PURPLE);
             }
         });
 
@@ -98,45 +90,24 @@ public class MenuBar extends JPanel {
         JButton button = new JButton(text);
         button.setFont(FontManager.getBold(14));
         button.setForeground(Color.WHITE);
-        styleButton(button);
-        button.addActionListener(e -> navigateTo(pageClass));
-        return button;
-    }
-
-    private void styleButton(JButton button) {
         button.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         button.setContentAreaFilled(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
         button.setOpaque(false);
-
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setOpaque(true);
-                button.setBackground(HOVER_COLOR);
-                button.repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setOpaque(false);
-                button.repaint();
-            }
-        });
+        button.addActionListener(e -> navigateTo(pageClass));
+        return button;
     }
 
     private void showUserMenu(Component source) {
         JPopupMenu menu = new JPopupMenu();
-        menu.setBackground(new Color(48, 25, 52));
+        menu.setBackground(MENU_PURPLE);
         menu.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
-        // User info panel
         JPanel userInfo = new JPanel(new BorderLayout(10, 5));
-        userInfo.setBackground(new Color(48, 25, 52));
+        userInfo.setBackground(MENU_PURPLE);
         userInfo.setBorder(new EmptyBorder(15, 20, 15, 20));
 
-        // User details
         JPanel detailsPanel = new JPanel(new GridLayout(2, 1, 0, 5));
         detailsPanel.setOpaque(false);
 
@@ -156,10 +127,8 @@ public class MenuBar extends JPanel {
         menu.add(userInfo);
         menu.addSeparator();
 
-        // Menu items
-        addMenuItem(menu, "Profile", e -> System.out.println("Profile clicked"));
+        addMenuItem(menu, "Profile", e -> navigateTo(ProfilePage.class));
         addMenuItem(menu, "Library", e -> navigateTo(LibraryPage.class));
-        addMenuItem(menu, "Settings", e -> System.out.println("Settings clicked"));
         menu.addSeparator();
         addMenuItem(menu, "Log Out", e -> handleLogout());
 
@@ -170,7 +139,7 @@ public class MenuBar extends JPanel {
         JMenuItem item = new JMenuItem(text);
         item.setFont(FontManager.getRegular(13));
         item.setForeground(Color.WHITE);
-        item.setBackground(new Color(87, 54, 163));
+        item.setBackground(MENU_PURPLE);
         item.setBorder(new EmptyBorder(10, 20, 10, 20));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
         item.setOpaque(true);
@@ -178,10 +147,10 @@ public class MenuBar extends JPanel {
 
         item.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                item.setBackground(new Color(108, 67, 200));
+                item.setBackground(HOVER_PURPLE);
             }
             public void mouseExited(MouseEvent e) {
-                item.setBackground(new Color(87, 54, 163));
+                item.setBackground(MENU_PURPLE);
             }
         });
 

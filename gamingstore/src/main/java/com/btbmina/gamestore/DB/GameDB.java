@@ -2,6 +2,9 @@ package com.btbmina.gamestore.DB;
 import com.btbmina.gamestore.classes.Game;
 import com.btbmina.gamestore.classes.User;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameDB {
     private static final String URL = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083";
     private static final String USER = "sql7779083";
@@ -29,6 +32,32 @@ public class GameDB {
         }
         return null;
     }
+    public static List<Game> searchGames(String query) throws SQLException {
+        List<Game> games = new ArrayList<>();
+        String sql = "SELECT * FROM games WHERE title LIKE ? LIMIT 10";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + query + "%");
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Game game = new Game(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getDouble("price"),
+                            rs.getString("category"),
+                            rs.getDouble("rating"),
+                            rs.getString("system_requirements")
+                    );
+                    games.add(game);
+                }
+            }
+        }
+        return games;
+    }
+
 
     public static boolean insertGame(Game game) {
         String query = "INSERT INTO games (title, description, price, category, rating, system_requirements) VALUES (?, ?, ?, ?, ?, ?)";
@@ -46,4 +75,5 @@ public class GameDB {
         }
         return false;
     }
+
 }
