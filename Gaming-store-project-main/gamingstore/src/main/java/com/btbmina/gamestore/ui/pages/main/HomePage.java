@@ -25,7 +25,7 @@ public class HomePage extends JFrame {
     private float carouselTransitionAlpha = 1.0f;
     private GamePromotion previousPromotion = null;
     private Timer transitionTimer;
-
+    private JFrame mainFrame;
     private static class GamePromotion {
         String title;
         String description;
@@ -88,6 +88,7 @@ public class HomePage extends JFrame {
     }
 
     public HomePage() {
+        this.mainFrame = this; // Set the mainFrame reference
         initializeFrame();
         loadUserData();
         createMainContent();
@@ -443,7 +444,7 @@ public class HomePage extends JFrame {
         grid.setBackground(ColorScheme.DARK_BACKGROUND);
 
         String[][] categories = {
-                {"Action", "🎮"}, {"Adventure", "🗺"},
+                {"Shooter", "🎮"}, {"Action", "🗺"},
                 {"RPG", "⚔"}, {"Strategy", "🎯"},
                 {"Sports", "⚽"}, {"Racing", "🏎"},
                 {"Indie", "🎨"}, {"Simulation", "🌍"}
@@ -531,31 +532,66 @@ public class HomePage extends JFrame {
                 animateHover(card, false);
             }
 
+
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Category clicked: " + categoryName);
-                // Enhanced click effect
-                Timer pulseTimer = new Timer(20, null);
-                final float[] scale = {0.95f};
-                pulseTimer.addActionListener(event -> {
-                    scale[0] += 0.01f;
-                    if (scale[0] >= 1.0f) {
-                        scale[0] = 1.0f;
-                        pulseTimer.stop();
-                    }
-                    card.setSize(new Dimension((int)(card.getWidth() * scale[0]),
-                            (int)(card.getHeight() * scale[0])));
-                    card.revalidate();
-                });
-                pulseTimer.start();
+                // Create fade-out effect
+                Timer fadeTimer = new Timer(20, null);
+                float[] alpha = {1.0f};
 
-                // TODO: Implement category navigation
+                fadeTimer.addActionListener(event -> {
+                    alpha[0] -= 0.1f;
+                    if (alpha[0] <= 0) {
+                        fadeTimer.stop();
+                        // Navigate to category page
+                        navigateToCategory(categoryName);
+                    }
+                    setOpacity(alpha[0]);
+                });
+
+                fadeTimer.start();
             }
         });
 
         return card;
     }
+    private void navigateToCategory(String categoryName) {
+        dispose(); // Close current window
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // Save the current state if needed
+                cleanup();
 
+                // Create and show the category page
+                CategoryPage categoryPage = new CategoryPage(categoryName, currentUser);
+                categoryPage.setVisible(true);
+
+                // Optional: Add transition animation
+                categoryPage.setOpacity(0.0f);
+                Timer fadeInTimer = new Timer(20, null);
+                float[] alpha = {0.0f};
+
+                fadeInTimer.addActionListener(e -> {
+                    alpha[0] += 0.1f;
+                    if (alpha[0] >= 1.0f) {
+                        alpha[0] = 1.0f;
+                        fadeInTimer.stop();
+                    }
+                    categoryPage.setOpacity(alpha[0]);
+                });
+
+                fadeInTimer.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        HomePage.this,
+                        "Error loading category page: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+    }
     private void animateHover(JPanel card, boolean hovering) {
         Timer timer = new Timer(15, null); // Faster animation
         float[] alpha = {hovering ? 0f : 1f};

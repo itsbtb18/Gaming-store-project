@@ -33,6 +33,33 @@ public class GameDB {
         }
         return null;
     }
+    public static List<Game> getGamesByCategory(String category) throws SQLException {
+        List<Game> games = new ArrayList<>();
+        String query = "SELECT * FROM games WHERE category = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, category);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Game game = new Game(
+                        rs.getInt("game_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getString("category"),
+                        rs.getDouble("rating"),
+                        rs.getString("system_requirements"),
+                        rs.getString("path_image")
+                );
+                games.add(game);
+            }
+        }
+
+        return games;
+    }
     public static List<Game> searchGames(String query) throws SQLException {
         List<Game> games = new ArrayList<>();
         String sql = "SELECT * FROM games WHERE title LIKE ? LIMIT 10";
