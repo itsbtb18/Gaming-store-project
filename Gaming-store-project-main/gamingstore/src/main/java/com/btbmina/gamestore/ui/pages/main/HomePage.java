@@ -22,6 +22,9 @@ public class HomePage extends JFrame {
     private int currentImageIndex = 0;
     private Timer slideTimer;
     private List<GamePromotion> promotions;
+    private float carouselTransitionAlpha = 1.0f;
+    private GamePromotion previousPromotion = null;
+    private Timer transitionTimer;
 
     private static class GamePromotion {
         String title;
@@ -61,12 +64,24 @@ public class HomePage extends JFrame {
         private ImageIcon createPlaceholderImage() {
             BufferedImage placeholder = new BufferedImage(800, 400, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = placeholder.createGraphics();
+
+            // Enhanced placeholder gradient
             GradientPaint gradient = new GradientPaint(
                     0, 0, ColorScheme.PRIMARY_PURPLE,
-                    800, 400, ColorScheme.DARK_BACKGROUND
+                    800, 400, new Color(13, 17, 23)
             );
             g2d.setPaint(gradient);
             g2d.fillRect(0, 0, 800, 400);
+
+            // Add some gaming-themed elements to placeholder
+            g2d.setColor(new Color(255, 255, 255, 40));
+            for (int i = 0; i < 20; i++) {
+                int x = (int)(Math.random() * 800);
+                int y = (int)(Math.random() * 400);
+                int size = (int)(Math.random() * 5) + 1;
+                g2d.fillRect(x, y, size, size);
+            }
+
             g2d.dispose();
             return new ImageIcon(placeholder);
         }
@@ -150,7 +165,6 @@ public class HomePage extends JFrame {
         setContentPane(mainContainer);
     }
 
-    // Add this new method to create the search section
     private JPanel createSearchSection() {
         JPanel searchSection = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchSection.setBackground(ColorScheme.DARK_BACKGROUND);
@@ -176,6 +190,10 @@ public class HomePage extends JFrame {
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
         scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
+
+        // Enhanced scroll behavior
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
         return scrollPane;
     }
 
@@ -188,11 +206,15 @@ public class HomePage extends JFrame {
         JLabel titleLabel = new JLabel("Featured Games");
         titleLabel.setFont(FontManager.getTitle(24));
         titleLabel.setForeground(Color.WHITE);
+
+        // Add a subtle glow effect to the title
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
+
         section.add(titleLabel, BorderLayout.NORTH);
 
-        // Carousel panel
+        // Carousel panel with increased height for more impressive display
         carouselPanel = createCarouselPanel();
-        carouselPanel.setPreferredSize(new Dimension(0, 300));
+        carouselPanel.setPreferredSize(new Dimension(0, 400)); // Increased height
         section.add(carouselPanel, BorderLayout.CENTER);
 
         return section;
@@ -207,73 +229,168 @@ public class HomePage extends JFrame {
                     Graphics2D g2d = (Graphics2D) g;
                     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
                     GamePromotion current = promotions.get(currentImageIndex);
 
-                    // Draw game image
+                    // For smooth transition effect
+                    if (carouselTransitionAlpha < 1.0f && previousPromotion != null) {
+                        // Draw previous image
+                        if (previousPromotion.image != null) {
+                            Image prevImg = previousPromotion.image.getImage();
+                            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f - carouselTransitionAlpha));
+                            g2d.drawImage(prevImg, 0, 0, getWidth(), getHeight(), this);
+                        }
+                    }
+
+                    // Draw current game image
                     if (current.image != null) {
                         Image img = current.image.getImage();
+                        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, carouselTransitionAlpha));
                         g2d.drawImage(img, 0, 0, getWidth(), getHeight(), this);
                     }
 
-                    // Draw gradient overlay
+                    // Reset composite
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+                    // Draw enhanced gradient overlay with gamer aesthetic
+                    Paint originalPaint = g2d.getPaint();
+
+                    // Bottom gradient overlay
                     GradientPaint overlay = new GradientPaint(
-                            0, getHeight() - 150,
+                            0, getHeight() - 200,
                             new Color(0, 0, 0, 0),
                             0, getHeight(),
-                            new Color(0, 0, 0, 200)
+                            new Color(13, 17, 23, 230)
                     );
                     g2d.setPaint(overlay);
-                    g2d.fillRect(0, getHeight() - 150, getWidth(), 150);
+                    g2d.fillRect(0, getHeight() - 200, getWidth(), 200);
 
-                    // Draw game info
+                    // Left side gradient for text
+                    GradientPaint leftOverlay = new GradientPaint(
+                            0, 0,
+                            new Color(0, 0, 0, 180),
+                            300, 0,
+                            new Color(0, 0, 0, 0)
+                    );
+                    g2d.setPaint(leftOverlay);
+                    g2d.fillRect(0, 0, 300, getHeight());
+
+                    g2d.setPaint(originalPaint);
+
+                    // Draw game info with enhanced styling
                     drawGameInfo(g2d, current);
                     drawNavigationDots(g2d);
+
+                    // Add a subtle glowing border to the carousel
+                    g2d.setColor(new Color(ColorScheme.PRIMARY_PURPLE.getRed(),
+                            ColorScheme.PRIMARY_PURPLE.getGreen(),
+                            ColorScheme.PRIMARY_PURPLE.getBlue(), 40));
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.drawRect(0, 0, getWidth()-1, getHeight()-1);
                 }
             }
         };
     }
 
     private void drawGameInfo(Graphics2D g2d, GamePromotion game) {
-        // Title
-        g2d.setFont(FontManager.getBold(32));
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(game.title, 40, carouselPanel.getHeight() - 80);
+        // Background for text - subtle transparent panel
+        g2d.setColor(new Color(0, 0, 0, 100));
+        g2d.fillRoundRect(30, carouselPanel.getHeight() - 130, 500, 100, 15, 15);
 
-        // Description
-        g2d.setFont(FontManager.getRegular(16));
-        g2d.setColor(new Color(200, 200, 200));
+        // Title with shadow effect
+        g2d.setFont(FontManager.getBold(36)); // Increased size
+
+        // Draw shadow
+        g2d.setColor(new Color(0, 0, 0, 150));
+        g2d.drawString(game.title, 42, carouselPanel.getHeight() - 80);
+
+        // Draw actual text
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(game.title, 40, carouselPanel.getHeight() - 82);
+
+        // Description with better visibility
+        g2d.setFont(FontManager.getRegular(18)); // Increased size
+        g2d.setColor(new Color(220, 220, 220));
         g2d.drawString(game.description, 40, carouselPanel.getHeight() - 45);
 
-        // Price info
+        // Price info with more prominent styling
         drawPriceInfo(g2d, game);
+
+        // Add a "Play Now" indicator
+        g2d.setColor(ColorScheme.PRIMARY_PURPLE);
+        g2d.fillRoundRect(40, carouselPanel.getHeight() - 30, 120, 30, 15, 15);
+
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(FontManager.getBold(14));
+        String playText = "PLAY NOW";
+        FontMetrics fm = g2d.getFontMetrics();
+        int textWidth = fm.stringWidth(playText);
+        g2d.drawString(playText, 40 + (120 - textWidth)/2, carouselPanel.getHeight() - 10);
     }
 
     private void drawPriceInfo(Graphics2D g2d, GamePromotion game) {
-        int priceX = carouselPanel.getWidth() - 180;
+        int priceX = carouselPanel.getWidth() - 220;
         int priceY = carouselPanel.getHeight() - 45;
 
+        // Price background panel
+        g2d.setColor(new Color(0, 0, 0, 150));
+        int width = 180;
+        int height = 60;
+        g2d.fillRoundRect(priceX - 20, priceY - 40, width, height, 15, 15);
+
+        // Border glow for price panel
+        g2d.setColor(new Color(ColorScheme.ACCENT_PINK.getRed(),
+                ColorScheme.ACCENT_PINK.getGreen(),
+                ColorScheme.ACCENT_PINK.getBlue(), 80));
+        g2d.drawRoundRect(priceX - 20, priceY - 40, width, height, 15, 15);
+
         if (game.discount > 0) {
+            // Discount badge
+            g2d.setColor(ColorScheme.ACCENT_PINK);
+            String discountText = "-" + (int)(game.discount * 100) + "%";
+            g2d.setFont(FontManager.getBold(14));
+            FontMetrics fm = g2d.getFontMetrics();
+            int discountWidth = fm.stringWidth(discountText) + 20;
+            g2d.fillRoundRect(priceX - 10, priceY - 60, discountWidth, 24, 12, 12);
+
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(discountText, priceX, priceY - 44);
+
             // Original price (struck through)
             String originalPrice = String.format("$%.2f", game.price);
             g2d.setFont(FontManager.getRegular(16));
-            g2d.setColor(new Color(200, 200, 200));
-            g2d.drawString(originalPrice, priceX, priceY);
+            g2d.setColor(new Color(180, 180, 180));
+            g2d.drawString(originalPrice, priceX, priceY - 10);
 
             // Strike through line
-            int strikeY = priceY - 4;
+            int strikeY = priceY - 14;
             g2d.drawLine(priceX, strikeY, priceX + g2d.getFontMetrics().stringWidth(originalPrice), strikeY);
 
-            // Discounted price
+            // Discounted price with enhanced visibility
             double discountedPrice = game.price * (1 - game.discount);
             String priceText = String.format("$%.2f", discountedPrice);
-            g2d.setFont(FontManager.getBold(24));
+            g2d.setFont(FontManager.getBold(28));
+
+            // Create a glow effect
+            g2d.setColor(new Color(ColorScheme.ACCENT_PINK.getRed(),
+                    ColorScheme.ACCENT_PINK.getGreen(),
+                    ColorScheme.ACCENT_PINK.getBlue(), 100));
+            g2d.drawString(priceText, priceX + 2, priceY + 20);
+
             g2d.setColor(ColorScheme.ACCENT_PINK);
-            g2d.drawString(priceText, priceX + 100, priceY);
+            g2d.drawString(priceText, priceX, priceY + 18);
         } else {
-            // Regular price
+            // Regular price with enhanced styling
             String priceText = String.format("$%.2f", game.price);
-            g2d.setFont(FontManager.getBold(24));
+            g2d.setFont(FontManager.getBold(28));
+
+            // Create a subtle glow effect
+            g2d.setColor(new Color(ColorScheme.ACCENT_PINK.getRed(),
+                    ColorScheme.ACCENT_PINK.getGreen(),
+                    ColorScheme.ACCENT_PINK.getBlue(), 100));
+            g2d.drawString(priceText, priceX + 2, priceY + 2);
+
             g2d.setColor(ColorScheme.ACCENT_PINK);
             g2d.drawString(priceText, priceX, priceY);
         }
@@ -282,15 +399,29 @@ public class HomePage extends JFrame {
     private void drawNavigationDots(Graphics2D g2d) {
         if (promotions == null || promotions.isEmpty()) return;
 
-        int dotSize = 8;
+        int dotSize = 10;  // Larger dots
         int spacing = 20;
         int totalWidth = (promotions.size() * dotSize) + ((promotions.size() - 1) * spacing);
         int startX = (carouselPanel.getWidth() - totalWidth) / 2;
         int y = carouselPanel.getHeight() - 20;
 
+        // Draw background for dots
+        g2d.setColor(new Color(0, 0, 0, 100));
+        g2d.fillRoundRect(startX - 10, y - 5, totalWidth + 20, dotSize + 10, 10, 10);
+
         for (int i = 0; i < promotions.size(); i++) {
             int x = startX + (i * (dotSize + spacing));
-            g2d.setColor(i == currentImageIndex ? Color.WHITE : new Color(255, 255, 255, 100));
+
+            if (i == currentImageIndex) {
+                // Active dot with glow effect
+                g2d.setColor(new Color(255, 255, 255, 80));
+                g2d.fillOval(x-2, y-2, dotSize+4, dotSize+4);
+                g2d.setColor(Color.WHITE);
+            } else {
+                // Inactive dot
+                g2d.setColor(new Color(255, 255, 255, 100));
+            }
+
             g2d.fillOval(x, y, dotSize, dotSize);
         }
     }
@@ -300,10 +431,11 @@ public class HomePage extends JFrame {
         section.setBackground(ColorScheme.DARK_BACKGROUND);
         section.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 
-        // Title
+        // Title with subtle glow effect
         JLabel titleLabel = new JLabel("Browse Categories");
         titleLabel.setFont(FontManager.getTitle(24));
         titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
         section.add(titleLabel, BorderLayout.NORTH);
 
         // Categories grid
@@ -333,15 +465,31 @@ public class HomePage extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+                // Enhanced gradient with gaming aesthetic
                 GradientPaint gradient = new GradientPaint(
-                        0, 0, ColorScheme.DARK_BACKGROUND,
-                        0, getHeight(), ColorScheme.LIGHT_BACKGROUND
+                        0, 0, new Color(ColorScheme.DARK_BACKGROUND.getRed(),
+                        ColorScheme.DARK_BACKGROUND.getGreen(),
+                        ColorScheme.DARK_BACKGROUND.getBlue(), 255),
+                        getWidth(), getHeight(), new Color(ColorScheme.PRIMARY_PURPLE.getRed(),
+                        ColorScheme.PRIMARY_PURPLE.getGreen(),
+                        ColorScheme.PRIMARY_PURPLE.getBlue(), 80)
                 );
                 g2d.setPaint(gradient);
                 g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
 
+                // Enhanced border
                 g2d.setColor(new Color(255, 255, 255, 30));
+                g2d.setStroke(new BasicStroke(1.5f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
+
+                // Add subtle particle effect
+                g2d.setColor(new Color(255, 255, 255, 20));
+                for (int i = 0; i < 10; i++) {
+                    int x = (int)(Math.random() * getWidth());
+                    int y = (int)(Math.random() * getHeight());
+                    int size = (int)(Math.random() * 3) + 1;
+                    g2d.fillRect(x, y, size, size);
+                }
             }
         };
 
@@ -352,15 +500,15 @@ public class HomePage extends JFrame {
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
         card.setPreferredSize(new Dimension(180, 120));
 
-        // Icon
+        // Icon with enhanced styling
         JLabel iconLabel = new JLabel(icon);
-        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36)); // Larger icon
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Category name
+        // Category name with enhanced styling
         JLabel nameLabel = new JLabel(categoryName);
-        nameLabel.setFont(FontManager.getBold(16));
+        nameLabel.setFont(FontManager.getBold(18)); // Larger text
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -371,7 +519,7 @@ public class HomePage extends JFrame {
         card.add(nameLabel);
         card.add(Box.createVerticalGlue());
 
-        // Hover effect
+        // Enhanced hover effect with more gaming aesthetic
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -386,6 +534,21 @@ public class HomePage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("Category clicked: " + categoryName);
+                // Enhanced click effect
+                Timer pulseTimer = new Timer(20, null);
+                final float[] scale = {0.95f};
+                pulseTimer.addActionListener(event -> {
+                    scale[0] += 0.01f;
+                    if (scale[0] >= 1.0f) {
+                        scale[0] = 1.0f;
+                        pulseTimer.stop();
+                    }
+                    card.setSize(new Dimension((int)(card.getWidth() * scale[0]),
+                            (int)(card.getHeight() * scale[0])));
+                    card.revalidate();
+                });
+                pulseTimer.start();
+
                 // TODO: Implement category navigation
             }
         });
@@ -394,10 +557,19 @@ public class HomePage extends JFrame {
     }
 
     private void animateHover(JPanel card, boolean hovering) {
-        Timer timer = new Timer(20, null);
+        Timer timer = new Timer(15, null); // Faster animation
         float[] alpha = {hovering ? 0f : 1f};
-        Color startColor = hovering ? ColorScheme.DARK_BACKGROUND : ColorScheme.LIGHT_BACKGROUND;
-        Color endColor = hovering ? ColorScheme.LIGHT_BACKGROUND : ColorScheme.DARK_BACKGROUND;
+
+        // Enhanced color transitions for gaming look
+        Color startBg = hovering ? ColorScheme.DARK_BACKGROUND :
+                new Color(ColorScheme.PRIMARY_PURPLE.getRed(),
+                        ColorScheme.PRIMARY_PURPLE.getGreen(),
+                        ColorScheme.PRIMARY_PURPLE.getBlue(), 100);
+
+        Color endBg = hovering ? new Color(ColorScheme.PRIMARY_PURPLE.getRed(),
+                ColorScheme.PRIMARY_PURPLE.getGreen(),
+                ColorScheme.PRIMARY_PURPLE.getBlue(), 100) :
+                ColorScheme.DARK_BACKGROUND;
 
         timer.addActionListener(e -> {
             if (hovering) {
@@ -414,8 +586,16 @@ public class HomePage extends JFrame {
                 }
             }
 
-            Color currentColor = interpolateColor(startColor, endColor, alpha[0]);
+            Color currentColor = interpolateColor(startBg, endBg, alpha[0]);
             card.setBackground(currentColor);
+
+            // Scale effect
+            float scale = hovering ? 1.0f + (0.05f * alpha[0]) : 1.0f - (0.02f * (1.0f - alpha[0]));
+            card.setBorder(BorderFactory.createEmptyBorder((int)(15 * scale),
+                    (int)(15 * scale),
+                    (int)(15 * scale),
+                    (int)(15 * scale)));
+
             card.repaint();
         });
 
@@ -426,7 +606,8 @@ public class HomePage extends JFrame {
         int red = (int) (start.getRed() * (1 - ratio) + end.getRed() * ratio);
         int green = (int) (start.getGreen() * (1 - ratio) + end.getGreen() * ratio);
         int blue = (int) (start.getBlue() * (1 - ratio) + end.getBlue() * ratio);
-        return new Color(red, green, blue);
+        int alpha = (int) (start.getAlpha() * (1 - ratio) + end.getAlpha() * ratio);
+        return new Color(red, green, blue, alpha);
     }
 
     private void initializePromotions() {
@@ -435,7 +616,7 @@ public class HomePage extends JFrame {
         promotions.add(new GamePromotion(
                 "Cyberpunk 2077",
                 "Experience the future of gaming - 50% OFF!",
-                "/images/promos/cyberpunk.jpg",
+                "/assets/images/promos/cyberpunk.jpg",
                 59.99,
                 0.50
         ));
@@ -443,7 +624,7 @@ public class HomePage extends JFrame {
         promotions.add(new GamePromotion(
                 "Elden Ring",
                 "Journey through the Lands Between",
-                "/images/promos/elden-ring.jpg",
+                "/assets/images/promos/elden-ring.jpg",
                 69.99,
                 0.0
         ));
@@ -451,7 +632,7 @@ public class HomePage extends JFrame {
         promotions.add(new GamePromotion(
                 "God of War Ragnarök",
                 "Epic Norse adventure - 30% OFF",
-                "/images/promos/god-of-war.jpg",
+                "/assets/images/promos/god-of-war.jpg",
                 49.99,
                 0.30
         ));
@@ -466,12 +647,127 @@ public class HomePage extends JFrame {
             slideTimer.stop();
         }
 
-        slideTimer = new Timer(5000, e -> {
+        slideTimer = new Timer(6000, e -> {
+            // Store previous promotion for transition effect
+            previousPromotion = promotions.get(currentImageIndex);
             currentImageIndex = (currentImageIndex + 1) % promotions.size();
-            if (carouselPanel != null) {
-                carouselPanel.repaint();
-            }
+            startTransitionAnimation();
         });
         slideTimer.start();
     }
-}
+
+    private void startTransitionAnimation() {
+        if (transitionTimer != null && transitionTimer.isRunning()) {
+            transitionTimer.stop();
+        }
+
+        carouselTransitionAlpha = 0.0f;
+        final GamePromotion nextPromo = promotions.get(currentImageIndex);
+        final BufferedImage currentImage = new BufferedImage(carouselPanel.getWidth(),
+                carouselPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        // Capture current state
+        Graphics2D g = currentImage.createGraphics();
+        carouselPanel.paint(g);
+        g.dispose();
+
+        transitionTimer = new Timer(16, e -> { // ~60fps animation
+            carouselTransitionAlpha += 0.05f;
+            if (carouselTransitionAlpha >= 1.0f) {
+                carouselTransitionAlpha = 1.0f;
+                transitionTimer.stop();
+            }
+
+            // Create transition effect
+            carouselPanel.repaint(new Rectangle(0, 0, carouselPanel.getWidth(),
+                    carouselPanel.getHeight()));
+        });
+
+        // Add custom painting during transition
+        carouselPanel.addPropertyChangeListener("paintTransition", evt -> {
+            Graphics2D g2d = (Graphics2D) evt.getNewValue();
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    1.0f - carouselTransitionAlpha));
+            g2d.drawImage(currentImage, 0, 0, null);
+
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    carouselTransitionAlpha));
+            if (nextPromo.image != null) {
+                g2d.drawImage(nextPromo.image.getImage(), 0, 0,
+                        carouselPanel.getWidth(), carouselPanel.getHeight(), null);
+            }
+        });
+
+        transitionTimer.start();
+    }
+            // Add mouse listeners for carousel navigation
+            private void setupCarouselControls() {
+                carouselPanel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        int x = e.getX();
+                        if (x < carouselPanel.getWidth() / 3) {
+                            // Left click - previous image
+                            currentImageIndex = (currentImageIndex - 1 + promotions.size()) % promotions.size();
+                        } else if (x > (carouselPanel.getWidth() * 2) / 3) {
+                            // Right click - next image
+                            currentImageIndex = (currentImageIndex + 1) % promotions.size();
+                        }
+                        carouselPanel.repaint();
+                    }
+                });
+
+                // Add key listeners for keyboard navigation
+                addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                            currentImageIndex = (currentImageIndex - 1 + promotions.size()) % promotions.size();
+                            carouselPanel.repaint();
+                        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                            currentImageIndex = (currentImageIndex + 1) % promotions.size();
+                            carouselPanel.repaint();
+                        }
+                    }
+                });
+                setFocusable(true);
+            }
+
+            // Method to handle cleanup when closing the window
+            private void cleanup() {
+                if (slideTimer != null) {
+                    slideTimer.stop();
+                }
+            }
+
+            // Override dispose to ensure proper cleanup
+            @Override
+            public void dispose() {
+                cleanup();
+                super.dispose();
+            }
+
+            // Method to update the carousel content
+            public void updatePromotions(List<GamePromotion> newPromotions) {
+                this.promotions = newPromotions;
+                currentImageIndex = 0;
+                if (carouselPanel != null) {
+                    carouselPanel.repaint();
+                }
+                if (!promotions.isEmpty()) {
+                    startImageSlideshow();
+                }
+            }
+
+            // Main method for testing
+            public static void main(String[] args) {
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    new HomePage();
+                });
+            }
+        }

@@ -25,7 +25,9 @@ public class LibraryService {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, userId);
             stmt.setInt(2, game.getId());
-            return stmt.executeUpdate() > 0;
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -39,7 +41,9 @@ public class LibraryService {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, userId);
             stmt.setInt(2, gameId);
-            return stmt.executeUpdate() > 0;
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -47,10 +51,11 @@ public class LibraryService {
     }
 
     // Get all games in a user's library
+    // Get all games in a user's library
     public List<Game> getGamesInLibrary(int userId) {
         List<Game> games = new ArrayList<>();
-        String query = "SELECT g.id, g.title, g.description, g.price, g.category, g.rating, g.system_requirements, g.path_image " +
-                "FROM games g INNER JOIN library l ON g.id = l.game_id WHERE l.user_id = ?";
+        String query = "SELECT g.game_id, g.title, g.description, g.price, g.category, g.rating, g.system_requirements, g.path_image " +
+                "FROM games g INNER JOIN library l ON g.game_id = l.game_id WHERE l.user_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, userId);
@@ -75,6 +80,7 @@ public class LibraryService {
 
         return games;
     }
+
 
     // Check if a game is in a user's library
     public boolean isGameInLibrary(int userId, int gameId) {

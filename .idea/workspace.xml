@@ -5,105 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aaf4bd4c-1f8f-4c88-8f6d-c5bf0da4f799" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/Gaming-store-project.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/dialogs/PurchaseDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DatabaseToolDbSqlDialect.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/DatabaseToolDbSqlDialect.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DatabaseToolSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/DatabaseToolSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Gaming-store-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetGL.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/.idea/sqldialects.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project Structure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/Project Structure.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML/Diagramme de classe.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/UML/Diagramme de classe.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML/Diagramme de sequence.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/UML/Diagramme de sequence.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UML/Diagrmme de cas d'utilisation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/UML/Diagrmme de cas d'utilisation.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/database.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/DB/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/DatabaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/DB/DatabaseInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/DatabaseInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/DB/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/DB/GameDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/GameDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/DB/PurchaseDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/PurchaseDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/DB/UserDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/UserDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/GameStoreApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/GameStoreApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/Util/ColorScheme.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/Util/ColorScheme.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/animation/AnimationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/animation/AnimationManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/animation/FadeEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/animation/FadeEffect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/animation/SlideEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/animation/SlideEffect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/animation/TransitionEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/animation/TransitionEffect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/Cart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/GameCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/GameCategory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/Purchase.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/Purchase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/Rating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/SystemRequirements.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/SystemRequirements.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/classes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/classes/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/controller/CartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/controller/LibraryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/controller/LibraryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/controller/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/controller/StoreController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/controller/StoreController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/CartService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/service/LibraryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/LibraryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/service/ProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/ProfileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/service/PurchaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/PurchaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/AppTheme.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/AppTheme.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/AppUIManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/AppUIManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/FontManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/FontManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/AnimatedButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/AnimatedButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/GameCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/GameCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/GradientPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/GradientPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/LoadingBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/LoadingBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/MenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/MenuBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/ModernScrollBarUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/ModernScrollBarUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/ModernScrollPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/ModernScrollPane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/PurpleButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/PurpleButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/PurplePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/PurplePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/RoundedPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/RoundedPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/SearchBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/SearchBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/TitleBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/TitleBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/auth/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/auth/LoginPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/auth/SignupPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/auth/SignupPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/CartPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/CartPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/HomePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/LibraryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/LibraryPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/LoadingPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/LoadingPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/ProfilePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/StorePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/StorePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/fonts/Inter-Bold.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/fonts/Inter-Bold.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/fonts/Inter-Light.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/fonts/Inter-Light.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/fonts/Inter-Medium.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/fonts/Inter-Medium.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/fonts/Inter-Regular.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/fonts/Inter-Regular.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/fonts/Montserrat-Bold.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/fonts/Montserrat-Bold.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/icons/cart.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/icons/cart.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/icons/user.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/icons/user.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/bg_login.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/bg_login.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/featured1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/featured2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/featured3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured3.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/home_bg.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/home_bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/Promos/cyberpunk.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/Promos/elden-ring.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/Promos/god-of-war.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/UserDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/UserDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/Util/ColorScheme.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/Util/ColorScheme.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/LibraryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/LibraryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/SearchBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/SearchBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/HomePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/ProfilePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/icons/user.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/icons/user.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/home_bg.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,9 +39,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2xCBrY9uwVWJi93tfz0TNIC67zz" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -131,11 +50,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.GameStoreApp.executor": "Run",
+    "Application.HomePage.executor": "Run",
+    "Application.ProfilePage.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
