@@ -1,4 +1,6 @@
 package com.btbmina.gamestore.ui.components;
+import com.btbmina.gamestore.DB.UserDB;
+import com.btbmina.gamestore.classes.User;
 import com.btbmina.gamestore.ui.pages.main.GamePage;
 import com.btbmina.gamestore.DB.GameDB;
 import com.btbmina.gamestore.Util.ColorScheme;
@@ -323,20 +325,21 @@ public class SearchBar extends JTextField {
         JMenuItem item = new JMenuItem(game.getTitle()) {
             @Override
             public void requestFocus() {
-                // Intentionally empty to prevent focus stealing
+                // Prevent focus stealing
             }
         };
 
+        // Setup item appearance
         item.setFont(FontManager.getRegular(14));
         item.setForeground(Color.BLACK);
-        item.setBackground(new Color(200, 200, 200)); // Light gray background
+        item.setBackground(new Color(200, 200, 200));
         item.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(180, 180, 180)),
                 BorderFactory.createEmptyBorder(10, 12, 10, 12)
         ));
         item.setFocusPainted(false);
 
-        // Update the action listener to navigate to GamePage
+        // Single action listener for game navigation
         item.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> {
                 try {
@@ -346,26 +349,33 @@ public class SearchBar extends JTextField {
                     // Update search field
                     setText(game.getTitle());
 
-                    // Get the main window
-                    Window window = SwingUtilities.getWindowAncestor(this);
+                    // Get current window and handle navigation
+                    Window window = SwingUtilities.getWindowAncestor(SearchBar.this);
                     if (window instanceof JFrame) {
-                        JFrame frame = (JFrame) window;
+                        ((JFrame) window).dispose();
 
-                        // Create the game page
-                        GamePage gamePage = new GamePage(game);
+                        // Create and configure new game page
+                        User currentUser = getCurrentUser();
+                        if (currentUser == null) {
+                            throw new IllegalStateException("No user logged in");
+                        }
 
-                        // Clear frame and add game page
-                        frame.getContentPane().removeAll();
-                        frame.getContentPane().add(gamePage);
+                        GamePage gamePage = new GamePage(game, currentUser);
+                        gamePage.setUndecorated(true);
 
-                        // Setup the menu bar in GamePage
-                        gamePage.setupAnimation();
+                        // Set fullscreen
+                        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                        GraphicsDevice gd = ge.getDefaultScreenDevice();
+                        if (gd.isFullScreenSupported()) {
+                            gd.setFullScreenWindow(gamePage);
+                        } else {
+                            gamePage.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                            gamePage.setSize(screenSize.width, screenSize.height);
+                            gamePage.setLocationRelativeTo(null);
+                        }
 
-                        // Refresh the frame
-                        frame.revalidate();
-                        frame.repaint();
-
-                        System.out.println("Navigating to game: " + game.getTitle());
+                        gamePage.setVisible(true);
                     }
                 } catch (Exception ex) {
                     System.err.println("Error navigating to game: " + ex.getMessage());
@@ -382,21 +392,19 @@ public class SearchBar extends JTextField {
 
         // Hover effect
         item.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent e) {
-                item.setBackground(new Color(220, 220, 220)); // Lighter gray on hover
+                item.setBackground(new Color(220, 220, 220));
             }
+
+            @Override
             public void mouseExited(MouseEvent e) {
-                item.setBackground(new Color(200, 200, 200)); // Back to original gray
+                item.setBackground(new Color(200, 200, 200));
             }
         });
 
         return item;
     }
-    // Method to directly show the search results popup (for testing)
-    public void showSearchPopup() {
-        performSearch();
-    }
-
     // Method to check if database connection is working
     public static void testSearchFunction(String query) {
         try {
@@ -410,4 +418,12 @@ public class SearchBar extends JTextField {
             e.printStackTrace();
         }
     }
+            private User getCurrentUser() {
+                try {
+                    return UserDB.getCurrentUser();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
 }

@@ -11,6 +11,7 @@ import com.btbmina.gamestore.ui.components.MenuBar;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
 
@@ -27,53 +28,38 @@ public class CategoryPage extends JFrame {
         this.categoryName = categoryName;
         this.currentUser = currentUser;
 
+        // Set undecorated before making the frame displayable
+        setUndecorated(true);
+
         initializeFrame();
         loadGames();
         createContent();
-        startEntryAnimations();
 
-        setOpacity(0.0f);
-        setVisible(true);
-
-        // Fade-in animation
-        Timer fadeTimer = new Timer(20, null);
-        float[] alpha = {0.0f};
-
-        fadeTimer.addActionListener(e -> {
-            alpha[0] += 0.1f;
-            if (alpha[0] >= 1.0f) {
-                alpha[0] = 1.0f;
-                fadeTimer.stop();
-            }
-            setOpacity(alpha[0]);
-        });
-
-        fadeTimer.start();
+        // Don't set visible here - let the caller handle it
     }
-
 
     private void initializeFrame() {
         setTitle("Gaming Store - " + categoryName);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true);
 
-        // Set fullscreen
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        if (gd.isFullScreenSupported()) {
-            gd.setFullScreenWindow(this);
-        } else {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-        }
+        // Don't set fullscreen here - let the caller handle it
+        // The frame configuration will be done by the calling code
     }
-
     private void loadGames() {
         try {
-            // Use GameDB to fetch games by category
             categoryGames = GameDB.getGamesByCategory(categoryName);
+            if (categoryGames.isEmpty()) {
+                System.out.println("No games found for category: " + categoryName);
+            } else {
+                System.out.println("Loaded " + categoryGames.size() + " games for category: " + categoryName);
+                // Print first game details for debugging
+                Game firstGame = categoryGames.get(0);
+                System.out.println("First game: " + firstGame.getTitle() + ", Image: " + firstGame.getPath_image());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             showError("Failed to load games", e.getMessage());
+            categoryGames = new ArrayList<>(); // Initialize empty list on error
         }
     }
 
@@ -196,74 +182,51 @@ public class CategoryPage extends JFrame {
     }
 
     private JPanel createGameCard(Game game) {
-        JPanel card = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                // Draw background
-                g2d.setColor(new Color(30, 30, 40));
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-
-                g2d.dispose();
-            }
-        };
+        JPanel card = new JPanel(new BorderLayout());
         card.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+        card.setBackground(new Color(30, 30, 40));
         card.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        card.setOpaque(false);
 
         // Game image panel
-        JPanel imagePanel = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                try {
-                    ImageIcon icon = new ImageIcon(getClass().getResource(game.getPath_image()));
-                    Image img = icon.getImage();
-                    g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-                } catch (Exception e) {
-                    g.setColor(new Color(40, 40, 50));
-                    g.fillRect(0, 0, getWidth(), getHeight());
-                    g.setColor(Color.WHITE);
-                    g.setFont(FontManager.getBold(24));
-                    String text = "No Image";
-                    FontMetrics fm = g.getFontMetrics();
-                    g.drawString(text,
-                            (getWidth() - fm.stringWidth(text)) / 2,
-                            (getHeight() + fm.getAscent()) / 2);
-                }
-            }
-        };
-        imagePanel.setPreferredSize(new Dimension(CARD_WIDTH - 20, 160));
+        JLabel imageLabel = new JLabel();
+        imageLabel.setPreferredSize(new Dimension(CARD_WIDTH - 20, 200));
+        imageLabel.setBackground(new Color(40, 40, 50));
+        imageLabel.setOpaque(true);
+
+        // Load and scale the image
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource(game.getPath_image()));
+            Image img = icon.getImage();
+            Image scaledImg = img.getScaledInstance(CARD_WIDTH - 20, 200, Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(scaledImg));
+        } catch (Exception e) {
+            System.out.println("Failed to load image for game: " + game.getTitle());
+            imageLabel.setText("No Image");
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setForeground(Color.WHITE);
+        }
 
         // Game info panel
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setOpaque(false);
+        infoPanel.setBackground(new Color(30, 30, 40));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        // Game title
+        // Title
         JLabel titleLabel = new JLabel(game.getTitle());
         titleLabel.setFont(FontManager.getBold(16));
         titleLabel.setForeground(Color.WHITE);
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Game price
+        // Price
         JLabel priceLabel = new JLabel(String.format("$%.2f", game.getPrice()));
         priceLabel.setFont(FontManager.getMedium(14));
         priceLabel.setForeground(new Color(130, 90, 210));
-
-        // Rating stars
-        JPanel ratingPanel = createRatingStars(game.getRating());
+        priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         infoPanel.add(titleLabel);
         infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         infoPanel.add(priceLabel);
-        infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        infoPanel.add(ratingPanel);
-
-        card.add(imagePanel, BorderLayout.NORTH);
-        card.add(infoPanel, BorderLayout.CENTER);
 
         // Add hover effect
         card.addMouseListener(new MouseAdapter() {
@@ -282,14 +245,51 @@ public class CategoryPage extends JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO: Navigate to game details page
-                System.out.println("Clicked game: " + game.getTitle());
+                navigateToGame(game.getId());
             }
         });
 
+        card.add(imageLabel, BorderLayout.CENTER);
+        card.add(infoPanel, BorderLayout.SOUTH);
+
         return card;
     }
+    private void navigateToGame(int gameId) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                Game selectedGame = GameDB.getGameById(gameId);
+                if (selectedGame == null) {
+                    showError("Error", "Game not found");
+                    return;
+                }
 
+                // Close current window
+                dispose();
+
+                // Create and configure game page
+                GamePage gamePage = new GamePage(selectedGame, currentUser);
+
+                // Set fullscreen
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+                if (gd.isFullScreenSupported()) {
+                    gd.setFullScreenWindow(gamePage);
+                } else {
+                    gamePage.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    gamePage.setSize(screenSize.width, screenSize.height);
+                    gamePage.setLocationRelativeTo(null);
+                }
+
+                gamePage.setVisible(true);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showError("Error", "Failed to open game page: " + ex.getMessage());
+            }
+        });
+    }
     private JPanel createRatingStars(double rating) {
         JPanel starsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
         starsPanel.setOpaque(false);

@@ -458,7 +458,6 @@ public class HomePage extends JFrame {
         section.add(grid, BorderLayout.SOUTH);
         return section;
     }
-
     private JPanel createCategoryCard(String categoryName, String icon) {
         JPanel card = new JPanel() {
             @Override
@@ -503,13 +502,13 @@ public class HomePage extends JFrame {
 
         // Icon with enhanced styling
         JLabel iconLabel = new JLabel(icon);
-        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36)); // Larger icon
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36));
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Category name with enhanced styling
         JLabel nameLabel = new JLabel(categoryName);
-        nameLabel.setFont(FontManager.getBold(18)); // Larger text
+        nameLabel.setFont(FontManager.getBold(18));
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -532,59 +531,43 @@ public class HomePage extends JFrame {
                 animateHover(card, false);
             }
 
-
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Create fade-out effect
-                Timer fadeTimer = new Timer(20, null);
-                float[] alpha = {1.0f};
-
-                fadeTimer.addActionListener(event -> {
-                    alpha[0] -= 0.1f;
-                    if (alpha[0] <= 0) {
-                        fadeTimer.stop();
-                        // Navigate to category page
-                        navigateToCategory(categoryName);
-                    }
-                    setOpacity(alpha[0]);
-                });
-
-                fadeTimer.start();
+                navigateToCategory(categoryName);
             }
         });
 
         return card;
     }
     private void navigateToCategory(String categoryName) {
-        dispose(); // Close current window
         SwingUtilities.invokeLater(() -> {
             try {
-                // Save the current state if needed
-                cleanup();
-
-                // Create and show the category page
+                // Create new CategoryPage without showing it yet
                 CategoryPage categoryPage = new CategoryPage(categoryName, currentUser);
+
+                // Configure fullscreen
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+                // Close current window first
+                dispose();
+
+                // Now show the category page
+                if (gd.isFullScreenSupported()) {
+                    gd.setFullScreenWindow(categoryPage);
+                } else {
+                    categoryPage.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    categoryPage.setSize(screenSize.width, screenSize.height);
+                    categoryPage.setLocationRelativeTo(null);
+                }
+
                 categoryPage.setVisible(true);
 
-                // Optional: Add transition animation
-                categoryPage.setOpacity(0.0f);
-                Timer fadeInTimer = new Timer(20, null);
-                float[] alpha = {0.0f};
-
-                fadeInTimer.addActionListener(e -> {
-                    alpha[0] += 0.1f;
-                    if (alpha[0] >= 1.0f) {
-                        alpha[0] = 1.0f;
-                        fadeInTimer.stop();
-                    }
-                    categoryPage.setOpacity(alpha[0]);
-                });
-
-                fadeInTimer.start();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(
-                        HomePage.this,
+                        this,
                         "Error loading category page: " + ex.getMessage(),
                         "Error",
                         JOptionPane.ERROR_MESSAGE
