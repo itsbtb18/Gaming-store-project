@@ -41,7 +41,6 @@ public class AppUIManager {
 
         // Create main content panel
         mainPanel.add(new HomePage(), "HOME");
-        mainPanel.add(new StorePage(), "STORE");
         mainPanel.add(new LibraryPage(), "LIBRARY");
         mainPanel.add(new ProfilePage(), "PROFILE");
         mainPanel.add(new CartPage(), "CART");
