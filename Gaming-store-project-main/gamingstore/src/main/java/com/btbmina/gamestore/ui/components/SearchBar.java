@@ -1,9 +1,10 @@
 package com.btbmina.gamestore.ui.components;
-
+import com.btbmina.gamestore.ui.pages.main.GamePage;
 import com.btbmina.gamestore.DB.GameDB;
 import com.btbmina.gamestore.Util.ColorScheme;
 import com.btbmina.gamestore.classes.Game;
 import com.btbmina.gamestore.ui.FontManager;
+import com.btbmina.gamestore.ui.pages.main.GamePage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -320,53 +321,77 @@ public class SearchBar extends JTextField {
 
     private JMenuItem createResultItem(Game game) {
         JMenuItem item = new JMenuItem(game.getTitle()) {
-            // Override to prevent focus issues
             @Override
             public void requestFocus() {
                 // Intentionally empty to prevent focus stealing
             }
         };
 
-        item.setFont(FontManager.getRegular(14)); // Police plus grande pour plus de lisibilité
-        item.setForeground(Color.BLACK); // Texte BLANC comme demandé
-        item.setBackground(new Color(70, 45, 120)); // Fond plus clair
+        item.setFont(FontManager.getRegular(14));
+        item.setForeground(Color.BLACK);
+        item.setBackground(new Color(200, 200, 200)); // Light gray background
         item.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(100, 70, 160)), // Séparateur subtil
-                BorderFactory.createEmptyBorder(10, 12, 10, 12) // Rembourrage augmenté
+                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(180, 180, 180)),
+                BorderFactory.createEmptyBorder(10, 12, 10, 12)
         ));
         item.setFocusPainted(false);
 
-        // Action when clicking on a game
+        // Update the action listener to navigate to GamePage
         item.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> {
-                // Hide the popup
-                searchResults.setVisible(false);
+                try {
+                    // Hide search results
+                    searchResults.setVisible(false);
 
-                // Set search field text to selected game and restore focus
-                setText(game.getTitle());
-                requestFocusInWindow();
+                    // Update search field
+                    setText(game.getTitle());
 
-                // Navigate to game details page (implement this in your application)
-                System.out.println("Selected game: " + game.getTitle() + ", ID: " + game.getId());
+                    // Get the main window
+                    Window window = SwingUtilities.getWindowAncestor(this);
+                    if (window instanceof JFrame) {
+                        JFrame frame = (JFrame) window;
 
-                // TODO: Replace with your navigation code
-                // For example: mainFrame.showGamePage(game.getId());
+                        // Create the game page
+                        GamePage gamePage = new GamePage(game);
+
+                        // Clear frame and add game page
+                        frame.getContentPane().removeAll();
+                        frame.getContentPane().add(gamePage);
+
+                        // Setup the menu bar in GamePage
+                        gamePage.setupAnimation();
+
+                        // Refresh the frame
+                        frame.revalidate();
+                        frame.repaint();
+
+                        System.out.println("Navigating to game: " + game.getTitle());
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Error navigating to game: " + ex.getMessage());
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                            SwingUtilities.getWindowAncestor(SearchBar.this),
+                            "Error loading game page: " + ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
             });
         });
 
-        // Hover effect - couleur plus vive pour le survol
+        // Hover effect
         item.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
-                item.setBackground(ColorScheme.SECONDARY_PURPLE);
+                item.setBackground(new Color(220, 220, 220)); // Lighter gray on hover
             }
             public void mouseExited(MouseEvent e) {
-                item.setBackground(new Color(70, 45, 120));
+                item.setBackground(new Color(200, 200, 200)); // Back to original gray
             }
         });
 
         return item;
     }
-
     // Method to directly show the search results popup (for testing)
     public void showSearchPopup() {
         performSearch();

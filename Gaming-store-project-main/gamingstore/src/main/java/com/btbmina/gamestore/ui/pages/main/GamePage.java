@@ -22,6 +22,7 @@ public class GamePage extends JPanel {
     private final int ANIMATION_DURATION = 300; // milliseconds
     private long animationStartTime;
     private boolean animatingIn = true;
+    private JMenuBar menuBar; // Store the menu bar reference
 
     public GamePage(Game game) {
         this.game = game;
@@ -34,7 +35,7 @@ public class GamePage extends JPanel {
 
         loadGameImage();
         createUI();
-        setupAnimation();
+        // Don't call setupAnimation here, it will be called after adding to frame
     }
 
     private void loadGameImage() {
@@ -50,7 +51,7 @@ public class GamePage extends JPanel {
         }
     }
 
-    private void setupAnimation() {
+    public void setupAnimation() {
         animationStartTime = System.currentTimeMillis();
         animationTimer = new Timer(16, new ActionListener() {
             @Override
@@ -74,6 +75,18 @@ public class GamePage extends JPanel {
         animationTimer.start();
     }
 
+    // New method to set the menu bar to the parent frame
+    public void applyMenuBar() {
+        if (menuBar != null) {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window instanceof JFrame) {
+                JFrame frame = (JFrame) window;
+                frame.setJMenuBar(menuBar);
+                frame.revalidate();
+            }
+        }
+    }
+
     private void setOpacity(float opacity) {
         AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
         for (Component component : getComponents()) {
@@ -85,7 +98,7 @@ public class GamePage extends JPanel {
     }
 
     private void createUI() {
-        // Create menu bar
+        // Create menu bar (but don't attach it yet)
         createMenuBar();
 
         // Header section with game title and main image
@@ -109,7 +122,7 @@ public class GamePage extends JPanel {
     }
 
     private void createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         menuBar.setBackground(ColorScheme.DARK_PURPLE);
         menuBar.setBorder(BorderFactory.createEmptyBorder());
 
@@ -131,7 +144,8 @@ public class GamePage extends JPanel {
         menuBar.add(storeMenu);
         menuBar.add(helpMenu);
 
-        ((JFrame) SwingUtilities.getWindowAncestor(this)).setJMenuBar(menuBar);
+        // We'll set this to the JFrame later, don't do it now
+        // ((JFrame) SwingUtilities.getWindowAncestor(this)).setJMenuBar(menuBar);
     }
 
     private JMenu createMenu(String title) {
