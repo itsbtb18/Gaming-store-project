@@ -328,7 +328,7 @@ public class SearchBar extends JTextField {
         };
 
         item.setFont(FontManager.getRegular(14)); // Police plus grande pour plus de lisibilité
-        item.setForeground(Color.WHITE); // Texte BLANC comme demandé
+        item.setForeground(Color.BLACK); // Texte BLANC comme demandé
         item.setBackground(new Color(70, 45, 120)); // Fond plus clair
         item.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(100, 70, 160)), // Séparateur subtil

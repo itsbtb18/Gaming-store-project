@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aaf4bd4c-1f8f-4c88-8f6d-c5bf0da4f799" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/Promos/cyberpunk.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/Promos/elden-ring.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gamingstore/src/main/resources/assets/images/Promos/god-of-war.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/UserDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/DB/UserDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/Util/ColorScheme.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/Util/ColorScheme.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/LibraryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/service/LibraryService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/SearchBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/components/SearchBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/HomePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/HomePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/ProfilePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/icons/user.png" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/icons/user.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/featured3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/home_bg.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +39,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
