@@ -49,15 +49,18 @@ public class UserDB{
         }
         return false;
     }
-    public static void updateUsername(int userId, String newUsername) throws SQLException {
+    public static boolean updateUsername(int userId, String newUsername) throws SQLException {
         String sql = "UPDATE users SET username = ? WHERE user_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newUsername);
             pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0; // return true if update succeeded
         }
     }
+
 
     public static void updateEmail(int userId, String newEmail) throws SQLException {
         String sql = "UPDATE users SET email = ? WHERE user_id = ?";
