@@ -40,7 +40,7 @@ public class GameService {
 
     // Update game details in the database
     public boolean updateGame(Game game) {
-        String query = "UPDATE games SET title = ?, description = ?, price = ?, category = ?, rating = ?, system_requirements = ? WHERE id = ?";
+        String query = "UPDATE games SET title = ?, description = ?, price = ?, category = ?, rating = ?, system_requirements = ? WHERE game_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, game.getTitle());
@@ -61,7 +61,7 @@ public class GameService {
 
     // Delete a game from the database by its ID
     public boolean deleteGame(int gameId) {
-        String query = "DELETE FROM games WHERE id = ?";
+        String query = "DELETE FROM games WHERE game_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, gameId);
@@ -76,7 +76,7 @@ public class GameService {
 
     // Get a game by its ID
     public Game getGameById(int gameId) {
-        String query = "SELECT * FROM games WHERE id = ?";
+        String query = "SELECT * FROM games WHERE game_id = ?";
         Game game = null;
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -91,7 +91,9 @@ public class GameService {
                 double rating = resultSet.getDouble("rating");
                 String systemRequirements = resultSet.getString("system_requirements");
 
-                game = new Game(gameId, title, description, price, category, rating, systemRequirements);
+                String pathImage = resultSet.getString("path_image");
+                game = new Game(gameId, title, description, price, category, rating, systemRequirements, pathImage);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,7 +119,9 @@ public class GameService {
                 double rating = resultSet.getDouble("rating");
                 String systemRequirements = resultSet.getString("system_requirements");
 
-                Game game = new Game(id, title, description, price, category, rating, systemRequirements);
+                String pathImage = resultSet.getString("path_image");
+                Game game = new Game(id, title, description, price, category, rating, systemRequirements, pathImage);
+
                 games.add(game);
             }
         } catch (SQLException e) {

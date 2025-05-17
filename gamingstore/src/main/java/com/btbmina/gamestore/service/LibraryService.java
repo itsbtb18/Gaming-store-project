@@ -51,10 +51,11 @@ public class LibraryService {
     }
 
     // Get all games in a user's library
+    // Get all games in a user's library
     public List<Game> getGamesInLibrary(int userId) {
         List<Game> games = new ArrayList<>();
-        String query = "SELECT g.id, g.title, g.description, g.price, g.category, g.rating, g.system_requirements " +
-                "FROM games g INNER JOIN library l ON g.id = l.game_id WHERE l.user_id = ?";
+        String query = "SELECT g.game_id, g.title, g.description, g.price, g.category, g.rating, g.system_requirements, g.path_image " +
+                "FROM games g INNER JOIN library l ON g.game_id = l.game_id WHERE l.user_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, userId);
@@ -68,8 +69,9 @@ public class LibraryService {
                 String category = resultSet.getString("category");
                 double rating = resultSet.getDouble("rating");
                 String systemRequirements = resultSet.getString("system_requirements");
+                String pathImage = resultSet.getString("path_image");
 
-                Game game = new Game(gameId, title, description, price, category, rating, systemRequirements);
+                Game game = new Game(gameId, title, description, price, category, rating, systemRequirements, pathImage);
                 games.add(game);
             }
         } catch (SQLException e) {
@@ -78,6 +80,7 @@ public class LibraryService {
 
         return games;
     }
+
 
     // Check if a game is in a user's library
     public boolean isGameInLibrary(int userId, int gameId) {
