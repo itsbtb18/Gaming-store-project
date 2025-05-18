@@ -14,16 +14,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
-import java.io.File;
 
 public class CategoryPage extends JFrame {
     private User currentUser;
     private String categoryName;
     private List<Game> categoryGames;
-    private static final int CARDS_PER_ROW = 3;
-    private static final int CARD_WIDTH = 280;
-    private static final int CARD_HEIGHT = 320;
-    private static final int CARD_SPACING = 20;
 
     public CategoryPage(String categoryName, User currentUser) {
         this.categoryName = categoryName;
@@ -34,15 +29,11 @@ public class CategoryPage extends JFrame {
         initializeFrame();
         loadGames();
         createContent();
-
-
     }
 
     private void initializeFrame() {
         setTitle("Gaming Store - " + categoryName);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
     }
 
     private void loadGames() {
@@ -52,9 +43,6 @@ public class CategoryPage extends JFrame {
                 System.out.println("No games found for category: " + categoryName);
             } else {
                 System.out.println("Loaded " + categoryGames.size() + " games for category: " + categoryName);
-
-                Game firstGame = categoryGames.get(0);
-                System.out.println("First game: " + firstGame.getTitle() + ", Image: " + firstGame.getPath_image());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +63,6 @@ public class CategoryPage extends JFrame {
 
         JPanel menuWrapper = new JPanel(new BorderLayout());
         menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
-
         menuWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         MenuBar menuBar = new MenuBar(this, currentUser);
@@ -83,14 +70,14 @@ public class CategoryPage extends JFrame {
         menuWrapper.add(menuBar, BorderLayout.CENTER);
         contentPanel.add(menuWrapper);
 
-        contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Reduced spacing
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Spacing
         contentPanel.add(createCategoryHeader());
 
         if (categoryGames != null && !categoryGames.isEmpty()) {
-            contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Reduced spacing
-            contentPanel.add(createGamesGrid());
+            contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Spacing
+            contentPanel.add(createGamesList());
         } else {
-            contentPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Reduced spacing
+            contentPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Spacing
             contentPanel.add(createEmptyStatePanel());
         }
 
@@ -108,25 +95,24 @@ public class CategoryPage extends JFrame {
     private JPanel createCategoryHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(ColorScheme.DARK_BACKGROUND);
-
         header.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
         JPanel titleWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         titleWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
 
         JLabel iconLabel = new JLabel(getCategoryIcon());
-        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32)); // Reduced font size
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
         iconLabel.setForeground(Color.WHITE);
 
         JLabel titleLabel = new JLabel(categoryName + " Games");
-        titleLabel.setFont(FontManager.getBold(28)); // Reduced font size
+        titleLabel.setFont(FontManager.getBold(28));
         titleLabel.setForeground(Color.WHITE);
 
         titleWrapper.add(iconLabel);
         titleWrapper.add(titleLabel);
 
         JLabel countLabel = new JLabel(categoryGames.size() + " games");
-        countLabel.setFont(FontManager.getMedium(14)); // Reduced font size
+        countLabel.setFont(FontManager.getMedium(14));
         countLabel.setForeground(new Color(200, 200, 200));
         countLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
@@ -149,115 +135,55 @@ public class CategoryPage extends JFrame {
         };
     }
 
-    private JPanel createGamesGrid() {
-        int totalWidth = CARD_WIDTH * CARDS_PER_ROW + CARD_SPACING * (CARDS_PER_ROW - 1);
+    private JPanel createGamesList() {
+        JPanel listContainer = new JPanel();
+        listContainer.setLayout(new BoxLayout(listContainer, BoxLayout.Y_AXIS));
+        listContainer.setBackground(ColorScheme.DARK_BACKGROUND);
+        listContainer.setBorder(BorderFactory.createEmptyBorder(0, 40, 20, 40));
 
-        JPanel gridContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        gridContainer.setBackground(ColorScheme.DARK_BACKGROUND);
-
-        JPanel grid = new JPanel(new GridBagLayout());
-        grid.setBackground(ColorScheme.DARK_BACKGROUND);
-        grid.setPreferredSize(new Dimension(totalWidth, -1));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(CARD_SPACING/2, CARD_SPACING/2, CARD_SPACING/2, CARD_SPACING/2);
+        // Create a list panel to hold all game items
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
         for (Game game : categoryGames) {
-            grid.add(createGameCard(game), gbc);
-
-            gbc.gridx++;
-            if (gbc.gridx == CARDS_PER_ROW) {
-                gbc.gridx = 0;
-                gbc.gridy++;
-            }
+            listPanel.add(createGameListItem(game));
+            listPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Space between items
         }
 
-        gridContainer.add(grid);
-        return gridContainer;
+        listContainer.add(listPanel);
+        return listContainer;
     }
 
-    private JPanel createGameCard(Game game) {
-        JPanel card = new JPanel(new BorderLayout());
-        card.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
-        card.setBackground(new Color(30, 30, 40));
-        card.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    private JPanel createGameListItem(Game game) {
+        JPanel item = new JPanel(new BorderLayout());
+        item.setBackground(new Color(30, 30, 40));
+        item.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 
-
-        JLabel imageLabel = new JLabel();
-        imageLabel.setPreferredSize(new Dimension(CARD_WIDTH - 20, 200));
-        imageLabel.setBackground(new Color(40, 40, 50));
-        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imageLabel.setOpaque(true);
-
-        try {
-            String imagePath = game.getPath_image();
-            System.out.println("Attempting to load image from: " + imagePath);
-
-            ImageIcon icon = null;
-
-            if (imagePath != null && !imagePath.isEmpty()) {
-                java.net.URL imageUrl = getClass().getResource(imagePath);
-                if (imageUrl != null) {
-                    icon = new ImageIcon(imageUrl);
-                    System.out.println("Loaded image from resources: " + imageUrl);
-                } else {
-                    System.out.println("Resource not found, trying absolute path: " + imagePath);
-                    // Second attempt: Try as absolute file path
-                    File imageFile = new File(imagePath);
-                    if (imageFile.exists()) {
-                        icon = new ImageIcon(imageFile.getAbsolutePath());
-                        System.out.println("Loaded image from file: " + imageFile.getAbsolutePath());
-                    }
-                }
-            }
-
-            if (icon != null && icon.getIconWidth() > 0) {
-                Image img = icon.getImage();
-                Image scaledImg = img.getScaledInstance(CARD_WIDTH - 20, 200, Image.SCALE_SMOOTH);
-                imageLabel.setIcon(new ImageIcon(scaledImg));
-            } else {
-                throw new Exception("Failed to load valid image");
-            }
-        } catch (Exception e) {
-            System.out.println("Failed to load image for game: " + game.getTitle() + " - Error: " + e.getMessage());
-            imageLabel.setText("No Image");
-            imageLabel.setFont(FontManager.getMedium(14));
-            imageLabel.setForeground(Color.WHITE);
-        }
-
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(new Color(30, 30, 40));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-
-        JLabel titleLabel = new JLabel(game.getTitle());
-        titleLabel.setFont(FontManager.getBold(16));
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel nameLabel = new JLabel(game.getTitle());
+        nameLabel.setFont(FontManager.getMedium(18));
+        nameLabel.setForeground(Color.WHITE);
 
         JLabel priceLabel = new JLabel(String.format("$%.2f", game.getPrice()));
-        priceLabel.setFont(FontManager.getMedium(14));
+        priceLabel.setFont(FontManager.getBold(16));
         priceLabel.setForeground(new Color(130, 90, 210));
-        priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        infoPanel.add(titleLabel);
-        infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        infoPanel.add(priceLabel);
+        item.add(nameLabel, BorderLayout.WEST);
+        item.add(priceLabel, BorderLayout.EAST);
 
-        card.addMouseListener(new MouseAdapter() {
+        // Add hover effect
+        item.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                card.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(130, 90, 210), 2),
-                        BorderFactory.createEmptyBorder(8, 8, 8, 8)
-                ));
+                item.setBackground(new Color(40, 40, 60));
+                setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                card.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                item.setBackground(new Color(30, 30, 40));
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
 
             @Override
@@ -266,10 +192,7 @@ public class CategoryPage extends JFrame {
             }
         });
 
-        card.add(imageLabel, BorderLayout.CENTER);
-        card.add(infoPanel, BorderLayout.SOUTH);
-
-        return card;
+        return item;
     }
 
     private void navigateToGame(int gameId) {
@@ -282,7 +205,6 @@ public class CategoryPage extends JFrame {
                 }
 
                 dispose();
-
 
                 GamePage gamePage = new GamePage(selectedGame, currentUser);
 
@@ -305,32 +227,6 @@ public class CategoryPage extends JFrame {
                 showError("Error", "Failed to open game page: " + ex.getMessage());
             }
         });
-    }
-
-    private JPanel createRatingStars(double rating) {
-        JPanel starsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-        starsPanel.setOpaque(false);
-
-        int fullStars = (int) rating;
-        boolean hasHalfStar = rating % 1 >= 0.5;
-
-        for (int i = 0; i < 5; i++) {
-            String star;
-            if (i < fullStars) {
-                star = "★"; // Full star
-            } else if (i == fullStars && hasHalfStar) {
-                star = "⯨"; // Half star
-            } else {
-                star = "☆"; // Empty star
-            }
-
-            JLabel starLabel = new JLabel(star);
-            starLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
-            starLabel.setForeground(new Color(255, 215, 0)); // Gold color
-            starsPanel.add(starLabel);
-        }
-
-        return starsPanel;
     }
 
     private JPanel createEmptyStatePanel() {
@@ -363,25 +259,6 @@ public class CategoryPage extends JFrame {
 
         emptyState.add(content);
         return emptyState;
-    }
-
-    private void startEntryAnimations() {
-
-        setOpacity(0.0f);
-        Timer fadeTimer = new Timer(10, new ActionListener() {
-            float opacity = 0.0f;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                opacity += 0.05f;
-                if (opacity >= 1.0f) {
-                    opacity = 1.0f;
-                    ((Timer)e.getSource()).stop();
-                }
-                setOpacity(opacity);
-            }
-        });
-        fadeTimer.start();
     }
 
     private void showError(String title, String message) {
