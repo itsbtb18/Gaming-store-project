@@ -13,7 +13,7 @@ import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class MenuBar extends JPanel {
-    // Enhanced color palette for professional gaming UI
+
     private static final int HEIGHT = 50; // Reduced from 70 to save vertical space
     private static final Color MENU_PURPLE = new Color(76, 40, 130);
     private static final Color HOVER_PURPLE = new Color(96, 53, 162);
@@ -36,21 +36,17 @@ public class MenuBar extends JPanel {
     private void setupPanel() {
         setLayout(new BorderLayout());
         setBackground(ColorScheme.DARK_BACKGROUND);
-        // Add a subtle gradient bottom border
         setBorder(new MatteBorder(0, 0, 1, 0, BORDER_HIGHLIGHT));
         setPreferredSize(new Dimension(getWidth(), HEIGHT));
     }
 
     private void createContent() {
-        // Create main panel with FlowLayout for better horizontal alignment
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setOpaque(false);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
 
-        // Left side with Home button
         JPanel leftPanel = createNavPanel();
 
-        // Right side with controls
         JPanel rightPanel = createControlsPanel();
 
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -60,17 +56,15 @@ public class MenuBar extends JPanel {
     }
 
     private JPanel createNavPanel() {
-        // Left-aligned panel for navigation buttons
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
-        // Create home button and set it as active
         JButton homeButton = createNavButton("Home", HomePage.class);
         setActiveNavButton(homeButton);
 
-        // Add vertical alignment to center the button
         panel.add(Box.createVerticalStrut(HEIGHT));
         panel.add(homeButton);
 
@@ -95,19 +89,18 @@ public class MenuBar extends JPanel {
     }
 
     private JPanel createControlsPanel() {
-        // Use BoxLayout for better control of alignment
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setOpaque(false);
 
-        // Create buttons with consistent vertical alignment
+
         JButton cartButton = createControlButton("Cart");
         cartButton.addActionListener(e -> navigateTo(CartPage.class));
 
         JButton userButton = createControlButton("Account");
         userButton.addActionListener(e -> showUserMenu(userButton));
 
-        // Add components with proper alignment
         panel.add(Box.createHorizontalStrut(10));
         panel.add(Box.createVerticalStrut(HEIGHT)); // Ensure vertical centering
         panel.add(cartButton);
@@ -320,7 +313,7 @@ public class MenuBar extends JPanel {
         new LoginPage();
     }
 
-    // Custom rounded border for components
+
     private static class RoundedBorder extends AbstractBorder {
         private final int radius;
         private final Color color;

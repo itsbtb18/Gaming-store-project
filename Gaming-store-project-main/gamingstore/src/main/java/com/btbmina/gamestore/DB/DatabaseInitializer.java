@@ -8,15 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.stream.Collectors;
 
-/**
- * Class responsible for initializing database schema
- */
+
 public class DatabaseInitializer {
 
-    /**
-     * Initialize database schema
-     * @return true if initialization was successful, false otherwise
-     */
     public static boolean initialize() {
         System.out.println("Starting database initialization...");
 
@@ -30,13 +24,7 @@ public class DatabaseInitializer {
         return true;
     }
 
-    /**
-     * Create the database if it doesn't exist
-     */
 
-    /**
-     * Create tables in the database
-     */
     private static boolean createTables() {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              Statement stmt = conn.createStatement()) {
@@ -56,7 +44,7 @@ public class DatabaseInitializer {
                             ")"
             );
 
-            // Create games table
+
             stmt.executeUpdate(
                     "CREATE TABLE IF NOT EXISTS games (" +
                             "game_id INT AUTO_INCREMENT PRIMARY KEY, " +
@@ -69,7 +57,7 @@ public class DatabaseInitializer {
                             ")"
             );
 
-            // Create purchases table
+
             stmt.executeUpdate(
                     "CREATE TABLE IF NOT EXISTS purchases (" +
                             "purchase_id INT AUTO_INCREMENT PRIMARY KEY, " +

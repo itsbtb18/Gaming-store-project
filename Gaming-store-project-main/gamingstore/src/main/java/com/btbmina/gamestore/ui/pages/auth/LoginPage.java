@@ -26,7 +26,6 @@ public class LoginPage extends JFrame {
         createMainContent();
     }
 
-    // ✅ Corrected and simplified image loader
     private void loadBackgroundImage() {
         try {
             backgroundImage = ImageIO.read(getClass().getClassLoader().getResource("assets/images/bg_login.jpg"));
@@ -53,7 +52,6 @@ public class LoginPage extends JFrame {
         setVisible(true);
     }
 
-    // ✅ NO overlay — just clean image background
     private JPanel createContentPanel() {
         JPanel contentPanel = new JPanel() {
             @Override
@@ -77,7 +75,6 @@ public class LoginPage extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Semi-transparent panel (optional – you can remove this if not needed)
                 g2d.setColor(new Color(0, 0, 0, 160));
                 RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(
                         0, 0, getWidth(), getHeight(), 20, 20

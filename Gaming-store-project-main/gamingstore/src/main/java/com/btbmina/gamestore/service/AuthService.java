@@ -10,14 +10,14 @@ public class AuthService {
 
     public AuthService() {
         try {
-            // Get the singleton database connection
+
             this.connection = DatabaseConnection.getInstance().getConnection();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database connection error: " + e.getMessage(),
                     "Connection Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
-    // Register a new user
+
     public boolean registerUser(String username, String email, String password) {
         String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
@@ -36,7 +36,6 @@ public class AuthService {
         }
     }
 
-    // Authenticate the user during login
     public User authenticateUser(String username, String password) {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
@@ -58,7 +57,6 @@ public class AuthService {
         }
         return null;
     }
-    // Get user data by username (to load user profile)
     public User getUserData(String username) {
         String query = "SELECT * FROM users WHERE username = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -69,7 +67,7 @@ public class AuthService {
                 String email = resultSet.getString("email");
                 String password = resultSet.getString("password");
 
-                // Return user object
+
                 return new User(username, email, password);
             }
         } catch (SQLException e) {
@@ -80,7 +78,6 @@ public class AuthService {
         return null;
     }
 
-    // Update user password
     public boolean updatePassword(String username, String oldPassword, String newPassword) {
         String query = "UPDATE users SET password = ? WHERE username = ? AND password = ?";
 

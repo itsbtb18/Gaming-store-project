@@ -87,7 +87,6 @@ public class UserDB{
             }
         }
 
-        // Update password
         String updateSql = "UPDATE users SET password = ? WHERE user_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
@@ -145,7 +144,5 @@ public class UserDB{
         }
     }
 
-
-    // Additional methods for updating and deleting users can be added similarly.
 
 }

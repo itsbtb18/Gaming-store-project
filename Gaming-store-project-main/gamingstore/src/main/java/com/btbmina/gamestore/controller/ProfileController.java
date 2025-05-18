@@ -14,7 +14,6 @@ public class ProfileController {
         this.profileService = new ProfileService();
     }
 
-    // Affiche les informations du profil dans des champs de texte
     public void loadProfile(JTextField usernameField, JTextField emailField) {
         User user = profileService.getUserProfile(currentUser.getUserId());
         if (user != null) {
@@ -26,7 +25,6 @@ public class ProfileController {
         }
     }
 
-    // Met à jour les infos de profil (username, email)
     public void updateProfile(String newUsername, String newEmail, String currentPasswordInput) {
         if (!currentPasswordInput.equals(currentUser.getPassword())) {
             JOptionPane.showMessageDialog(null, "Mot de passe incorrect.",
@@ -47,7 +45,6 @@ public class ProfileController {
         }
     }
 
-    // Change le mot de passe
     public void changePassword(String oldPassword, String newPassword) {
         if (!oldPassword.equals(currentUser.getPassword())) {
             JOptionPane.showMessageDialog(null, "Ancien mot de passe incorrect.",
@@ -66,7 +63,6 @@ public class ProfileController {
         }
     }
 
-    // Supprime le profil utilisateur
     public void deleteProfile(JFrame frameToClose) {
         int confirm = JOptionPane.showConfirmDialog(null,
                 "Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.",
@@ -77,8 +73,8 @@ public class ProfileController {
             if (deleted) {
                 JOptionPane.showMessageDialog(null, "Compte supprimé avec succès.",
                         "Supprimé", JOptionPane.INFORMATION_MESSAGE);
-                frameToClose.dispose(); // Ferme la fenêtre actuelle
-                // Ici tu peux aussi rediriger vers l'écran de login
+                frameToClose.dispose();
+
             } else {
                 JOptionPane.showMessageDialog(null, "Échec de la suppression du compte.",
                         "Erreur", JOptionPane.ERROR_MESSAGE);

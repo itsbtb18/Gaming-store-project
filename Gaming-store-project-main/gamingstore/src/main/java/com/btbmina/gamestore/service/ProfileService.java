@@ -16,7 +16,6 @@ public class ProfileService {
         }
     }
 
-    // Get user profile information by user ID
     public User getUserProfile(int userId) {
         String query = "SELECT id, username, email, password FROM users WHERE id = ?";
         User user = null;
@@ -38,7 +37,6 @@ public class ProfileService {
         return user;
     }
 
-    // Update user profile information
     public boolean updateUserProfile(User user) {
         String query = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -54,8 +52,6 @@ public class ProfileService {
             return false;
         }
     }
-
-    // Change user password
     public boolean changePassword(int userId, String newPassword) {
         String query = "UPDATE users SET password = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -70,7 +66,6 @@ public class ProfileService {
         }
     }
 
-    // Delete user profile (e.g., for account deletion)
     public boolean deleteUserProfile(int userId) {
         String query = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

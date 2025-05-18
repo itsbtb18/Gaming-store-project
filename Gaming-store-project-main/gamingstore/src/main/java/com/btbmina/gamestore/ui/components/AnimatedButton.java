@@ -5,9 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * A custom JButton with hover scaling animation and smooth purple styling.
- */
 public class AnimatedButton extends JButton {
     private float scale = 1.0f;
     private final Timer animationTimer;

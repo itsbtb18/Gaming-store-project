@@ -18,7 +18,7 @@ public class LibraryService {
         }
     }
 
-    // Add a game to the user's library
+
     public boolean addGameToLibrary(int userId, Game game) {
         String query = "INSERT INTO library (user_id, game_id) VALUES (?, ?)";
 
@@ -34,7 +34,6 @@ public class LibraryService {
         }
     }
 
-    // Remove a game from the user's library
     public boolean removeGameFromLibrary(int userId, int gameId) {
         String query = "DELETE FROM library WHERE user_id = ? AND game_id = ?";
 
@@ -49,9 +48,6 @@ public class LibraryService {
             return false;
         }
     }
-
-    // Get all games in a user's library
-    // Get all games in a user's library
     public List<Game> getGamesInLibrary(int userId) {
         List<Game> games = new ArrayList<>();
         String query = "SELECT g.game_id, g.title, g.description, g.price, g.category, g.rating, g.system_requirements, g.path_image " +
@@ -80,9 +76,6 @@ public class LibraryService {
 
         return games;
     }
-
-
-    // Check if a game is in a user's library
     public boolean isGameInLibrary(int userId, int gameId) {
         String query = "SELECT COUNT(*) FROM library WHERE user_id = ? AND game_id = ?";
 

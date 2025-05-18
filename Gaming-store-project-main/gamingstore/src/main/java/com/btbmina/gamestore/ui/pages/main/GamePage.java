@@ -32,7 +32,6 @@ public class GamePage extends JFrame {
         this.game = game;
         this.currentUser = currentUser;
 
-        // Debug print
         System.out.println("Game image path: " + game.getPath_image());
         System.out.println("Working directory: " + System.getProperty("user.dir"));
 
@@ -53,15 +52,12 @@ public class GamePage extends JFrame {
             if (game.getPath_image() != null && !game.getPath_image().isEmpty()) {
                 String imagePath = game.getPath_image();
 
-                // Debug print to check path
                 System.out.println("Attempting to load image from: " + imagePath);
 
-                // Ensure path starts with /
                 if (!imagePath.startsWith("/")) {
                     imagePath = "/" + imagePath;
                 }
 
-                // Try loading from resources
                 URL resourceUrl = getClass().getResource(imagePath);
                 if (resourceUrl != null) {
                     gameImage = ImageIO.read(resourceUrl);
@@ -69,7 +65,6 @@ public class GamePage extends JFrame {
                     return;
                 }
 
-                // If resource not found, try absolute path
                 File imageFile = new File("src/main/resources" + imagePath);
                 if (imageFile.exists()) {
                     gameImage = ImageIO.read(imageFile);
@@ -89,24 +84,19 @@ public class GamePage extends JFrame {
         mainContainer = new JPanel(new BorderLayout());
         mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Create MenuBar
         MenuBar menuBar = new MenuBar(this, currentUser);
 
-        // Create wrapper for MenuBar with proper spacing
         JPanel menuWrapper = new JPanel(new BorderLayout());
         menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
         menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         menuWrapper.add(menuBar, BorderLayout.CENTER);
 
-        // Add components to main container
         mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
         mainContainer.add(menuWrapper, BorderLayout.CENTER);
         mainContainer.add(createMainContent(), BorderLayout.SOUTH);
 
         setContentPane(mainContainer);
     }
-
-    // Helper method to create main content
     private JPanel createMainContent() {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -121,12 +111,10 @@ public class GamePage extends JFrame {
             container.setBackground(ColorScheme.DARK_BACKGROUND);
             container.setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
 
-            // Game image
             JPanel imagePanel = createImagePanel();
             container.add(imagePanel);
             container.add(Box.createRigidArea(new Dimension(0, 30)));
 
-            // Game info section
             JPanel infoSection = createInfoSection();
             container.add(infoSection);
 
@@ -143,15 +131,12 @@ public class GamePage extends JFrame {
                         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-                        // Calculate dimensions maintaining aspect ratio
                         double ratio = (double) gameImage.getWidth() / gameImage.getHeight();
                         int width = (int) (IMAGE_HEIGHT * ratio);
 
-                        // Center the image
                         int x = (getWidth() - width) / 2;
                         g2d.drawImage(gameImage, x, 0, width, IMAGE_HEIGHT, null);
 
-                        // Add gradient overlay at bottom
                         GradientPaint gradient = new GradientPaint(
                                 0, IMAGE_HEIGHT - 100,
                                 new Color(0, 0, 0, 0),
@@ -173,7 +158,6 @@ public class GamePage extends JFrame {
             section.setLayout(new BoxLayout(section, BoxLayout.Y_AXIS));
             section.setBackground(ColorScheme.DARK_BACKGROUND);
 
-            // Title and price row
             JPanel headerPanel = new JPanel(new BorderLayout());
             headerPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
@@ -190,7 +174,6 @@ public class GamePage extends JFrame {
             section.add(headerPanel);
             section.add(Box.createRigidArea(new Dimension(0, 20)));
 
-            // Description
             JTextArea descriptionArea = new JTextArea(game.getDescription());
             descriptionArea.setFont(FontManager.getRegular(16));
             descriptionArea.setForeground(new Color(200, 200, 200));
@@ -201,7 +184,6 @@ public class GamePage extends JFrame {
             section.add(descriptionArea);
             section.add(Box.createRigidArea(new Dimension(0, 30)));
 
-            // System requirements
             JLabel requirementsTitle = new JLabel("System Requirements");
             requirementsTitle.setFont(FontManager.getBold(20));
             requirementsTitle.setForeground(Color.WHITE);
@@ -218,7 +200,6 @@ public class GamePage extends JFrame {
             section.add(requirementsArea);
             section.add(Box.createRigidArea(new Dimension(0, 30)));
 
-            // Buttons panel
             JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
             buttonsPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
@@ -236,11 +217,10 @@ public class GamePage extends JFrame {
         }
 
     private JButton createStyledButton(String text, Color backgroundColor) {
-        // Define colors
+
         Color primaryPurple = new Color(130, 90, 210);  // Main purple
         Color darkPurple = new Color(100, 60, 180);     // Darker purple for secondary button
 
-        // Choose color based on button type
         Color buttonColor = text.equals("Buy Now") ? primaryPurple : darkPurple;
 
         JButton button = new JButton(text) {
@@ -262,7 +242,6 @@ public class GamePage extends JFrame {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setContentAreaFilled(false);
 
-        // Add hover effect
         button.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(buttonColor.brighter());

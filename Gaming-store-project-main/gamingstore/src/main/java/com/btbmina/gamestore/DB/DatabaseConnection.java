@@ -4,9 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Manages database connections for the application
- */
 public class DatabaseConnection {
     // Database credentials - made public for DatabaseInitializer
     public static final String DATABASE_URL = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7779083";
@@ -27,9 +24,6 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Get singleton instance of the DatabaseConnection
-     */
     public static synchronized DatabaseConnection getInstance() {
         if (instance == null) {
             instance = new DatabaseConnection();
@@ -37,9 +31,6 @@ public class DatabaseConnection {
         return instance;
     }
 
-    /**
-     * Get a connection to the database
-     */
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
@@ -55,9 +46,6 @@ public class DatabaseConnection {
         return connection;
     }
 
-    /**
-     * Close the database connection
-     */
     public void closeConnection() {
         if (connection != null) {
             try {
@@ -70,9 +58,7 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Check if the database connection is active
-     */
+
     public boolean isConnected() {
         try {
             return connection != null && !connection.isClosed();

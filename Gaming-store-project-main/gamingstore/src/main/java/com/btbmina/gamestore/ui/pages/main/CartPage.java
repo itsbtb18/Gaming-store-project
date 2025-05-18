@@ -18,7 +18,7 @@ public class CartPage extends JPanel {
     }
 
     private void createUI() {
-        // Header
+
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(ColorScheme.MEDIUM_BACKGROUND);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -28,12 +28,10 @@ public class CartPage extends JPanel {
         titleLabel.setForeground(ColorScheme.TEXT_PRIMARY);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        // Cart items
         cartItemsPanel = new JPanel();
         cartItemsPanel.setLayout(new BoxLayout(cartItemsPanel, BoxLayout.Y_AXIS));
         cartItemsPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add sample items (would be loaded from cart data)
         addCartItem("Game 1", 59.99);
         addCartItem("Game 2", 49.99);
         addCartItem("Game 3", 29.99);
@@ -58,7 +56,6 @@ public class CartPage extends JPanel {
         itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         itemPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Game info
         JPanel infoPanel = new JPanel(new BorderLayout());
         infoPanel.setBackground(ColorScheme.LIGHT_BACKGROUND);
 
@@ -72,7 +69,6 @@ public class CartPage extends JPanel {
         infoPanel.add(titleLabel, BorderLayout.WEST);
         infoPanel.add(priceLabel, BorderLayout.EAST);
 
-        // Remove button
         PurpleButton removeButton = new PurpleButton("Remove");
         removeButton.addActionListener(e -> removeCartItem(itemPanel, price));
 
@@ -118,7 +114,6 @@ public class CartPage extends JPanel {
         totalPriceLabel.setForeground(ColorScheme.TEXT_PRIMARY);
         updateTotalPrice();
 
-        // Checkout button
         PurpleButton checkoutButton = new PurpleButton("Proceed to Checkout");
         checkoutButton.setPreferredSize(new Dimension(200, 40));
 

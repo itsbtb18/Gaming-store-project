@@ -27,43 +27,38 @@ public class SearchBar extends JTextField {
     private void setupAppearance() {
         setPreferredSize(new Dimension(300, 35));
         setFont(FontManager.getRegular(14));
-        // Plus claire pour meilleure visibilité du texte
+
         setForeground(ColorScheme.TEXT_PRIMARY);
-        // Arrière-plan plus clair pour meilleure visibilité
+
         setBackground(new Color(150, 150, 180));
         setCaretColor(ColorScheme.TEXT_PRIMARY);
         setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(ColorScheme.ACCENT_COLOR, 2),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
 
-        // Placeholder text
         setPlaceholder("Search games...");
     }
 
     private void setupSearchFunctionality() {
-        // Create popup menu for search results that appears below the search field
+
         searchResults = new JPopupMenu();
-        // Couleur de fond plus claire pour le menu
+
         searchResults.setBackground(new Color(120, 120, 180));
         searchResults.setBorder(BorderFactory.createLineBorder(ColorScheme.ACCENT_COLOR, 1));
 
-        // Important: Set the light weight popup property to false
-        // This helps with popup visibility in some Swing parent containers
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
 
-        // Create search timer to avoid excessive database queries
         searchTimer = new Timer(300, e -> performSearch());
         searchTimer.setRepeats(false);
 
-        // Add document listener for text changes
+
         getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { startSearch(); }
             public void removeUpdate(javax.swing.event.DocumentEvent e) { startSearch(); }
             public void changedUpdate(javax.swing.event.DocumentEvent e) { startSearch(); }
         });
 
-        // Add key listener to handle Enter key and navigation
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -85,11 +80,9 @@ public class SearchBar extends JTextField {
             }
         });
 
-        // Use AWTEventListener to better track clicks outside the popup
         Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
             if (event instanceof MouseEvent && event.getID() == MouseEvent.MOUSE_PRESSED) {
                 MouseEvent mouseEvent = (MouseEvent) event;
-                // Check if click was outside both the search field and popup
                 if (!SwingUtilities.isDescendingFrom(mouseEvent.getComponent(), this) &&
                         !SwingUtilities.isDescendingFrom(mouseEvent.getComponent(), searchResults)) {
                     searchResults.setVisible(false);
@@ -117,7 +110,7 @@ public class SearchBar extends JTextField {
                 Point p = getLocationOnScreen();
                 searchResults.setLocation(p.x, p.y + getHeight());
             } catch (IllegalComponentStateException ex) {
-                // Component may not be on screen yet
+
                 System.err.println("Could not update popup position: " + ex.getMessage());
             }
         }
@@ -164,12 +157,11 @@ public class SearchBar extends JTextField {
     }
 
     private void startSearch() {
-        // Don't search if the text is the placeholder
+
         if (getText().equals("Search games...")) {
             return;
         }
 
-        // Restart the timer to reduce database calls
         if (searchTimer.isRunning()) {
             searchTimer.restart();
         } else {
@@ -186,26 +178,23 @@ public class SearchBar extends JTextField {
             return;
         }
 
-        // Set flag to indicate we're searching
         isSearching = true;
 
         try {
-            // Debug output
+
             System.out.println("Searching for: " + searchText);
 
-            // Execute search query
+
             List<Game> games = GameDB.searchGames(searchText);
 
-            // Debug output
+
             System.out.println("Found " + games.size() + " games");
 
-            // Display results
             showSearchResults(games);
         } catch (Exception e) {
             System.err.println("Error searching games: " + e.getMessage());
             e.printStackTrace();
 
-            // Show error in results popup
             searchResults.removeAll();
             JMenuItem errorItem = new JMenuItem("Erreur lors de la recherche");
             errorItem.setFont(FontManager.getRegular(14));
@@ -224,7 +213,7 @@ public class SearchBar extends JTextField {
         searchResults.removeAll();
 
         if (games.isEmpty()) {
-            // Add "No results" item
+
             JMenuItem noResults = new JMenuItem("Aucun jeu trouvé");
             noResults.setEnabled(false);
             noResults.setFont(FontManager.getRegular(14));
@@ -233,26 +222,23 @@ public class SearchBar extends JTextField {
             noResults.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
             searchResults.add(noResults);
         } else {
-            // Add each game as a menu item
+
             for (Game game : games) {
                 JMenuItem item = createResultItem(game);
                 searchResults.add(item);
             }
 
-            // Add "View All Results" button
             addViewAllButton(games.size());
         }
 
-        // Show the popup
         showPopup();
     }
 
     private void addViewAllButton(int resultCount) {
-        // Create a panel to hold the button (for better styling)
+
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setBackground(new Color(45, 45, 45)); // Noir claire comme demandé
 
-        // Create the "View All" button
         viewAllButton = new JButton("Voir tous les résultats (" + resultCount + ")");
         viewAllButton.setFont(FontManager.getRegular(14));
         viewAllButton.setForeground(Color.WHITE);
@@ -261,7 +247,6 @@ public class SearchBar extends JTextField {
         viewAllButton.setFocusPainted(false);
         viewAllButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effect
         viewAllButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -274,41 +259,37 @@ public class SearchBar extends JTextField {
             }
         });
 
-        // Action when clicking the button
         viewAllButton.addActionListener(e -> {
             searchResults.setVisible(false);
-            // TODO: Navigate to full search results page
+
             System.out.println("Navigating to full search results for: " + getText());
-            // mainFrame.showAllSearchResults(getText());
+
         });
 
         buttonPanel.add(viewAllButton, BorderLayout.CENTER);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
 
-        // Add to popup as a menu component (not a menu item)
         searchResults.add(buttonPanel);
     }
 
     private void showPopup() {
         try {
-            // Make sure we're on the EDT
+
             SwingUtilities.invokeLater(() -> {
                 try {
-                    // Calculate the popup size - width matches search field, height depends on items
+
                     int itemCount = Math.max(1, searchResults.getComponentCount());
                     int popupHeight = Math.min(itemCount * 40 + 10, 300);
                     searchResults.setPreferredSize(new Dimension(getWidth(), popupHeight));
 
-                    // Ensure the popup is visible and in the right position
                     Point p = getLocationOnScreen();
                     searchResults.setLocation(p.x, p.y + getHeight());
                     searchResults.setVisible(true);
 
-                    // Force component to validate and repaint
                     searchResults.validate();
                     searchResults.repaint();
 
-                    // Request focus back to search field
+
                     SwingUtilities.invokeLater(this::requestFocusInWindow);
                 } catch (Exception e) {
                     System.err.println("Error showing popup from EDT: " + e.getMessage());
@@ -329,7 +310,7 @@ public class SearchBar extends JTextField {
             }
         };
 
-        // Setup item appearance
+
         item.setFont(FontManager.getRegular(14));
         item.setForeground(Color.BLACK);
         item.setBackground(new Color(200, 200, 200));
@@ -339,22 +320,22 @@ public class SearchBar extends JTextField {
         ));
         item.setFocusPainted(false);
 
-        // Single action listener for game navigation
+
         item.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> {
                 try {
-                    // Hide search results
+
                     searchResults.setVisible(false);
 
-                    // Update search field
+
                     setText(game.getTitle());
 
-                    // Get current window and handle navigation
+
                     Window window = SwingUtilities.getWindowAncestor(SearchBar.this);
                     if (window instanceof JFrame) {
                         ((JFrame) window).dispose();
 
-                        // Create and configure new game page
+
                         User currentUser = getCurrentUser();
                         if (currentUser == null) {
                             throw new IllegalStateException("No user logged in");
@@ -363,7 +344,7 @@ public class SearchBar extends JTextField {
                         GamePage gamePage = new GamePage(game, currentUser);
                         gamePage.setUndecorated(true);
 
-                        // Set fullscreen
+
                         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
                         GraphicsDevice gd = ge.getDefaultScreenDevice();
                         if (gd.isFullScreenSupported()) {
@@ -390,7 +371,7 @@ public class SearchBar extends JTextField {
             });
         });
 
-        // Hover effect
+
         item.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -405,7 +386,7 @@ public class SearchBar extends JTextField {
 
         return item;
     }
-    // Method to check if database connection is working
+
     public static void testSearchFunction(String query) {
         try {
             List<Game> games = GameDB.searchGames(query);

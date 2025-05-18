@@ -65,7 +65,6 @@ public class HomePage extends JFrame {
             BufferedImage placeholder = new BufferedImage(800, 400, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = placeholder.createGraphics();
 
-            // Enhanced placeholder gradient
             GradientPaint gradient = new GradientPaint(
                     0, 0, ColorScheme.PRIMARY_PURPLE,
                     800, 400, new Color(13, 17, 23)
@@ -73,7 +72,6 @@ public class HomePage extends JFrame {
             g2d.setPaint(gradient);
             g2d.fillRect(0, 0, 800, 400);
 
-            // Add some gaming-themed elements to placeholder
             g2d.setColor(new Color(255, 255, 255, 40));
             for (int i = 0; i < 20; i++) {
                 int x = (int)(Math.random() * 800);
@@ -101,17 +99,15 @@ public class HomePage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        // Get screen dimensions
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gd = ge.getDefaultScreenDevice();
 
         if (gd.isFullScreenSupported()) {
-            // Enable true full screen mode
+
             gd.setFullScreenWindow(this);
         } else {
-            // Fallback to maximized window if full screen is not supported
             setExtendedState(JFrame.MAXIMIZED_BOTH);
-            // Set size to screen size
+
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             setSize(screenSize.width, screenSize.height);
             setLocationRelativeTo(null);
@@ -134,32 +130,26 @@ public class HomePage extends JFrame {
         JPanel mainContainer = new JPanel(new BorderLayout());
         mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add TitleBar
         mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
 
-        // Create content panel with vertical layout
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add MenuBar with spacing
         JPanel menuWrapper = new JPanel(new BorderLayout());
         menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
         menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         menuWrapper.add(new MenuBar(this, currentUser), BorderLayout.CENTER);
         contentPanel.add(menuWrapper);
 
-        // Add SearchBar section
         contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         contentPanel.add(createSearchSection());
 
-        // Add main sections
         contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         contentPanel.add(createCarouselSection());
         contentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         contentPanel.add(createCategoriesSection());
 
-        // Add scrollPane with custom scrollbar
         JScrollPane scrollPane = createScrollPane(contentPanel);
         mainContainer.add(scrollPane, BorderLayout.CENTER);
 
@@ -171,10 +161,9 @@ public class HomePage extends JFrame {
         searchSection.setBackground(ColorScheme.DARK_BACKGROUND);
 
         SearchBar searchBar = new SearchBar();
-        // Set preferred size for the search bar
+
         searchBar.setPreferredSize(new Dimension(600, 40));
 
-        // Create a wrapper panel for proper alignment
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(ColorScheme.DARK_BACKGROUND);
         wrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -192,7 +181,6 @@ public class HomePage extends JFrame {
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
         scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Enhanced scroll behavior
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         return scrollPane;
@@ -203,17 +191,15 @@ public class HomePage extends JFrame {
         section.setBackground(ColorScheme.DARK_BACKGROUND);
         section.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
-        // Title with animation
+
         JLabel titleLabel = new JLabel("Featured Games");
         titleLabel.setFont(FontManager.getTitle(24));
         titleLabel.setForeground(Color.WHITE);
 
-        // Add a subtle glow effect to the title
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
 
         section.add(titleLabel, BorderLayout.NORTH);
 
-        // Carousel panel with increased height for more impressive display
         carouselPanel = createCarouselPanel();
         carouselPanel.setPreferredSize(new Dimension(0, 400)); // Increased height
         section.add(carouselPanel, BorderLayout.CENTER);
@@ -234,9 +220,8 @@ public class HomePage extends JFrame {
 
                     GamePromotion current = promotions.get(currentImageIndex);
 
-                    // For smooth transition effect
                     if (carouselTransitionAlpha < 1.0f && previousPromotion != null) {
-                        // Draw previous image
+
                         if (previousPromotion.image != null) {
                             Image prevImg = previousPromotion.image.getImage();
                             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f - carouselTransitionAlpha));
@@ -244,20 +229,16 @@ public class HomePage extends JFrame {
                         }
                     }
 
-                    // Draw current game image
                     if (current.image != null) {
                         Image img = current.image.getImage();
                         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, carouselTransitionAlpha));
                         g2d.drawImage(img, 0, 0, getWidth(), getHeight(), this);
                     }
 
-                    // Reset composite
                     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
-                    // Draw enhanced gradient overlay with gamer aesthetic
                     Paint originalPaint = g2d.getPaint();
 
-                    // Bottom gradient overlay
                     GradientPaint overlay = new GradientPaint(
                             0, getHeight() - 200,
                             new Color(0, 0, 0, 0),
@@ -267,7 +248,6 @@ public class HomePage extends JFrame {
                     g2d.setPaint(overlay);
                     g2d.fillRect(0, getHeight() - 200, getWidth(), 200);
 
-                    // Left side gradient for text
                     GradientPaint leftOverlay = new GradientPaint(
                             0, 0,
                             new Color(0, 0, 0, 180),
@@ -279,11 +259,9 @@ public class HomePage extends JFrame {
 
                     g2d.setPaint(originalPaint);
 
-                    // Draw game info with enhanced styling
                     drawGameInfo(g2d, current);
                     drawNavigationDots(g2d);
 
-                    // Add a subtle glowing border to the carousel
                     g2d.setColor(new Color(ColorScheme.PRIMARY_PURPLE.getRed(),
                             ColorScheme.PRIMARY_PURPLE.getGreen(),
                             ColorScheme.PRIMARY_PURPLE.getBlue(), 40));
@@ -295,30 +273,24 @@ public class HomePage extends JFrame {
     }
 
     private void drawGameInfo(Graphics2D g2d, GamePromotion game) {
-        // Background for text - subtle transparent panel
+
         g2d.setColor(new Color(0, 0, 0, 100));
         g2d.fillRoundRect(30, carouselPanel.getHeight() - 130, 500, 100, 15, 15);
 
-        // Title with shadow effect
         g2d.setFont(FontManager.getBold(36)); // Increased size
 
-        // Draw shadow
         g2d.setColor(new Color(0, 0, 0, 150));
         g2d.drawString(game.title, 42, carouselPanel.getHeight() - 80);
 
-        // Draw actual text
         g2d.setColor(Color.WHITE);
         g2d.drawString(game.title, 40, carouselPanel.getHeight() - 82);
 
-        // Description with better visibility
         g2d.setFont(FontManager.getRegular(18)); // Increased size
         g2d.setColor(new Color(220, 220, 220));
         g2d.drawString(game.description, 40, carouselPanel.getHeight() - 45);
 
-        // Price info with more prominent styling
         drawPriceInfo(g2d, game);
 
-        // Add a "Play Now" indicator
         g2d.setColor(ColorScheme.PRIMARY_PURPLE);
         g2d.fillRoundRect(40, carouselPanel.getHeight() - 30, 120, 30, 15, 15);
 
@@ -334,20 +306,18 @@ public class HomePage extends JFrame {
         int priceX = carouselPanel.getWidth() - 220;
         int priceY = carouselPanel.getHeight() - 45;
 
-        // Price background panel
         g2d.setColor(new Color(0, 0, 0, 150));
         int width = 180;
         int height = 60;
         g2d.fillRoundRect(priceX - 20, priceY - 40, width, height, 15, 15);
 
-        // Border glow for price panel
         g2d.setColor(new Color(ColorScheme.ACCENT_PINK.getRed(),
                 ColorScheme.ACCENT_PINK.getGreen(),
                 ColorScheme.ACCENT_PINK.getBlue(), 80));
         g2d.drawRoundRect(priceX - 20, priceY - 40, width, height, 15, 15);
 
         if (game.discount > 0) {
-            // Discount badge
+
             g2d.setColor(ColorScheme.ACCENT_PINK);
             String discountText = "-" + (int)(game.discount * 100) + "%";
             g2d.setFont(FontManager.getBold(14));
@@ -358,22 +328,19 @@ public class HomePage extends JFrame {
             g2d.setColor(Color.WHITE);
             g2d.drawString(discountText, priceX, priceY - 44);
 
-            // Original price (struck through)
             String originalPrice = String.format("$%.2f", game.price);
             g2d.setFont(FontManager.getRegular(16));
             g2d.setColor(new Color(180, 180, 180));
             g2d.drawString(originalPrice, priceX, priceY - 10);
 
-            // Strike through line
             int strikeY = priceY - 14;
             g2d.drawLine(priceX, strikeY, priceX + g2d.getFontMetrics().stringWidth(originalPrice), strikeY);
 
-            // Discounted price with enhanced visibility
+
             double discountedPrice = game.price * (1 - game.discount);
             String priceText = String.format("$%.2f", discountedPrice);
             g2d.setFont(FontManager.getBold(28));
 
-            // Create a glow effect
             g2d.setColor(new Color(ColorScheme.ACCENT_PINK.getRed(),
                     ColorScheme.ACCENT_PINK.getGreen(),
                     ColorScheme.ACCENT_PINK.getBlue(), 100));
@@ -382,11 +349,10 @@ public class HomePage extends JFrame {
             g2d.setColor(ColorScheme.ACCENT_PINK);
             g2d.drawString(priceText, priceX, priceY + 18);
         } else {
-            // Regular price with enhanced styling
+
             String priceText = String.format("$%.2f", game.price);
             g2d.setFont(FontManager.getBold(28));
 
-            // Create a subtle glow effect
             g2d.setColor(new Color(ColorScheme.ACCENT_PINK.getRed(),
                     ColorScheme.ACCENT_PINK.getGreen(),
                     ColorScheme.ACCENT_PINK.getBlue(), 100));
@@ -406,7 +372,6 @@ public class HomePage extends JFrame {
         int startX = (carouselPanel.getWidth() - totalWidth) / 2;
         int y = carouselPanel.getHeight() - 20;
 
-        // Draw background for dots
         g2d.setColor(new Color(0, 0, 0, 100));
         g2d.fillRoundRect(startX - 10, y - 5, totalWidth + 20, dotSize + 10, 10, 10);
 
@@ -414,12 +379,12 @@ public class HomePage extends JFrame {
             int x = startX + (i * (dotSize + spacing));
 
             if (i == currentImageIndex) {
-                // Active dot with glow effect
+
                 g2d.setColor(new Color(255, 255, 255, 80));
                 g2d.fillOval(x-2, y-2, dotSize+4, dotSize+4);
                 g2d.setColor(Color.WHITE);
             } else {
-                // Inactive dot
+
                 g2d.setColor(new Color(255, 255, 255, 100));
             }
 
@@ -432,14 +397,12 @@ public class HomePage extends JFrame {
         section.setBackground(ColorScheme.DARK_BACKGROUND);
         section.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 
-        // Title with subtle glow effect
         JLabel titleLabel = new JLabel("Browse Categories");
         titleLabel.setFont(FontManager.getTitle(24));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
         section.add(titleLabel, BorderLayout.NORTH);
 
-        // Categories grid
         JPanel grid = new JPanel(new GridLayout(2, 4, 15, 15));
         grid.setBackground(ColorScheme.DARK_BACKGROUND);
 
@@ -465,7 +428,6 @@ public class HomePage extends JFrame {
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Enhanced gradient with gaming aesthetic
                 GradientPaint gradient = new GradientPaint(
                         0, 0, new Color(ColorScheme.DARK_BACKGROUND.getRed(),
                         ColorScheme.DARK_BACKGROUND.getGreen(),
@@ -477,12 +439,10 @@ public class HomePage extends JFrame {
                 g2d.setPaint(gradient);
                 g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
 
-                // Enhanced border
                 g2d.setColor(new Color(255, 255, 255, 30));
                 g2d.setStroke(new BasicStroke(1.5f));
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
 
-                // Add subtle particle effect
                 g2d.setColor(new Color(255, 255, 255, 20));
                 for (int i = 0; i < 10; i++) {
                     int x = (int)(Math.random() * getWidth());
@@ -493,33 +453,28 @@ public class HomePage extends JFrame {
             }
         };
 
-        // Card setup
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(ColorScheme.DARK_BACKGROUND);
         card.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
         card.setPreferredSize(new Dimension(180, 120));
 
-        // Icon with enhanced styling
         JLabel iconLabel = new JLabel(icon);
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36));
         iconLabel.setForeground(Color.WHITE);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Category name with enhanced styling
         JLabel nameLabel = new JLabel(categoryName);
         nameLabel.setFont(FontManager.getBold(18));
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Layout
         card.add(Box.createVerticalGlue());
         card.add(iconLabel);
         card.add(Box.createRigidArea(new Dimension(0, 10)));
         card.add(nameLabel);
         card.add(Box.createVerticalGlue());
 
-        // Enhanced hover effect with more gaming aesthetic
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -542,17 +497,14 @@ public class HomePage extends JFrame {
     private void navigateToCategory(String categoryName) {
         SwingUtilities.invokeLater(() -> {
             try {
-                // Create new CategoryPage without showing it yet
+
                 CategoryPage categoryPage = new CategoryPage(categoryName, currentUser);
 
-                // Configure fullscreen
                 GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
                 GraphicsDevice gd = ge.getDefaultScreenDevice();
 
-                // Close current window first
                 dispose();
 
-                // Now show the category page
                 if (gd.isFullScreenSupported()) {
                     gd.setFullScreenWindow(categoryPage);
                 } else {
@@ -579,7 +531,6 @@ public class HomePage extends JFrame {
         Timer timer = new Timer(15, null); // Faster animation
         float[] alpha = {hovering ? 0f : 1f};
 
-        // Enhanced color transitions for gaming look
         Color startBg = hovering ? ColorScheme.DARK_BACKGROUND :
                 new Color(ColorScheme.PRIMARY_PURPLE.getRed(),
                         ColorScheme.PRIMARY_PURPLE.getGreen(),
@@ -608,7 +559,6 @@ public class HomePage extends JFrame {
             Color currentColor = interpolateColor(startBg, endBg, alpha[0]);
             card.setBackground(currentColor);
 
-            // Scale effect
             float scale = hovering ? 1.0f + (0.05f * alpha[0]) : 1.0f - (0.02f * (1.0f - alpha[0]));
             card.setBorder(BorderFactory.createEmptyBorder((int)(15 * scale),
                     (int)(15 * scale),
@@ -667,7 +617,6 @@ public class HomePage extends JFrame {
         }
 
         slideTimer = new Timer(6000, e -> {
-            // Store previous promotion for transition effect
             previousPromotion = promotions.get(currentImageIndex);
             currentImageIndex = (currentImageIndex + 1) % promotions.size();
             startTransitionAnimation();
@@ -685,7 +634,6 @@ public class HomePage extends JFrame {
         final BufferedImage currentImage = new BufferedImage(carouselPanel.getWidth(),
                 carouselPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
-        // Capture current state
         Graphics2D g = currentImage.createGraphics();
         carouselPanel.paint(g);
         g.dispose();
@@ -697,12 +645,9 @@ public class HomePage extends JFrame {
                 transitionTimer.stop();
             }
 
-            // Create transition effect
             carouselPanel.repaint(new Rectangle(0, 0, carouselPanel.getWidth(),
                     carouselPanel.getHeight()));
         });
-
-        // Add custom painting during transition
         carouselPanel.addPropertyChangeListener("paintTransition", evt -> {
             Graphics2D g2d = (Graphics2D) evt.getNewValue();
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
@@ -719,24 +664,23 @@ public class HomePage extends JFrame {
 
         transitionTimer.start();
     }
-            // Add mouse listeners for carousel navigation
+
             private void setupCarouselControls() {
                 carouselPanel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         int x = e.getX();
                         if (x < carouselPanel.getWidth() / 3) {
-                            // Left click - previous image
+
                             currentImageIndex = (currentImageIndex - 1 + promotions.size()) % promotions.size();
                         } else if (x > (carouselPanel.getWidth() * 2) / 3) {
-                            // Right click - next image
+
                             currentImageIndex = (currentImageIndex + 1) % promotions.size();
                         }
                         carouselPanel.repaint();
                     }
                 });
 
-                // Add key listeners for keyboard navigation
                 addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
@@ -752,21 +696,19 @@ public class HomePage extends JFrame {
                 setFocusable(true);
             }
 
-            // Method to handle cleanup when closing the window
             private void cleanup() {
                 if (slideTimer != null) {
                     slideTimer.stop();
                 }
             }
 
-            // Override dispose to ensure proper cleanup
             @Override
             public void dispose() {
                 cleanup();
                 super.dispose();
             }
 
-            // Method to update the carousel content
+
             public void updatePromotions(List<GamePromotion> newPromotions) {
                 this.promotions = newPromotions;
                 currentImageIndex = 0;
@@ -778,7 +720,6 @@ public class HomePage extends JFrame {
                 }
             }
 
-            // Main method for testing
             public static void main(String[] args) {
                 SwingUtilities.invokeLater(() -> {
                     try {

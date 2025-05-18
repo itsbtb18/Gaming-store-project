@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 public class DatabaseManager {
 
-        /**
-         * Initialise la connexion à la base de données.
-         * À appeler au démarrage de l'application.
-         */
+
         public static void connect() {
             try {
                 Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -20,10 +17,6 @@ public class DatabaseManager {
             }
         }
 
-        /**
-         * Retourne la connexion actuelle.
-         * @return la connexion JDBC active
-         */
         public static Connection getConnection() {
             try {
                 return DatabaseConnection.getInstance().getConnection();

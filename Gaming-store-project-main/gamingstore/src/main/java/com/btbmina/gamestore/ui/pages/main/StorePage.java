@@ -10,7 +10,6 @@ public class StorePage extends JPanel {
         setLayout(new BorderLayout());
         setBackground(ColorScheme.DARK_BACKGROUND);  // Utilisation de la couleur de fond sombre
 
-        // Add search bar
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(ColorScheme.MEDIUM_BACKGROUND); // Couleur de fond pour la barre de recherche
         JTextField searchField = new JTextField(30);
@@ -19,11 +18,9 @@ public class StorePage extends JPanel {
         searchPanel.add(searchField);
         searchPanel.add(new PurpleButton("Search"));
 
-        // Add game grid
         JPanel gamesGrid = new JPanel(new GridLayout(0, 3, 10, 10));
         gamesGrid.setBackground(ColorScheme.DARK_BACKGROUND); // Utilisation de la couleur de fond sombre pour la grille
 
-        // Add sample games (you would load these from a database)
         for (int i = 0; i < 9; i++) {
             gamesGrid.add(createGameCard("Game " + (i + 1)));
         }
@@ -40,13 +37,11 @@ public class StorePage extends JPanel {
         card.setLayout(new BorderLayout());
         card.setBackground(ColorScheme.MEDIUM_BACKGROUND); // Utilisation de la couleur pour les cartes de jeu
 
-        // Add game image (just an empty space for now)
         JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension(200, 300));
         imageLabel.setBackground(ColorScheme.LIGHT_BACKGROUND);  // Fond pour l'image
         card.add(imageLabel, BorderLayout.CENTER);
 
-        // Add game title and price
         JPanel info = new JPanel(new BorderLayout());
         info.setBackground(ColorScheme.MEDIUM_BACKGROUND);  // Fond pour la section info
         info.add(new JLabel(title), BorderLayout.CENTER);

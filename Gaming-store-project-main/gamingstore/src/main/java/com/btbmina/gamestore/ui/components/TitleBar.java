@@ -25,7 +25,7 @@ public class TitleBar extends JPanel {
     private final Font iconFont = new Font("Segoe UI Symbol", Font.PLAIN, 14);
     private final Font titleFont = new Font("Segoe UI", Font.BOLD, 14);
 
-    // App title and icon
+
     private final String appTitle = "GameStore";
     private final JLabel appIcon;
     private final JLabel titleLabel;
@@ -37,7 +37,7 @@ public class TitleBar extends JPanel {
         setPreferredSize(new Dimension(getWidth(), height));
         setBorder(new EmptyBorder(0, 15, 0, 0));
 
-        // Set up app icon and title
+
         appIcon = new JLabel("🎮");
         appIcon.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
         appIcon.setForeground(ICON_COLOR);
@@ -46,18 +46,16 @@ public class TitleBar extends JPanel {
         titleLabel.setFont(titleFont);
         titleLabel.setForeground(TEXT_COLOR);
 
-        // Create left panel for icon and title
+
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         leftPanel.setOpaque(false);
         leftPanel.add(appIcon);
         leftPanel.add(titleLabel);
         add(leftPanel, BorderLayout.WEST);
 
-        // Create buttons panel
         JPanel buttonsPanel = createButtonsPanel();
         add(buttonsPanel, BorderLayout.EAST);
 
-        // Add window dragging functionality
         setupWindowDragging();
     }
 
@@ -65,7 +63,6 @@ public class TitleBar extends JPanel {
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttonsPanel.setOpaque(false);
 
-        // Create a spacer so buttons are properly centered vertically
         buttonsPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         // Create maximize/restore button (optional)
@@ -80,15 +77,12 @@ public class TitleBar extends JPanel {
             }
         });
 
-        // Minimize button
         JButton minimizeBtn = createButton("🗕");
         minimizeBtn.addActionListener(e -> parent.setState(Frame.ICONIFIED));
 
-        // Close button
         JButton closeBtn = createButton("✕");
         closeBtn.addActionListener(e -> System.exit(0));
 
-        // Add buttons to panel
         buttonsPanel.add(minimizeBtn);
         buttonsPanel.add(maximizeBtn);
         buttonsPanel.add(closeBtn);
@@ -102,16 +96,13 @@ public class TitleBar extends JPanel {
         button.setBackground(BACKGROUND_COLOR);
         button.setFont(iconFont);
 
-        // Create consistent button size for a more professional look
         button.setPreferredSize(new Dimension(46, height));
 
-        // Remove all default button styling
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Add hover effects
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -169,11 +160,6 @@ public class TitleBar extends JPanel {
         });
     }
 
-    /**
-     * Apply rounded corners to the window frame
-     * Note: This should be called after the window is visible
-     * @param radius The corner radius in pixels
-     */
     public void applyRoundedCorners(int radius) {
         if (parent.isUndecorated()) {
             parent.setShape(new RoundRectangle2D.Double(0, 0,
@@ -181,10 +167,6 @@ public class TitleBar extends JPanel {
         }
     }
 
-    /**
-     * Update the title displayed in the title bar
-     * @param title The new title to display
-     */
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
@@ -194,10 +176,10 @@ public class TitleBar extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Use anti-aliasing for smoother appearance
+
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw a subtle gradient to add depth
+
         GradientPaint gradient = new GradientPaint(
                 0, 0, BACKGROUND_COLOR,
                 0, height, new Color(33, 9, 58)

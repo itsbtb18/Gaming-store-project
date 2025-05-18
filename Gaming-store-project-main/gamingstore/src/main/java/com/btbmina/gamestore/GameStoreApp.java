@@ -10,10 +10,8 @@ public class GameStoreApp {
     public static void main(String[] args) {
         System.out.println("Starting Gaming Store Application...");
 
-        // Set modern look and feel
         SwingUtilities.invokeLater(() -> {
             try {
-                // Set system look and feel
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
                 System.out.println("Initializing database...");
@@ -24,7 +22,7 @@ public class GameStoreApp {
                     throw new IllegalStateException("Database initialization failed");
                 }
 
-                // Connect to database via database manager
+
                 DatabaseManager.connect();
                 if (DatabaseManager.isConnected()) {
                     System.out.println("Successfully connected to database!");
@@ -33,7 +31,6 @@ public class GameStoreApp {
                     throw new IllegalStateException("La base de données est inaccessible.");
                 }
 
-                // Display the loading page
                 LoadingPage loadingPage = new LoadingPage();
                 loadingPage.setVisible(true);
                 System.out.println("Application UI started.");
@@ -47,7 +44,6 @@ public class GameStoreApp {
             }
         });
 
-        // Close database properly when application ends
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DatabaseManager.disconnect();
             System.out.println(" Déconnexion réussie de la base de données.");

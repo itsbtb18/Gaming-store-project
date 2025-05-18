@@ -10,7 +10,6 @@ public class LibraryPage extends JPanel {
         setLayout(new BorderLayout());
         setBackground(ColorScheme.DARK_BACKGROUND);  // Use DARK_BACKGROUND from ColorScheme
 
-        // Create top filter panel
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         filterPanel.setBackground(ColorScheme.PRIMARY_PURPLE);  // Use PRIMARY_PURPLE for filter panel background
         filterPanel.add(new JLabel("Filter: "));
@@ -18,12 +17,10 @@ public class LibraryPage extends JPanel {
         filterPanel.add(new PurpleButton("Installed"));
         filterPanel.add(new PurpleButton("Ready to Install"));
 
-        // Create games list panel
         JPanel gamesPanel = new JPanel();
         gamesPanel.setLayout(new BoxLayout(gamesPanel, BoxLayout.Y_AXIS));
         gamesPanel.setBackground(ColorScheme.DARK_BACKGROUND);  // Use DARK_BACKGROUND for games list panel
 
-        // Add sample games (would be loaded from database)
         for (int i = 0; i < 10; i++) {
             gamesPanel.add(createGameEntry("Game " + (i + 1)));
             gamesPanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -43,12 +40,10 @@ public class LibraryPage extends JPanel {
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-        // Game icon
         JPanel iconPanel = new JPanel();
         iconPanel.setPreferredSize(new Dimension(70, 70));
         iconPanel.setBackground(ColorScheme.PRIMARY_PURPLE);  // Use PRIMARY_PURPLE for icon panel background
 
-        // Game info
         JPanel infoPanel = new JPanel(new BorderLayout());
         infoPanel.setBackground(ColorScheme.MEDIUM_BACKGROUND);  // Use MEDIUM_BACKGROUND for info panel
         JLabel titleLabel = new JLabel(title);
@@ -56,7 +51,6 @@ public class LibraryPage extends JPanel {
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         infoPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Action buttons
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonsPanel.setBackground(ColorScheme.MEDIUM_BACKGROUND);  // Use MEDIUM_BACKGROUND for buttons panel
         buttonsPanel.add(new PurpleButton("Play"));

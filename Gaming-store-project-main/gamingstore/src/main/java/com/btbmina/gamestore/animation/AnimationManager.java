@@ -6,22 +6,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Manages animations throughout the application
- * Provides methods for fade, slide, and transition effects
- */
 public class AnimationManager {
     private static final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(2);
 
-    /**
-     * Fade in a component
-     *
-     * @param component The component to fade in
-     * @param duration Duration in milliseconds
-     * @param delay Delay before starting in milliseconds
-     * @param callback Optional callback to run after animation
-     */
+
     public static void fadeIn(JComponent component, int duration, int delay, Runnable callback) {
         if (component instanceof AlphaContainer) {
             AlphaContainer alphaComponent = (AlphaContainer) component;
@@ -65,14 +54,7 @@ public class AnimationManager {
         scheduler.scheduleAtFixedRate(fadeTask, delay, duration / steps, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * Fade out a component
-     *
-     * @param component The component to fade out
-     * @param duration Duration in milliseconds
-     * @param delay Delay before starting in milliseconds
-     * @param callback Optional callback to run after animation
-     */
+
     public static void fadeOut(JComponent component, int duration, int delay, Runnable callback) {
         if (component instanceof AlphaContainer) {
             AlphaContainer alphaComponent = (AlphaContainer) component;
@@ -119,33 +101,17 @@ public class AnimationManager {
         scheduler.scheduleAtFixedRate(fadeTask, delay, duration / steps, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * Slide in a component from a specific direction
-     * This would need to be customized based on your layout manager and container
-     */
     public static void slideIn(JComponent component, int direction, int duration, int delay, Runnable callback) {
         // Implementation depends on the specific layout manager.
     }
 
-    /**
-     * Slide out a component in a specific direction
-     * This would need to be customized based on your layout manager and container
-     */
     public static void slideOut(JComponent component, int direction, int duration, int delay, Runnable callback) {
         // Implementation depends on the specific layout manager.
     }
 
-    /**
-     * Transition between two frames
-     * This would handle seamless transitions between different main windows
-     */
     public static void transitionFrames(JFrame currentFrame, JFrame nextFrame, int type, int duration) {
         // Implementation for frame transitions (customize as needed)
     }
-
-    /**
-     * Shutdown the animation scheduler
-     */
     public static void shutdown() {
         scheduler.shutdown();
         try {

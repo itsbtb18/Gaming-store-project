@@ -18,7 +18,6 @@ public class GameService {
         }
     }
 
-    // Add a new game to the database
     public boolean addGame(Game game) {
         String query = "INSERT INTO games (title, description, price, category, rating, system_requirements) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -38,7 +37,6 @@ public class GameService {
         }
     }
 
-    // Update game details in the database
     public boolean updateGame(Game game) {
         String query = "UPDATE games SET title = ?, description = ?, price = ?, category = ?, rating = ?, system_requirements = ? WHERE game_id = ?";
 
@@ -58,8 +56,6 @@ public class GameService {
             return false;
         }
     }
-
-    // Delete a game from the database by its ID
     public boolean deleteGame(int gameId) {
         String query = "DELETE FROM games WHERE game_id = ?";
 
@@ -73,8 +69,6 @@ public class GameService {
             return false;
         }
     }
-
-    // Get a game by its ID
     public Game getGameById(int gameId) {
         String query = "SELECT * FROM games WHERE game_id = ?";
         Game game = null;
@@ -102,7 +96,6 @@ public class GameService {
         return game;
     }
 
-    // Get all games from the database
     public List<Game> getAllGames() {
         List<Game> games = new ArrayList<>();
         String query = "SELECT * FROM games";

@@ -29,22 +29,20 @@ public class CategoryPage extends JFrame {
         this.categoryName = categoryName;
         this.currentUser = currentUser;
 
-        // Set undecorated before making the frame displayable
         setUndecorated(true);
 
         initializeFrame();
         loadGames();
         createContent();
 
-        // Don't set visible here - let the caller handle it
+
     }
 
     private void initializeFrame() {
         setTitle("Gaming Store - " + categoryName);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Don't set fullscreen here - let the caller handle it
-        // The frame configuration will be done by the calling code
+
     }
 
     private void loadGames() {
@@ -54,7 +52,7 @@ public class CategoryPage extends JFrame {
                 System.out.println("No games found for category: " + categoryName);
             } else {
                 System.out.println("Loaded " + categoryGames.size() + " games for category: " + categoryName);
-                // Print first game details for debugging
+
                 Game firstGame = categoryGames.get(0);
                 System.out.println("First game: " + firstGame.getTitle() + ", Image: " + firstGame.getPath_image());
             }
@@ -69,34 +67,25 @@ public class CategoryPage extends JFrame {
         JPanel mainContainer = new JPanel(new BorderLayout());
         mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add TitleBar
         mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
 
-        // Create content panel
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add MenuBar with REDUCED height
         JPanel menuWrapper = new JPanel(new BorderLayout());
         menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
-        // Removed vertical padding to reduce height
+
         menuWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-        // Create a compact menu bar
         MenuBar menuBar = new MenuBar(this, currentUser);
-        // You might need to modify your MenuBar class to have a method like this
-        // If it doesn't exist, you'll need to modify MenuBar class too
-        // menuBar.setCompactMode(true);
 
         menuWrapper.add(menuBar, BorderLayout.CENTER);
         contentPanel.add(menuWrapper);
 
-        // Add category header
         contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Reduced spacing
         contentPanel.add(createCategoryHeader());
 
-        // Add games grid
         if (categoryGames != null && !categoryGames.isEmpty()) {
             contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Reduced spacing
             contentPanel.add(createGamesGrid());
@@ -105,7 +94,6 @@ public class CategoryPage extends JFrame {
             contentPanel.add(createEmptyStatePanel());
         }
 
-        // Add scroll pane with modern scrollbar
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
         scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
@@ -120,10 +108,9 @@ public class CategoryPage extends JFrame {
     private JPanel createCategoryHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(ColorScheme.DARK_BACKGROUND);
-        // Reduced vertical padding
+
         header.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
-        // Category title with icon
         JPanel titleWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         titleWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
 
@@ -138,7 +125,6 @@ public class CategoryPage extends JFrame {
         titleWrapper.add(iconLabel);
         titleWrapper.add(titleLabel);
 
-        // Games count
         JLabel countLabel = new JLabel(categoryGames.size() + " games");
         countLabel.setFont(FontManager.getMedium(14)); // Reduced font size
         countLabel.setForeground(new Color(200, 200, 200));
@@ -198,22 +184,19 @@ public class CategoryPage extends JFrame {
         card.setBackground(new Color(30, 30, 40));
         card.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Game image panel
+
         JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension(CARD_WIDTH - 20, 200));
         imageLabel.setBackground(new Color(40, 40, 50));
         imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         imageLabel.setOpaque(true);
 
-        // Fixed image loading with better error handling
         try {
             String imagePath = game.getPath_image();
             System.out.println("Attempting to load image from: " + imagePath);
 
-            // Try loading from resources first
             ImageIcon icon = null;
 
-            // First attempt: Use getResource
             if (imagePath != null && !imagePath.isEmpty()) {
                 java.net.URL imageUrl = getClass().getResource(imagePath);
                 if (imageUrl != null) {
@@ -244,19 +227,16 @@ public class CategoryPage extends JFrame {
             imageLabel.setForeground(Color.WHITE);
         }
 
-        // Game info panel
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(new Color(30, 30, 40));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        // Title
         JLabel titleLabel = new JLabel(game.getTitle());
         titleLabel.setFont(FontManager.getBold(16));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Price
         JLabel priceLabel = new JLabel(String.format("$%.2f", game.getPrice()));
         priceLabel.setFont(FontManager.getMedium(14));
         priceLabel.setForeground(new Color(130, 90, 210));
@@ -266,7 +246,6 @@ public class CategoryPage extends JFrame {
         infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         infoPanel.add(priceLabel);
 
-        // Add hover effect
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -302,13 +281,11 @@ public class CategoryPage extends JFrame {
                     return;
                 }
 
-                // Close current window
                 dispose();
 
-                // Create and configure game page
+
                 GamePage gamePage = new GamePage(selectedGame, currentUser);
 
-                // Set fullscreen
                 GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
                 GraphicsDevice gd = ge.getDefaultScreenDevice();
 
@@ -364,7 +341,6 @@ public class CategoryPage extends JFrame {
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Empty state illustration
         JLabel iconLabel = new JLabel("🎮");
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 72));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -390,7 +366,7 @@ public class CategoryPage extends JFrame {
     }
 
     private void startEntryAnimations() {
-        // Implement fade-in and slide animations similar to HomePage
+
         setOpacity(0.0f);
         Timer fadeTimer = new Timer(10, new ActionListener() {
             float opacity = 0.0f;

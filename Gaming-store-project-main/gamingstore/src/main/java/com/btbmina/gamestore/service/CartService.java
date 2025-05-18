@@ -34,7 +34,6 @@ public class CartService {
         }
     }
 
-    // Remove a game from the user's cart
     public boolean removeGameFromCart(int userId, Game game) {
         String query = "DELETE FROM cart_items WHERE user_id = ? AND game_id = ?";
 
@@ -50,7 +49,6 @@ public class CartService {
         }
     }
 
-    // Get all games in the user's cart
     public Cart getCartForUser(int userId) {
         Cart cart = new Cart(userId);
         String query = "SELECT g.id, g.name, g.price FROM cart_items ci JOIN games g ON ci.game_id = g.id WHERE ci.user_id = ?";
@@ -75,7 +73,6 @@ public class CartService {
         return cart;
     }
 
-    // Clear the user's cart
     public boolean clearCart(int userId) {
         String query = "DELETE FROM cart_items WHERE user_id = ?";
 
@@ -90,7 +87,6 @@ public class CartService {
         }
     }
 
-    // Get the total price of the cart
     public double getTotalPrice(int userId) {
         double totalPrice = 0.0;
         String query = "SELECT g.price FROM cart_items ci JOIN games g ON ci.game_id = g.id WHERE ci.user_id = ?";

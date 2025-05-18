@@ -17,7 +17,7 @@ public class AppUIManager {
 
     public static void initialize() {
         try {
-            // Correct the UIManager Look and Feel setup
+
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,16 +36,14 @@ public class AppUIManager {
     }
 
     private static void setupUI() {
-        // Create sidebar
+
         JPanel sidebar = createSidebar();
 
-        // Create main content panel
         mainPanel.add(new HomePage(), "HOME");
         mainPanel.add(new LibraryPage(), "LIBRARY");
         mainPanel.add(new ProfilePage(), "PROFILE");
         mainPanel.add(new CartPage(), "CART");
 
-        // Add components to main frame
         mainFrame.setLayout(new BorderLayout());
         mainFrame.add(sidebar, BorderLayout.WEST);
         mainFrame.add(mainPanel, BorderLayout.CENTER);
@@ -57,7 +55,6 @@ public class AppUIManager {
         sidebar.setBackground(DARK_PURPLE);
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
-        // Logo
         JLabel logo = new JLabel("Gaming Store");
         logo.setFont(new Font("Segoe UI", Font.BOLD, 20));
         logo.setForeground(Color.WHITE);
@@ -66,7 +63,6 @@ public class AppUIManager {
         sidebar.add(logo);
         sidebar.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        // Navigation buttons
         addNavButton(sidebar, "Home", "HOME");
         addNavButton(sidebar, "Store", "STORE");
         addNavButton(sidebar, "Library", "LIBRARY");

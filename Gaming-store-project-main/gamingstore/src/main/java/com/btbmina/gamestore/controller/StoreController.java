@@ -23,7 +23,6 @@ public class StoreController {
         loadGames();
     }
 
-    // Chargement des jeux dans le modèle de liste
     public void loadGames() {
         games = gameService.getAllGames();
         gameListModel.clear();
@@ -32,7 +31,6 @@ public class StoreController {
         }
     }
 
-    // Gestion du clic sur un jeu dans la liste
     public void handleGameSelection(int selectedIndex) {
         if (selectedIndex < 0 || selectedIndex >= games.size()) {
             JOptionPane.showMessageDialog(null, "Veuillez sélectionner un jeu.");
@@ -41,7 +39,6 @@ public class StoreController {
 
         Game selectedGame = games.get(selectedIndex);
 
-        // Vérifier si le jeu est déjà dans la bibliothèque
         boolean alreadyOwned = libraryService.isGameInLibrary(currentUser.getUserId(), selectedGame.getId());
 
         if (alreadyOwned) {
@@ -49,7 +46,6 @@ public class StoreController {
             return;
         }
 
-        // Demander confirmation d'achat
         int confirm = JOptionPane.showConfirmDialog(null,
                 "Voulez-vous acheter ce jeu ?\n" + selectedGame.getTitle() + " - " + selectedGame.getPrice() + " DA",
                 "Confirmer l'achat",
