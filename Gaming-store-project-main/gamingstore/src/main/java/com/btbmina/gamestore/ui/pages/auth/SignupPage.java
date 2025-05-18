@@ -178,7 +178,7 @@ public class SignupPage extends JFrame {
     private void configureField(JTextField field) {
         field.setMaximumSize(new Dimension(360, 35));
         field.setBackground(ColorScheme.LIGHT_BACKGROUND);
-        field.setForeground(ColorScheme.TEXT_PRIMARY);
+        field.setForeground(Color.white);
         field.setCaretColor(Color.WHITE);
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         field.setFont(FontManager.getRegular(14));

@@ -10,13 +10,21 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 
 public class MenuBar extends JPanel {
-    private static final int HEIGHT = 60;
-    private static final Color MENU_PURPLE = new Color(87, 54, 163);
-    private static final Color HOVER_PURPLE = new Color(108, 67, 200);
+    // Enhanced color palette for professional gaming UI
+    private static final int HEIGHT = 50; // Reduced from 70 to save vertical space
+    private static final Color MENU_PURPLE = new Color(76, 40, 130);
+    private static final Color HOVER_PURPLE = new Color(96, 53, 162);
+    private static final Color ACTIVE_PURPLE = new Color(122, 68, 210);
+    private static final Color TEXT_COLOR = new Color(240, 240, 250);
+    private static final Color SECONDARY_TEXT = new Color(180, 180, 210);
+    private static final Color BORDER_HIGHLIGHT = new Color(140, 90, 220, 80);
+
     private final JFrame parentFrame;
     private final User currentUser;
+    private JButton activeNavButton;
 
     public MenuBar(JFrame parentFrame, User currentUser) {
         this.parentFrame = parentFrame;
@@ -28,58 +36,142 @@ public class MenuBar extends JPanel {
     private void setupPanel() {
         setLayout(new BorderLayout());
         setBackground(ColorScheme.DARK_BACKGROUND);
-        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(255, 255, 255, 20)));
+        // Add a subtle gradient bottom border
+        setBorder(new MatteBorder(0, 0, 1, 0, BORDER_HIGHLIGHT));
         setPreferredSize(new Dimension(getWidth(), HEIGHT));
     }
 
     private void createContent() {
-        add(createNavPanel(), BorderLayout.WEST);
-        add(createControlsPanel(), BorderLayout.EAST);
+        // Create main panel with FlowLayout for better horizontal alignment
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setOpaque(false);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
+
+        // Left side with Home button
+        JPanel leftPanel = createNavPanel();
+
+        // Right side with controls
+        JPanel rightPanel = createControlsPanel();
+
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
+
+        add(mainPanel, BorderLayout.CENTER);
     }
 
     private JPanel createNavPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        // Left-aligned panel for navigation buttons
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setOpaque(false);
-        panel.add(createNavButton("Home", HomePage.class));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+
+        // Create home button and set it as active
+        JButton homeButton = createNavButton("Home", HomePage.class);
+        setActiveNavButton(homeButton);
+
+        // Add vertical alignment to center the button
+        panel.add(Box.createVerticalStrut(HEIGHT));
+        panel.add(homeButton);
+
         return panel;
     }
 
+    private void setActiveNavButton(JButton button) {
+        if (activeNavButton != null) {
+            activeNavButton.setForeground(TEXT_COLOR);
+            activeNavButton.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0, 0, 0, 0, ACTIVE_PURPLE),
+                    BorderFactory.createEmptyBorder(0, 15, 0, 15)
+            ));
+        }
+
+        activeNavButton = button;
+        activeNavButton.setForeground(ACTIVE_PURPLE);
+        activeNavButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 3, 0, ACTIVE_PURPLE),
+                BorderFactory.createEmptyBorder(0, 15, 0, 15)
+        ));
+    }
+
     private JPanel createControlsPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
+        // Use BoxLayout for better control of alignment
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setOpaque(false);
 
+        // Create buttons with consistent vertical alignment
         JButton cartButton = createControlButton("Cart");
         cartButton.addActionListener(e -> navigateTo(CartPage.class));
 
         JButton userButton = createControlButton("Account");
         userButton.addActionListener(e -> showUserMenu(userButton));
 
+        // Add components with proper alignment
+        panel.add(Box.createHorizontalStrut(10));
+        panel.add(Box.createVerticalStrut(HEIGHT)); // Ensure vertical centering
         panel.add(cartButton);
+        panel.add(Box.createHorizontalStrut(15)); // Consistent spacing
         panel.add(userButton);
-        panel.add(Box.createHorizontalStrut(20));
+        panel.add(Box.createHorizontalStrut(5));
 
         return panel;
     }
 
     private JButton createControlButton(String text) {
-        JButton button = new JButton(text);
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int width = getWidth();
+                int height = getHeight();
+
+                // Create gradient background
+                GradientPaint gradient = new GradientPaint(
+                        0, 0,
+                        getModel().isPressed() ? MENU_PURPLE.darker() : MENU_PURPLE,
+                        0, height,
+                        getModel().isPressed() ? MENU_PURPLE : HOVER_PURPLE
+                );
+
+                g2d.setPaint(gradient);
+                g2d.fill(new RoundRectangle2D.Float(0, 0, width, height, 16, 16));
+
+                // Add subtle highlight at top
+                if (!getModel().isPressed()) {
+                    g2d.setColor(new Color(255, 255, 255, 30));
+                    g2d.fill(new RoundRectangle2D.Float(1, 1, width-2, height/3, 16, 16));
+                }
+
+                g2d.dispose();
+                super.paintComponent(g);
+            }
+        };
+
         button.setFont(FontManager.getBold(14));
-        button.setForeground(Color.WHITE);
-        button.setBackground(MENU_PURPLE);
-        button.setOpaque(true);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setForeground(TEXT_COLOR);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setOpaque(false);
+        button.setBorder(BorderFactory.createEmptyBorder(6, 16, 6, 16)); // Reduced padding
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
+
+        // Set preferred size for consistent button heights
+        button.setPreferredSize(new Dimension(button.getPreferredSize().width, 32));
+        button.setMaximumSize(new Dimension(button.getPreferredSize().width, 32));
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(HOVER_PURPLE);
+                button.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(MENU_PURPLE);
+                button.repaint();
             }
         });
 
@@ -89,24 +181,80 @@ public class MenuBar extends JPanel {
     private JButton createNavButton(String text, Class<?> pageClass) {
         JButton button = new JButton(text);
         button.setFont(FontManager.getBold(14));
-        button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+        button.setForeground(TEXT_COLOR);
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 0, 0, ACTIVE_PURPLE),
+                BorderFactory.createEmptyBorder(0, 15, 0, 15)
+        ));
         button.setContentAreaFilled(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
         button.setOpaque(false);
-        button.addActionListener(e -> navigateTo(pageClass));
+
+        // Set alignment to center vertically
+        button.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+        // Set preferred height for consistent button heights
+        button.setPreferredSize(new Dimension(button.getPreferredSize().width, 32));
+        button.setMaximumSize(new Dimension(button.getPreferredSize().width, 32));
+
+        button.addActionListener(e -> {
+            setActiveNavButton(button);
+            navigateTo(pageClass);
+        });
+
         return button;
     }
 
     private void showUserMenu(Component source) {
-        JPopupMenu menu = new JPopupMenu();
-        menu.setBackground(MENU_PURPLE);
-        menu.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        JPopupMenu menu = new JPopupMenu() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g2d.setColor(new Color(40, 25, 65));
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+
+                g2d.dispose();
+            }
+        };
+
+        menu.setBackground(new Color(40, 25, 65));
+        menu.setBorder(new EmptyBorder(5, 0, 5, 0));
 
         JPanel userInfo = new JPanel(new BorderLayout(10, 5));
-        userInfo.setBackground(MENU_PURPLE);
+        userInfo.setBackground(new Color(50, 35, 80));
         userInfo.setBorder(new EmptyBorder(15, 20, 15, 20));
+
+        // Add user avatar
+        JPanel avatarPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Draw circle avatar background
+                g2d.setColor(MENU_PURPLE);
+                g2d.fillOval(0, 0, getWidth(), getHeight());
+
+                // Draw avatar initials
+                g2d.setColor(TEXT_COLOR);
+                g2d.setFont(FontManager.getBold(16));
+                String initials = String.valueOf(currentUser.getUsername().charAt(0)).toUpperCase();
+                FontMetrics fm = g2d.getFontMetrics();
+                int textWidth = fm.stringWidth(initials);
+                int textHeight = fm.getAscent();
+                g2d.drawString(initials,
+                        (getWidth() - textWidth) / 2,
+                        (getHeight() + textHeight - fm.getDescent()) / 2);
+
+                g2d.dispose();
+            }
+        };
+        avatarPanel.setPreferredSize(new Dimension(40, 40));
+        avatarPanel.setOpaque(false);
 
         JPanel detailsPanel = new JPanel(new GridLayout(2, 1, 0, 5));
         detailsPanel.setOpaque(false);
@@ -114,14 +262,16 @@ public class MenuBar extends JPanel {
         JLabel nameLabel = new JLabel(currentUser.getUsername());
         JLabel emailLabel = new JLabel(currentUser.getEmail());
 
-        nameLabel.setForeground(Color.WHITE);
-        emailLabel.setForeground(new Color(200, 200, 200));
+        nameLabel.setForeground(TEXT_COLOR);
+        emailLabel.setForeground(SECONDARY_TEXT);
 
         nameLabel.setFont(FontManager.getBold(14));
         emailLabel.setFont(FontManager.getRegular(12));
 
         detailsPanel.add(nameLabel);
         detailsPanel.add(emailLabel);
+
+        userInfo.add(avatarPanel, BorderLayout.WEST);
         userInfo.add(detailsPanel, BorderLayout.CENTER);
 
         menu.add(userInfo);
@@ -131,15 +281,14 @@ public class MenuBar extends JPanel {
         addMenuItem(menu, "Library", e -> navigateTo(LibraryPage.class));
         menu.addSeparator();
         addMenuItem(menu, "Log Out", e -> handleLogout());
-
         menu.show(source, 0, source.getHeight());
     }
 
     private void addMenuItem(JPopupMenu menu, String text, ActionListener action) {
         JMenuItem item = new JMenuItem(text);
         item.setFont(FontManager.getRegular(13));
-        item.setForeground(Color.WHITE);
-        item.setBackground(MENU_PURPLE);
+        item.setForeground(TEXT_COLOR);
+        item.setBackground(new Color(40, 25, 65));
         item.setBorder(new EmptyBorder(10, 20, 10, 20));
         item.setCursor(new Cursor(Cursor.HAND_CURSOR));
         item.setOpaque(true);
@@ -150,7 +299,7 @@ public class MenuBar extends JPanel {
                 item.setBackground(HOVER_PURPLE);
             }
             public void mouseExited(MouseEvent e) {
-                item.setBackground(MENU_PURPLE);
+                item.setBackground(new Color(40, 25, 65));
             }
         });
 
@@ -169,5 +318,35 @@ public class MenuBar extends JPanel {
     private void handleLogout() {
         parentFrame.dispose();
         new LoginPage();
+    }
+
+    // Custom rounded border for components
+    private static class RoundedBorder extends AbstractBorder {
+        private final int radius;
+        private final Color color;
+
+        public RoundedBorder(int radius, Color color) {
+            this.radius = radius;
+            this.color = color;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setColor(color);
+            g2d.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+            g2d.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(4, 8, 4, 8);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
     }
 }

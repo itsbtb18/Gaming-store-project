@@ -227,28 +227,8 @@ public class ProfilePage extends JFrame {
         validate();
         repaint();
 
-        // DEBUG - Print component hierarchy to help diagnose issues
-        System.out.println("Component hierarchy:");
-        printComponentHierarchy(mainContainer, 0);
     }
 
-    // Debug method to print component hierarchy
-    private void printComponentHierarchy(Container container, int level) {
-        String indent = " ".repeat(level * 2);
-        System.out.println(indent + container.getClass().getSimpleName() +
-                " [" + container.getWidth() + "x" + container.getHeight() + "]" +
-                " visible: " + container.isVisible());
-
-        for (Component comp : container.getComponents()) {
-            if (comp instanceof Container) {
-                printComponentHierarchy((Container)comp, level + 1);
-            } else {
-                System.out.println(indent + "  " + comp.getClass().getSimpleName() +
-                        " [" + comp.getWidth() + "x" + comp.getHeight() + "]" +
-                        " visible: " + comp.isVisible());
-            }
-        }
-    }
     private JPanel createAvatarSection() {
         JPanel avatarPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         avatarPanel.setBackground(ColorScheme.DARK_BACKGROUND);
@@ -424,7 +404,7 @@ public class ProfilePage extends JFrame {
         // Delete Button
         JButton deleteButton = new JButton("Delete Account");
         deleteButton.setFont(FontManager.getBold(14));
-        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setForeground(ColorScheme.GRADIENT_BOTTOM);
         deleteButton.setBackground(DANGER_BTN);
         deleteButton.setFocusPainted(false);
         deleteButton.setBorder(BorderFactory.createEmptyBorder(12, 25, 12, 25));
