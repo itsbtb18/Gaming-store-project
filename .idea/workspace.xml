@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="aaf4bd4c-1f8f-4c88-8f6d-c5bf0da4f799" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/Promos/cyberpunk.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/resources/assets/images/Promos/cyberpunk.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/CategoryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/CategoryPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gaming-store-project-main/gamingstore/src/main/java/com/btbmina/gamestore/ui/pages/main/GamePage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +79,7 @@
       <workItem from="1747517720356" duration="263000" />
       <workItem from="1747533912339" duration="619000" />
       <workItem from="1747538632419" duration="5707000" />
+      <workItem from="1747583604276" duration="3126000" />
     </task>
     <servers />
   </component>

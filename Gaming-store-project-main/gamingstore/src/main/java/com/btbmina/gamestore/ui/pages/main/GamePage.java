@@ -6,6 +6,8 @@ import com.btbmina.gamestore.ui.components.*;
 import com.btbmina.gamestore.classes.Game;
 import com.btbmina.gamestore.classes.User;
 import com.btbmina.gamestore.ui.components.MenuBar;
+import com.btbmina.gamestore.ui.components.TitleBar;
+import com.btbmina.gamestore.ui.components.ModernScrollBarUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 
 public class GamePage extends JFrame {
     private final Game game;
@@ -28,6 +31,10 @@ public class GamePage extends JFrame {
     public GamePage(Game game, User currentUser) {
         this.game = game;
         this.currentUser = currentUser;
+
+        // Debug print
+        System.out.println("Game image path: " + game.getPath_image());
+        System.out.println("Working directory: " + System.getProperty("user.dir"));
 
         initializeFrame();
         loadGameImage();
@@ -44,65 +51,69 @@ public class GamePage extends JFrame {
     private void loadGameImage() {
         try {
             if (game.getPath_image() != null && !game.getPath_image().isEmpty()) {
-                // First try to load from resources
-                try {
-                    gameImage = ImageIO.read(getClass().getResource(game.getPath_image()));
-                } catch (Exception e) {
-                    // If that fails, try loading from file system
-                    File imageFile = new File("src/main/resources" + game.getPath_image());
-                    if (imageFile.exists()) {
-                        gameImage = ImageIO.read(imageFile);
-                    }
+                String imagePath = game.getPath_image();
+
+                // Debug print to check path
+                System.out.println("Attempting to load image from: " + imagePath);
+
+                // Ensure path starts with /
+                if (!imagePath.startsWith("/")) {
+                    imagePath = "/" + imagePath;
                 }
+
+                // Try loading from resources
+                URL resourceUrl = getClass().getResource(imagePath);
+                if (resourceUrl != null) {
+                    gameImage = ImageIO.read(resourceUrl);
+                    System.out.println("Successfully loaded image from resources");
+                    return;
+                }
+
+                // If resource not found, try absolute path
+                File imageFile = new File("src/main/resources" + imagePath);
+                if (imageFile.exists()) {
+                    gameImage = ImageIO.read(imageFile);
+                    System.out.println("Successfully loaded image from file system");
+                    return;
+                }
+
+                System.err.println("Could not find image at: " + imagePath);
             }
         } catch (Exception e) {
             System.err.println("Error loading game image: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-        private void createContent() {
-            mainContainer = new JPanel(new BorderLayout());
-            mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
+    private void createContent() {
+        mainContainer = new JPanel(new BorderLayout());
+        mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-            // Add TitleBar at the very top
-            add(new TitleBar(this), BorderLayout.NORTH);
+        // Create MenuBar
+        MenuBar menuBar = new MenuBar(this, currentUser);
 
-            // Create content panel with BoxLayout
-            JPanel contentPanel = new JPanel();
-            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
+        // Create wrapper for MenuBar with proper spacing
+        JPanel menuWrapper = new JPanel(new BorderLayout());
+        menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
+        menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        menuWrapper.add(menuBar, BorderLayout.CENTER);
 
-            // Add MenuBar below TitleBar
-            JPanel menuWrapper = new JPanel(new BorderLayout());
-            menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
-            menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-            menuWrapper.add(new MenuBar(this, currentUser), BorderLayout.CENTER);
-            contentPanel.add(menuWrapper);
+        // Add components to main container
+        mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
+        mainContainer.add(menuWrapper, BorderLayout.CENTER);
+        mainContainer.add(createMainContent(), BorderLayout.SOUTH);
 
-            // Add game content
-            contentPanel.add(createGameContent());
+        setContentPane(mainContainer);
+    }
 
-            // Wrap in scroll pane with modern scrollbar
-            JScrollPane scrollPane = new JScrollPane(contentPanel);
-            scrollPane.setBorder(null);
-            scrollPane.setBackground(ColorScheme.DARK_BACKGROUND);
-            scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-
-            // Add notification label
-            notificationLabel = new JLabel();
-            notificationLabel.setFont(FontManager.getMedium(16));
-            notificationLabel.setForeground(Color.WHITE);
-            notificationLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            notificationLabel.setVisible(false);
-
-            // Add components to main container
-            mainContainer.add(scrollPane, BorderLayout.CENTER);
-            mainContainer.add(notificationLabel, BorderLayout.SOUTH);
-
-            setContentPane(mainContainer);
-        }
+    // Helper method to create main content
+    private JPanel createMainContent() {
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
+        contentPanel.add(createGameContent());
+        return contentPanel;
+    }
 
         private JPanel createGameContent() {
             JPanel container = new JPanel();
@@ -224,29 +235,45 @@ public class GamePage extends JFrame {
             return section;
         }
 
-        private JButton createStyledButton(String text, Color backgroundColor) {
-            JButton button = new JButton(text) {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    Graphics2D g2d = (Graphics2D) g;
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2d.setColor(getBackground());
-                    g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-                    super.paintComponent(g);
-                }
-            };
+    private JButton createStyledButton(String text, Color backgroundColor) {
+        // Define colors
+        Color primaryPurple = new Color(130, 90, 210);  // Main purple
+        Color darkPurple = new Color(100, 60, 180);     // Darker purple for secondary button
 
-            button.setFont(FontManager.getBold(16));
-            button.setForeground(Color.WHITE);
-            button.setBackground(backgroundColor);
-            button.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
-            button.setFocusPainted(false);
-            button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // Choose color based on button type
+        Color buttonColor = text.equals("Buy Now") ? primaryPurple : darkPurple;
 
-            return button;
-        }
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(buttonColor);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                super.paintComponent(g);
+            }
+        };
 
+        button.setFont(FontManager.getBold(16));
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setContentAreaFilled(false);
+
+        // Add hover effect
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(buttonColor.brighter());
+            }
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(buttonColor);
+            }
+        });
+
+        return button;
+    }
         private void handlePurchase() {
             showNotification("Game purchased successfully!", new Color(46, 125, 50));
         }

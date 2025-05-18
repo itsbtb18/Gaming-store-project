@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
+import java.io.File;
 
 public class CategoryPage extends JFrame {
     private User currentUser;
@@ -45,6 +46,7 @@ public class CategoryPage extends JFrame {
         // Don't set fullscreen here - let the caller handle it
         // The frame configuration will be done by the calling code
     }
+
     private void loadGames() {
         try {
             categoryGames = GameDB.getGamesByCategory(categoryName);
@@ -75,23 +77,31 @@ public class CategoryPage extends JFrame {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        // Add MenuBar
+        // Add MenuBar with REDUCED height
         JPanel menuWrapper = new JPanel(new BorderLayout());
         menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
-        menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        menuWrapper.add(new MenuBar(this, currentUser), BorderLayout.CENTER);
+        // Removed vertical padding to reduce height
+        menuWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        // Create a compact menu bar
+        MenuBar menuBar = new MenuBar(this, currentUser);
+        // You might need to modify your MenuBar class to have a method like this
+        // If it doesn't exist, you'll need to modify MenuBar class too
+        // menuBar.setCompactMode(true);
+
+        menuWrapper.add(menuBar, BorderLayout.CENTER);
         contentPanel.add(menuWrapper);
 
         // Add category header
-        contentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Reduced spacing
         contentPanel.add(createCategoryHeader());
 
         // Add games grid
         if (categoryGames != null && !categoryGames.isEmpty()) {
-            contentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+            contentPanel.add(Box.createRigidArea(new Dimension(0, 15))); // Reduced spacing
             contentPanel.add(createGamesGrid());
         } else {
-            contentPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+            contentPanel.add(Box.createRigidArea(new Dimension(0, 30))); // Reduced spacing
             contentPanel.add(createEmptyStatePanel());
         }
 
@@ -110,18 +120,19 @@ public class CategoryPage extends JFrame {
     private JPanel createCategoryHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(ColorScheme.DARK_BACKGROUND);
-        header.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        // Reduced vertical padding
+        header.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
         // Category title with icon
         JPanel titleWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         titleWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
 
         JLabel iconLabel = new JLabel(getCategoryIcon());
-        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36));
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32)); // Reduced font size
         iconLabel.setForeground(Color.WHITE);
 
         JLabel titleLabel = new JLabel(categoryName + " Games");
-        titleLabel.setFont(FontManager.getBold(32));
+        titleLabel.setFont(FontManager.getBold(28)); // Reduced font size
         titleLabel.setForeground(Color.WHITE);
 
         titleWrapper.add(iconLabel);
@@ -129,7 +140,7 @@ public class CategoryPage extends JFrame {
 
         // Games count
         JLabel countLabel = new JLabel(categoryGames.size() + " games");
-        countLabel.setFont(FontManager.getMedium(16));
+        countLabel.setFont(FontManager.getMedium(14)); // Reduced font size
         countLabel.setForeground(new Color(200, 200, 200));
         countLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
@@ -191,18 +202,45 @@ public class CategoryPage extends JFrame {
         JLabel imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension(CARD_WIDTH - 20, 200));
         imageLabel.setBackground(new Color(40, 40, 50));
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         imageLabel.setOpaque(true);
 
-        // Load and scale the image
+        // Fixed image loading with better error handling
         try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(game.getPath_image()));
-            Image img = icon.getImage();
-            Image scaledImg = img.getScaledInstance(CARD_WIDTH - 20, 200, Image.SCALE_SMOOTH);
-            imageLabel.setIcon(new ImageIcon(scaledImg));
+            String imagePath = game.getPath_image();
+            System.out.println("Attempting to load image from: " + imagePath);
+
+            // Try loading from resources first
+            ImageIcon icon = null;
+
+            // First attempt: Use getResource
+            if (imagePath != null && !imagePath.isEmpty()) {
+                java.net.URL imageUrl = getClass().getResource(imagePath);
+                if (imageUrl != null) {
+                    icon = new ImageIcon(imageUrl);
+                    System.out.println("Loaded image from resources: " + imageUrl);
+                } else {
+                    System.out.println("Resource not found, trying absolute path: " + imagePath);
+                    // Second attempt: Try as absolute file path
+                    File imageFile = new File(imagePath);
+                    if (imageFile.exists()) {
+                        icon = new ImageIcon(imageFile.getAbsolutePath());
+                        System.out.println("Loaded image from file: " + imageFile.getAbsolutePath());
+                    }
+                }
+            }
+
+            if (icon != null && icon.getIconWidth() > 0) {
+                Image img = icon.getImage();
+                Image scaledImg = img.getScaledInstance(CARD_WIDTH - 20, 200, Image.SCALE_SMOOTH);
+                imageLabel.setIcon(new ImageIcon(scaledImg));
+            } else {
+                throw new Exception("Failed to load valid image");
+            }
         } catch (Exception e) {
-            System.out.println("Failed to load image for game: " + game.getTitle());
+            System.out.println("Failed to load image for game: " + game.getTitle() + " - Error: " + e.getMessage());
             imageLabel.setText("No Image");
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setFont(FontManager.getMedium(14));
             imageLabel.setForeground(Color.WHITE);
         }
 
@@ -254,6 +292,7 @@ public class CategoryPage extends JFrame {
 
         return card;
     }
+
     private void navigateToGame(int gameId) {
         SwingUtilities.invokeLater(() -> {
             try {
@@ -290,6 +329,7 @@ public class CategoryPage extends JFrame {
             }
         });
     }
+
     private JPanel createRatingStars(double rating) {
         JPanel starsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
         starsPanel.setOpaque(false);
