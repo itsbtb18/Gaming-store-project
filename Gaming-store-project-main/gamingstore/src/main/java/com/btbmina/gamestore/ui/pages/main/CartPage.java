@@ -1,19 +1,17 @@
 package com.btbmina.gamestore.ui.pages.main;
 
+import com.btbmina.gamestore.Util.ColorScheme;
+import com.btbmina.gamestore.classes.User;
+import com.btbmina.gamestore.ui.components.TitleBar;
+import com.btbmina.gamestore.ui.components.MenuBar;
+
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import com.btbmina.gamestore.Util.ColorScheme;
-import com.btbmina.gamestore.ui.components.*;
-import com.btbmina.gamestore.classes.User;
-import com.btbmina.gamestore.ui.components.MenuBar;
 
 public class CartPage extends JFrame {
     private JPanel cartItemsPanel;
