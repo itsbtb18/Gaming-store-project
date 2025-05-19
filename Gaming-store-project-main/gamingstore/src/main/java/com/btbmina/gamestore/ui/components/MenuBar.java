@@ -96,7 +96,23 @@ public class MenuBar extends JPanel {
 
 
         JButton cartButton = createControlButton("Cart");
-        cartButton.addActionListener(e -> navigateTo(CartPage.class));
+        cartButton.addActionListener(e -> {
+            CartPage cartPage = new CartPage(currentUser);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+            if (gd.isFullScreenSupported()) {
+                gd.setFullScreenWindow(cartPage);
+            } else {
+                cartPage.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                cartPage.setSize(screenSize.width, screenSize.height);
+                cartPage.setLocationRelativeTo(null);
+            }
+
+            cartPage.setVisible(true);
+            parentFrame.dispose();
+        });
 
         JButton userButton = createControlButton("Account");
         userButton.addActionListener(e -> showUserMenu(userButton));

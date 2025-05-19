@@ -1,5 +1,6 @@
 package com.btbmina.gamestore.ui;
 
+import com.btbmina.gamestore.classes.User;
 import com.btbmina.gamestore.ui.pages.main.*;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class AppUIManager {
     private static final Color DARK_PURPLE = new Color(48, 25, 52);
     private static final Color MEDIUM_PURPLE = new Color(87, 54, 163);
     private static final Color LIGHT_PURPLE = new Color(157, 78, 221);
+    private static User currentUser; // Assuming User is a class that represents the user
 
     public static void initialize() {
         try {
@@ -42,7 +44,7 @@ public class AppUIManager {
         mainPanel.add(new HomePage(), "HOME");
         mainPanel.add(new LibraryPage(), "LIBRARY");
         mainPanel.add(new ProfilePage(), "PROFILE");
-        mainPanel.add(new CartPage(), "CART");
+        mainPanel.add(new CartPage(currentUser), "CART"); // Pass currentUser to CartPage
 
         mainFrame.setLayout(new BorderLayout());
         mainFrame.add(sidebar, BorderLayout.WEST);
