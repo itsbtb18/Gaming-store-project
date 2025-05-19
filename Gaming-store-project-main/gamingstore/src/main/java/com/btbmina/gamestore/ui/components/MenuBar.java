@@ -56,17 +56,50 @@ public class MenuBar extends JPanel {
     }
 
     private JPanel createNavPanel() {
-
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
         JButton homeButton = createNavButton("Home", HomePage.class);
+        JButton libraryButton = createNavButton("Library", null); // Create library button separately
+
+        // Add library button action listener
+        libraryButton.addActionListener(e -> {
+            try {
+                LibraryPage libraryPage = new LibraryPage();
+                Window window = SwingUtilities.getWindowAncestor(this);
+                if (window instanceof JFrame) {
+                    ((JFrame) window).dispose();
+                }
+
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                GraphicsDevice gd = ge.getDefaultScreenDevice();
+                if (gd.isFullScreenSupported()) {
+                    gd.setFullScreenWindow(libraryPage);
+                } else {
+                    libraryPage.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    libraryPage.setSize(screenSize.width, screenSize.height);
+                    libraryPage.setLocationRelativeTo(null);
+                }
+                libraryPage.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                    parentFrame,
+                    "Error opening Library page: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
         setActiveNavButton(homeButton);
 
         panel.add(Box.createVerticalStrut(HEIGHT));
         panel.add(homeButton);
+        panel.add(libraryButton);
 
         return panel;
     }

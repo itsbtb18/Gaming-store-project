@@ -1,19 +1,20 @@
 package com.btbmina.gamestore.ui.pages.main;
 
+import com.btbmina.gamestore.Util.ColorScheme;
+import com.btbmina.gamestore.classes.User;
+import com.btbmina.gamestore.ui.components.ModernScrollBarUI;
+import com.btbmina.gamestore.ui.components.PurpleButton;
+import com.btbmina.gamestore.ui.components.TitleBar;
+import com.btbmina.gamestore.ui.components.MenuBar;
+
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import com.btbmina.gamestore.Util.ColorScheme;
-import com.btbmina.gamestore.ui.components.*;
-import com.btbmina.gamestore.classes.User;
-import com.btbmina.gamestore.ui.components.MenuBar;
 
 public class CartPage extends JFrame {
     private JPanel cartItemsPanel;
@@ -233,7 +234,7 @@ public class CartPage extends JFrame {
         return panel;
     }
 
-    private void addCartItem(String title, double price) {
+    public void addCartItem(String title, double price) {
         JPanel itemPanel = new JPanel(new BorderLayout(15, 0));
         itemPanel.setBackground(new Color(35, 35, 40));
         itemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
@@ -569,14 +570,18 @@ public class CartPage extends JFrame {
     }
 
     // Custom shadow border
-    private class ShadowBorder extends EmptyBorder {
+    private class ShadowBorder extends AbstractBorder {
         private Color shadowColor;
         private int shadowSize;
 
         public ShadowBorder(Color shadowColor, int shadowSize) {
-            super(shadowSize, shadowSize, shadowSize, shadowSize);
             this.shadowColor = shadowColor;
             this.shadowSize = shadowSize;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(shadowSize, shadowSize, shadowSize, shadowSize);
         }
 
         @Override

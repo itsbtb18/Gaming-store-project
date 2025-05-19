@@ -84,16 +84,22 @@ public class GamePage extends JFrame {
         mainContainer = new JPanel(new BorderLayout());
         mainContainer.setBackground(ColorScheme.DARK_BACKGROUND);
 
-        MenuBar menuBar = new MenuBar(this, currentUser);
-
-        JPanel menuWrapper = new JPanel(new BorderLayout());
-        menuWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
-        menuWrapper.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        menuWrapper.add(menuBar, BorderLayout.CENTER);
-
+        // Add TitleBar at the top
         mainContainer.add(new TitleBar(this), BorderLayout.NORTH);
-        mainContainer.add(menuWrapper, BorderLayout.CENTER);
-        mainContainer.add(createMainContent(), BorderLayout.SOUTH);
+
+        // Create content wrapper for MenuBar and main content
+        JPanel contentWrapper = new JPanel(new BorderLayout());
+        contentWrapper.setBackground(ColorScheme.DARK_BACKGROUND);
+
+        // Add MenuBar below TitleBar
+        MenuBar menuBar = new MenuBar(this, currentUser);
+        menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(80, 80, 80)));
+        contentWrapper.add(menuBar, BorderLayout.NORTH);
+
+        // Add main content
+        contentWrapper.add(createMainContent(), BorderLayout.CENTER);
+
+        mainContainer.add(contentWrapper, BorderLayout.CENTER);
 
         setContentPane(mainContainer);
     }
@@ -254,28 +260,61 @@ public class GamePage extends JFrame {
         return button;
     }
         private void handlePurchase() {
-            showNotification("Game purchased successfully!", new Color(46, 125, 50));
+            try {
+                showNotification("Game purchased successfully!", new Color(46, 125, 50));
+                // Here you can add additional purchase logic
+            } catch (Exception e) {
+                e.printStackTrace();
+                showNotification("Purchase failed!", new Color(200, 50, 50));
+            }
         }
 
         private void handleAddToCart() {
-            showNotification("Added to cart!", new Color(130, 90, 210));
-        }
-
-        private void showNotification(String message, Color backgroundColor) {
-            if (notificationTimer != null && notificationTimer.isRunning()) {
-                notificationTimer.stop();
+            try {
+                CartPage cartPage = new CartPage(currentUser);
+                cartPage.addCartItem(game.getTitle(), game.getPrice());
+                showNotification("Game added to cart!", new Color(130, 90, 210));
+                
+                // Update visibility of cart page
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                GraphicsDevice gd = ge.getDefaultScreenDevice();
+                if (gd.isFullScreenSupported()) {
+                    gd.setFullScreenWindow(cartPage);
+                } else {
+                    cartPage.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    cartPage.setSize(screenSize.width, screenSize.height);
+                    cartPage.setLocationRelativeTo(null);
+                }
+                cartPage.setVisible(true);
+                dispose(); // Close the current game page
+            } catch (Exception e) {
+                e.printStackTrace();
+                showNotification("Failed to add game to cart!", new Color(200, 50, 50));
             }
-
-            notificationLabel.setText(message);
-            notificationLabel.setBackground(backgroundColor);
-            notificationLabel.setOpaque(true);
-            notificationLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
-            notificationLabel.setVisible(true);
-
-            notificationTimer = new Timer(3000, e -> {
-                notificationLabel.setVisible(false);
-                ((Timer) e.getSource()).stop();
-            });
-            notificationTimer.start();
         }
+
+    private void showNotification(String message, Color backgroundColor) {
+        JPanel notificationPanel = new JPanel();
+        notificationPanel.setBackground(backgroundColor);
+        notificationPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
+        
+        JLabel label = new JLabel(message);
+        label.setForeground(Color.WHITE);
+        label.setFont(FontManager.getBold(14));
+        notificationPanel.add(label);
+        
+        // Add to top of main container
+        mainContainer.add(notificationPanel, BorderLayout.SOUTH);
+        mainContainer.revalidate();
+        
+        // Remove notification after delay
+        Timer timer = new Timer(3000, e -> {
+            mainContainer.remove(notificationPanel);
+            mainContainer.revalidate();
+            mainContainer.repaint();
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
 }
