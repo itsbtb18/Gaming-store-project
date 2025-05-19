@@ -273,10 +273,28 @@ public class SearchBar extends JTextField {
     }
 
     private void showPopup() {
-        try {
+        if (!isShowing()) {
+            // If component is not showing, delay the popup
+            Timer showTimer = new Timer(100, e -> {
+                if (isShowing()) {
+                    showPopupInternal();
+                    ((Timer) e.getSource()).stop();
+                }
+            });
+            showTimer.setRepeats(true);
+            showTimer.start();
+            return;
+        }
+        showPopupInternal();
+    }
 
+    private void showPopupInternal() {
+        try {
             SwingUtilities.invokeLater(() -> {
                 try {
+                    if (!isShowing()) {
+                        return;
+                    }
 
                     int itemCount = Math.max(1, searchResults.getComponentCount());
                     int popupHeight = Math.min(itemCount * 40 + 10, 300);
@@ -289,16 +307,16 @@ public class SearchBar extends JTextField {
                     searchResults.validate();
                     searchResults.repaint();
 
-
                     SwingUtilities.invokeLater(this::requestFocusInWindow);
-                } catch (Exception e) {
-                    System.err.println("Error showing popup from EDT: " + e.getMessage());
-                    e.printStackTrace();
+                } catch (IllegalComponentStateException ex) {
+                    // Component is not yet ready, ignore
+                    System.out.println("Waiting for component to be ready for popup...");
+                } catch (Exception ex) {
+                    System.err.println("Error showing popup: " + ex.getMessage());
                 }
             });
         } catch (Exception e) {
-            System.err.println("Error showing popup: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error queuing popup display: " + e.getMessage());
         }
     }
 
